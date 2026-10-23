@@ -1,0 +1,1868 @@
+{
+ "variant": "E",
+ "walls": [
+  {
+   "id": 1,
+   "x1": 100,
+   "y1": 100,
+   "x2": 17300,
+   "y2": 100,
+   "t": 200,
+   "ext": true,
+   "layer": "",
+   "op": [
+    {
+     "id": 2,
+     "type": "window",
+     "pos": 2150,
+     "w": 1500,
+     "hinge": 0,
+     "side": 1
+    },
+    {
+     "id": 3,
+     "type": "window",
+     "pos": 5675,
+     "w": 600,
+     "hinge": 0,
+     "side": 1
+    },
+    {
+     "id": 4,
+     "type": "window",
+     "pos": 7675,
+     "w": 900,
+     "hinge": 0,
+     "side": 1
+    },
+    {
+     "id": 5,
+     "type": "window",
+     "pos": 9725,
+     "w": 1200,
+     "hinge": 0,
+     "side": 1
+    },
+    {
+     "id": 6,
+     "type": "window",
+     "pos": 11600,
+     "w": 1500,
+     "hinge": 0,
+     "side": 1
+    },
+    {
+     "id": 7,
+     "type": "window",
+     "pos": 15900,
+     "w": 600,
+     "hinge": 0,
+     "side": 1
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "x1": 17300,
+   "y1": 100,
+   "x2": 17300,
+   "y2": 10100,
+   "t": 200,
+   "ext": true,
+   "layer": "",
+   "op": [
+    {
+     "id": 9,
+     "type": "window",
+     "pos": 3690,
+     "w": 600,
+     "hinge": 0,
+     "side": 1
+    },
+    {
+     "id": 10,
+     "type": "door",
+     "pos": 4500,
+     "w": 1000,
+     "hinge": 0,
+     "side": -1
+    },
+    {
+     "id": 11,
+     "type": "window",
+     "pos": 8250,
+     "w": 900,
+     "hinge": 0,
+     "side": 1
+    }
+   ]
+  },
+  {
+   "id": 12,
+   "x1": 17300,
+   "y1": 10100,
+   "x2": 100,
+   "y2": 10100,
+   "t": 200,
+   "ext": true,
+   "layer": "",
+   "op": [
+    {
+     "id": 13,
+     "type": "window",
+     "pos": 16050,
+     "w": 1500,
+     "hinge": 0,
+     "side": 1
+    },
+    {
+     "id": 14,
+     "type": "slide",
+     "pos": 13750,
+     "w": 2000,
+     "hinge": 0,
+     "side": 1
+    },
+    {
+     "id": 15,
+     "type": "window",
+     "pos": 10750,
+     "w": 1500,
+     "hinge": 0,
+     "side": 1
+    },
+    {
+     "id": 16,
+     "type": "window",
+     "pos": 8300,
+     "w": 1200,
+     "hinge": 0,
+     "side": 1
+    },
+    {
+     "id": 17,
+     "type": "window",
+     "pos": 2350,
+     "w": 1200,
+     "hinge": 0,
+     "side": 1
+    }
+   ]
+  },
+  {
+   "id": 18,
+   "x1": 100,
+   "y1": 10100,
+   "x2": 100,
+   "y2": 100,
+   "t": 200,
+   "ext": true,
+   "layer": "",
+   "op": [
+    {
+     "id": 19,
+     "type": "window",
+     "pos": 1600,
+     "w": 1500,
+     "hinge": 0,
+     "side": 1
+    },
+    {
+     "id": 20,
+     "type": "window",
+     "pos": 5450,
+     "w": 1500,
+     "hinge": 0,
+     "side": 1
+    },
+    {
+     "id": 21,
+     "type": "door",
+     "pos": 7100,
+     "w": 1000,
+     "hinge": 0,
+     "side": 1
+    }
+   ]
+  },
+  {
+   "id": 22,
+   "x1": 4775,
+   "y1": 100,
+   "x2": 4775,
+   "y2": 10100,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": [
+    {
+     "id": 23,
+     "type": "door",
+     "pos": 1200,
+     "w": 800,
+     "hinge": 0,
+     "side": -1
+    },
+    {
+     "id": 24,
+     "type": "open",
+     "pos": 4875,
+     "w": 1200,
+     "hinge": 0,
+     "side": 1
+    }
+   ]
+  },
+  {
+   "id": 25,
+   "x1": 4775,
+   "y1": 4300,
+   "x2": 13925,
+   "y2": 4300,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": [
+    {
+     "id": 26,
+     "type": "door",
+     "pos": 1225,
+     "w": 800,
+     "hinge": 0,
+     "side": 1
+    },
+    {
+     "id": 27,
+     "type": "door",
+     "pos": 5575,
+     "w": 900,
+     "hinge": 1,
+     "side": -1
+    },
+    {
+     "id": 28,
+     "type": "door",
+     "pos": 8525,
+     "w": 900,
+     "hinge": 1,
+     "side": -1
+    }
+   ]
+  },
+  {
+   "id": 29,
+   "x1": 4775,
+   "y1": 2475,
+   "x2": 8775,
+   "y2": 2475,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": []
+  },
+  {
+   "id": 30,
+   "x1": 6775,
+   "y1": 100,
+   "x2": 6775,
+   "y2": 2475,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": []
+  },
+  {
+   "id": 31,
+   "x1": 8775,
+   "y1": 2475,
+   "x2": 8775,
+   "y2": 4300,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": []
+  },
+  {
+   "id": 32,
+   "x1": 10875,
+   "y1": 100,
+   "x2": 10875,
+   "y2": 4300,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": []
+  },
+  {
+   "id": 33,
+   "x1": 12775,
+   "y1": 4300,
+   "x2": 12775,
+   "y2": 3600,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": []
+  },
+  {
+   "id": 34,
+   "x1": 13925,
+   "y1": 100,
+   "x2": 13925,
+   "y2": 4300,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": []
+  },
+  {
+   "id": 35,
+   "x1": 13925,
+   "y1": 3400,
+   "x2": 17300,
+   "y2": 3400,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": [
+    {
+     "id": 36,
+     "type": "door",
+     "pos": 2775,
+     "w": 800,
+     "hinge": 1,
+     "side": -1
+    }
+   ]
+  },
+  {
+   "id": 37,
+   "x1": 14875,
+   "y1": 3400,
+   "x2": 14875,
+   "y2": 6900,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": [
+    {
+     "id": 38,
+     "type": "door",
+     "pos": 1575,
+     "w": 900,
+     "hinge": 0,
+     "side": 1
+    }
+   ]
+  },
+  {
+   "id": 39,
+   "x1": 4775,
+   "y1": 5650,
+   "x2": 13825,
+   "y2": 5650,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": [
+    {
+     "id": 40,
+     "type": "door",
+     "pos": 575,
+     "w": 900,
+     "hinge": 0,
+     "side": 1
+    },
+    {
+     "id": 41,
+     "type": "open",
+     "pos": 4300,
+     "w": 2350,
+     "hinge": 0,
+     "side": 1
+    },
+    {
+     "id": 42,
+     "type": "door",
+     "pos": 6075,
+     "w": 900,
+     "hinge": 0,
+     "side": 1
+    },
+    {
+     "id": 43,
+     "type": "door",
+     "pos": 7225,
+     "w": 800,
+     "hinge": 0,
+     "side": -1
+    }
+   ]
+  },
+  {
+   "id": 44,
+   "x1": 5875,
+   "y1": 5650,
+   "x2": 5875,
+   "y2": 6350,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": []
+  },
+  {
+   "id": 45,
+   "x1": 7775,
+   "y1": 5650,
+   "x2": 7775,
+   "y2": 10100,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": []
+  },
+  {
+   "id": 46,
+   "x1": 7775,
+   "y1": 6425,
+   "x2": 10325,
+   "y2": 6425,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": []
+  },
+  {
+   "id": 47,
+   "x1": 10325,
+   "y1": 5650,
+   "x2": 10325,
+   "y2": 6425,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": []
+  },
+  {
+   "id": 48,
+   "x1": 11425,
+   "y1": 5650,
+   "x2": 11425,
+   "y2": 10100,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": [
+    {
+     "id": 49,
+     "type": "door",
+     "pos": 3650,
+     "w": 800,
+     "hinge": 0,
+     "side": 1
+    }
+   ]
+  },
+  {
+   "id": 50,
+   "x1": 11425,
+   "y1": 8225,
+   "x2": 13825,
+   "y2": 8225,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": []
+  },
+  {
+   "id": 51,
+   "x1": 13825,
+   "y1": 5650,
+   "x2": 13825,
+   "y2": 10100,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": []
+  },
+  {
+   "id": 52,
+   "x1": 13825,
+   "y1": 6200,
+   "x2": 17300,
+   "y2": 6200,
+   "t": 150,
+   "ext": false,
+   "layer": "",
+   "op": [
+    {
+     "id": 53,
+     "type": "door",
+     "pos": 525,
+     "w": 800,
+     "hinge": 0,
+     "side": 1
+    }
+   ]
+  }
+ ],
+ "rooms": [
+  {
+   "id": 54,
+   "name": "Salon + kuchnia + jadalnia + komunikacja",
+   "x": 1000,
+   "y": 5500,
+   "layer": ""
+  },
+  {
+   "id": 55,
+   "name": "Spiżarnia",
+   "x": 5600,
+   "y": 1600,
+   "layer": ""
+  },
+  {
+   "id": 56,
+   "name": "Łazienka (wanna)",
+   "x": 6700,
+   "y": 3900,
+   "layer": ""
+  },
+  {
+   "id": 57,
+   "name": "Pralnia / suszarnia",
+   "x": 9800,
+   "y": 2900,
+   "layer": ""
+  },
+  {
+   "id": 58,
+   "name": "Pokój 3",
+   "x": 12000,
+   "y": 2400,
+   "layer": ""
+  },
+  {
+   "id": 59,
+   "name": "Kotłownia / gospodarcze",
+   "x": 15600,
+   "y": 2700,
+   "layer": ""
+  },
+  {
+   "id": 60,
+   "name": "Wiatrołap",
+   "x": 16000,
+   "y": 4700,
+   "layer": ""
+  },
+  {
+   "id": 61,
+   "name": "Pokój 2",
+   "x": 6300,
+   "y": 7600,
+   "layer": ""
+  },
+  {
+   "id": 62,
+   "name": "Sypialnia",
+   "x": 9300,
+   "y": 8300,
+   "layer": ""
+  },
+  {
+   "id": 63,
+   "name": "Łazienka (prysznic)",
+   "x": 12300,
+   "y": 6900,
+   "layer": ""
+  },
+  {
+   "id": 64,
+   "name": "Garderoba",
+   "x": 12300,
+   "y": 8700,
+   "layer": ""
+  },
+  {
+   "id": 65,
+   "name": "Gabinet",
+   "x": 15200,
+   "y": 8000,
+   "layer": ""
+  }
+ ],
+ "furn": [
+  {
+   "id": 66,
+   "key": "tall",
+   "name": "Zabudowa wysoka 220",
+   "x": 500,
+   "y": 1300,
+   "rot": 270,
+   "w": 2200,
+   "d": 600,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 1000,
+     "l": "otwarcie drzwi",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 600,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 67,
+   "key": "k240",
+   "name": "Zabudowa kuchenna 290",
+   "x": 2250,
+   "y": 500,
+   "rot": 0,
+   "w": 2900,
+   "d": 600,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 1000,
+     "l": "praca, otwarte szafki",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 68,
+   "key": "island",
+   "name": "Wyspa kuchenna 140×90",
+   "x": 2300,
+   "y": 2450,
+   "rot": 180,
+   "w": 1400,
+   "d": 900,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 1000,
+     "l": "praca",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    },
+    {
+     "s": "back",
+     "d": 900,
+     "l": "hokery",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 69,
+   "key": "tableext",
+   "name": "Stół rozkładany 160→280 (4→10 os.)",
+   "x": 2300,
+   "y": 4650,
+   "rot": 0,
+   "w": 1600,
+   "d": 900,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 900,
+     "l": "krzesła",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    },
+    {
+     "s": "back",
+     "d": 900,
+     "l": "krzesła",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    },
+    {
+     "s": "left",
+     "d": 600,
+     "l": "po rozłożeniu (okazjonalnie)",
+     "k": "info",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    },
+    {
+     "s": "right",
+     "d": 600,
+     "l": "po rozłożeniu (okazjonalnie)",
+     "k": "info",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 70,
+   "key": "sofabed",
+   "name": "Sofa rozkładana (spanie 140×200)",
+   "x": 2280,
+   "y": 6520,
+   "rot": 0,
+   "w": 1980,
+   "d": 880,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 441,
+     "l": "po rozłożeniu",
+     "k": "unfold",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    },
+    {
+     "s": "front",
+     "d": 600,
+     "l": "dojście",
+     "k": "use",
+     "st": 441,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 71,
+   "key": "corner",
+   "name": "Narożnik 198×304",
+   "x": 1191.5,
+   "y": 8480,
+   "rot": 0,
+   "w": 1983,
+   "d": 3040,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 600,
+     "l": "nogi / przejście",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": [
+      1090,
+      0,
+      600,
+      1863
+     ],
+     "off": false
+    }
+   ],
+   "parts": [
+    [
+     0,
+     0,
+     0.5496722138174484,
+     1
+    ],
+    [
+     0.5496722138174484,
+     0.6128289473684211,
+     0.4503277861825517,
+     0.38717105263157897
+    ]
+   ]
+  },
+  {
+   "id": 72,
+   "key": "coffee",
+   "name": "Pufa / stolik 98×172",
+   "x": 3890,
+   "y": 8260,
+   "rot": 0,
+   "w": 980,
+   "d": 1720,
+   "layer": "meble",
+   "z": []
+  },
+  {
+   "id": 73,
+   "key": "tvwall",
+   "name": "TV 55\" (ściana wschodnia)",
+   "x": 4650,
+   "y": 7915,
+   "rot": 90,
+   "w": 1230,
+   "d": 100,
+   "layer": "meble",
+   "z": []
+  },
+  {
+   "id": 74,
+   "key": "bench",
+   "name": "Blat pod oknem 125 (bez szafek)",
+   "x": 5475,
+   "y": 500,
+   "rot": 0,
+   "w": 1250,
+   "d": 600,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 700,
+     "l": "praca",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 75,
+   "key": "steel",
+   "name": "Regały stalowe 2×90×60",
+   "x": 6400,
+   "y": 1200,
+   "rot": 90,
+   "w": 1800,
+   "d": 600,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 750,
+     "l": "dostęp",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 600,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 76,
+   "key": "pantry",
+   "name": "Regał spiżarniany 35 (65 cm)",
+   "x": 5025,
+   "y": 2075,
+   "rot": 270,
+   "w": 650,
+   "d": 350,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 600,
+     "l": "dostęp",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 77,
+   "key": "bath",
+   "name": "Wanna 180×80",
+   "x": 5775,
+   "y": 2950,
+   "rot": 0,
+   "w": 1800,
+   "d": 800,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 750,
+     "l": "wejście",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 78,
+   "key": "instwall",
+   "name": "Ścianka instalacyjna 20 cm (WC + umywalka)",
+   "x": 7725,
+   "y": 2650,
+   "rot": 0,
+   "w": 1950,
+   "d": 200,
+   "layer": "meble",
+   "z": []
+  },
+  {
+   "id": 79,
+   "key": "wcw",
+   "name": "WC podwieszane (miska)",
+   "x": 7130,
+   "y": 3015,
+   "rot": 0,
+   "w": 360,
+   "d": 530,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 600,
+     "l": "przed WC",
+     "k": "use",
+     "st": 0,
+     "ex": 220,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 80,
+   "key": "sink80",
+   "name": "Umywalka 80",
+   "x": 8100,
+   "y": 2980,
+   "rot": 0,
+   "w": 800,
+   "d": 460,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 700,
+     "l": "przed umywalką",
+     "k": "use",
+     "st": 0,
+     "ex": 100,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 81,
+   "key": "k240",
+   "name": "Blat pod oknami: pralka, suszarka, zlew (395)",
+   "x": 8825,
+   "y": 520,
+   "rot": 0,
+   "w": 3950,
+   "d": 640,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 700,
+     "l": "praca",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 82,
+   "key": "pax",
+   "name": "Szafa PAX 185×60",
+   "x": 7775,
+   "y": 2100,
+   "rot": 180,
+   "w": 1850,
+   "d": 600,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 750,
+     "l": "otwarcie drzwi",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 83,
+   "key": "pax",
+   "name": "Szafa PAX 160×60",
+   "x": 9150,
+   "y": 3350,
+   "rot": 270,
+   "w": 1600,
+   "d": 600,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 750,
+     "l": "otwarcie drzwi",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 84,
+   "key": "pax",
+   "name": "Szafa PAX 140×60",
+   "x": 10500,
+   "y": 2540,
+   "rot": 90,
+   "w": 1400,
+   "d": 600,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 750,
+     "l": "otwarcie drzwi",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 85,
+   "key": "desk",
+   "name": "Biurko 120×79 (przy oknie)",
+   "x": 11345,
+   "y": 900,
+   "rot": 270,
+   "w": 1400,
+   "d": 790,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 900,
+     "l": "krzesło",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 86,
+   "key": "sofabed",
+   "name": "Sofa rozkładana (spanie 140×200)",
+   "x": 13410,
+   "y": 1290,
+   "rot": 90,
+   "w": 1980,
+   "d": 880,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 441,
+     "l": "po rozłożeniu",
+     "k": "unfold",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    },
+    {
+     "s": "front",
+     "d": 600,
+     "l": "dojście",
+     "k": "use",
+     "st": 441,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 87,
+   "key": "pax",
+   "name": "Szafa PAX 175×60 we wnęce",
+   "x": 11825,
+   "y": 3925,
+   "rot": 180,
+   "w": 1750,
+   "d": 600,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 750,
+     "l": "otwarcie drzwi",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 88,
+   "key": "pax75",
+   "name": "Szafa PAX 75×60 we wnęce holu (kurtki gości)",
+   "x": 14400,
+   "y": 3775,
+   "rot": 0,
+   "w": 750,
+   "d": 600,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 750,
+     "l": "otwarcie drzwi",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 89,
+   "key": "round",
+   "name": "Urządzenie techniczne Ø59 (pompa / zasobnik / bufor)",
+   "x": 15297,
+   "y": 497,
+   "rot": 0,
+   "w": 594,
+   "d": 594,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 600,
+     "l": "serwis",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null
+    }
+   ]
+  },
+  {
+   "id": 90,
+   "key": "round",
+   "name": "Urządzenie techniczne Ø59 (pompa / zasobnik / bufor)",
+   "x": 15917,
+   "y": 497,
+   "rot": 0,
+   "w": 594,
+   "d": 594,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 600,
+     "l": "serwis",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null
+    }
+   ]
+  },
+  {
+   "id": 91,
+   "key": "round",
+   "name": "Urządzenie techniczne Ø59 (pompa / zasobnik / bufor)",
+   "x": 16537,
+   "y": 497,
+   "rot": 0,
+   "w": 594,
+   "d": 594,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 600,
+     "l": "serwis",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null
+    }
+   ]
+  },
+  {
+   "id": 92,
+   "key": "pax",
+   "name": "Szafa PAX 135×60",
+   "x": 14300,
+   "y": 1575,
+   "rot": 270,
+   "w": 1350,
+   "d": 600,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 750,
+     "l": "otwarcie drzwi",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 93,
+   "key": "ref",
+   "name": "Rekuperator / szafka techniczna 99×59",
+   "x": 14294,
+   "y": 2795,
+   "rot": 270,
+   "w": 990,
+   "d": 588,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 600,
+     "l": "serwis",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null
+    }
+   ]
+  },
+  {
+   "id": 94,
+   "key": "dogbath",
+   "name": "Brodzik do mycia psa 100×80 (przy wejściu)",
+   "x": 16800,
+   "y": 1950,
+   "rot": 90,
+   "w": 1000,
+   "d": 800,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 800,
+     "l": "obsługa",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 95,
+   "key": "hall180",
+   "name": "Szafa przesuwna 225 (kurtki, buty)",
+   "x": 16075,
+   "y": 5800,
+   "rot": 180,
+   "w": 2250,
+   "d": 650,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 750,
+     "l": "dostęp",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 96,
+   "key": "bench",
+   "name": "Ławka-szafka na buty 120×40 (siedzisko)",
+   "x": 15550,
+   "y": 3675,
+   "rot": 0,
+   "w": 1200,
+   "d": 400,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 600,
+     "l": "siadanie",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 97,
+   "key": "pax",
+   "name": "Szafa PAX 175×60 we wnęce",
+   "x": 6825,
+   "y": 6025,
+   "rot": 0,
+   "w": 1750,
+   "d": 600,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 750,
+     "l": "otwarcie drzwi",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 98,
+   "key": "desk",
+   "name": "Biurko 150×79 (przy oknie)",
+   "x": 7305,
+   "y": 9300,
+   "rot": 90,
+   "w": 1400,
+   "d": 790,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 900,
+     "l": "krzesło",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 99,
+   "key": "sofabed",
+   "name": "Sofa rozkładana (spanie 140×200)",
+   "x": 5290,
+   "y": 9010,
+   "rot": 270,
+   "w": 1980,
+   "d": 880,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 441,
+     "l": "po rozłożeniu",
+     "k": "unfold",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    },
+    {
+     "s": "front",
+     "d": 600,
+     "l": "dojście",
+     "k": "use",
+     "st": 441,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 100,
+   "key": "pax",
+   "name": "Szafa PAX 235×60 we wnęce korytarza (pościel, ręczniki)",
+   "x": 9075,
+   "y": 6025,
+   "rot": 180,
+   "w": 2350,
+   "d": 600,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 750,
+     "l": "otwarcie drzwi",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 101,
+   "key": "bed180",
+   "name": "Łóżko 180×200",
+   "x": 8900,
+   "y": 8250,
+   "rot": 270,
+   "w": 1800,
+   "d": 2100,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "left",
+     "d": 800,
+     "l": "dojście",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 450,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    },
+    {
+     "s": "right",
+     "d": 800,
+     "l": "dojście",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 450,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 102,
+   "key": "night",
+   "name": "Szafka nocna",
+   "x": 8073,
+   "y": 7073,
+   "rot": 270,
+   "w": 446,
+   "d": 446,
+   "layer": "meble",
+   "z": []
+  },
+  {
+   "id": 103,
+   "key": "night",
+   "name": "Szafka nocna",
+   "x": 8073,
+   "y": 9427,
+   "rot": 270,
+   "w": 446,
+   "d": 446,
+   "layer": "meble",
+   "z": []
+  },
+  {
+   "id": 104,
+   "key": "crib",
+   "name": "Łóżeczko dziecięce 60×120",
+   "x": 11025,
+   "y": 8225,
+   "rot": 90,
+   "w": 1250,
+   "d": 650,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 600,
+     "l": "dojście",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 105,
+   "key": "tvwall",
+   "name": "TV na ścianie nad łóżeczkiem",
+   "x": 11300,
+   "y": 8235,
+   "rot": 90,
+   "w": 1230,
+   "d": 100,
+   "layer": "meble",
+   "z": [],
+   "ref": true
+  },
+  {
+   "id": 106,
+   "key": "instwall",
+   "name": "Ścianka instalacyjna 20 cm (WC + umywalka)",
+   "x": 13650,
+   "y": 6537.5,
+   "rot": 90,
+   "w": 1625,
+   "d": 200,
+   "layer": "meble",
+   "z": []
+  },
+  {
+   "id": 107,
+   "key": "wcw",
+   "name": "WC podwieszane (miska)",
+   "x": 13285,
+   "y": 6180,
+   "rot": 90,
+   "w": 360,
+   "d": 530,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 600,
+     "l": "przed WC",
+     "k": "use",
+     "st": 0,
+     "ex": 220,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 108,
+   "key": "sink80",
+   "name": "Umywalka 80",
+   "x": 13320,
+   "y": 6950,
+   "rot": 90,
+   "w": 800,
+   "d": 460,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 700,
+     "l": "przed umywalką",
+     "k": "use",
+     "st": 0,
+     "ex": 100,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 109,
+   "key": "shower120",
+   "name": "Prysznic 120×90",
+   "x": 12100,
+   "y": 7700,
+   "rot": 180,
+   "w": 1200,
+   "d": 900,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 750,
+     "l": "wejście",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 110,
+   "key": "pax",
+   "name": "Szafa PAX 170×60",
+   "x": 13450,
+   "y": 9150,
+   "rot": 90,
+   "w": 1700,
+   "d": 600,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 1000,
+     "l": "przejście 100 cm",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 600,
+     "rect": null,
+     "off": false,
+     "strict": true
+    }
+   ]
+  },
+  {
+   "id": 111,
+   "key": "pax",
+   "name": "Szafa PAX 125×60",
+   "x": 12525,
+   "y": 9700,
+   "rot": 180,
+   "w": 1250,
+   "d": 600,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 1000,
+     "l": "przejście 100 cm",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false,
+     "strict": true
+    }
+   ]
+  },
+  {
+   "id": 112,
+   "key": "pax",
+   "name": "Szafa PAX 225×60 we wnęce",
+   "x": 16075,
+   "y": 6575,
+   "rot": 0,
+   "w": 2250,
+   "d": 600,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 750,
+     "l": "otwarcie drzwi",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 113,
+   "key": "desk",
+   "name": "Biurko 150×79 (przy oknie)",
+   "x": 16805,
+   "y": 8350,
+   "rot": 90,
+   "w": 1500,
+   "d": 790,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 900,
+     "l": "krzesło",
+     "k": "use",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  },
+  {
+   "id": 114,
+   "key": "sofabed",
+   "name": "Sofa rozkładana (spanie 140×200)",
+   "x": 14940,
+   "y": 9560,
+   "rot": 180,
+   "w": 1980,
+   "d": 880,
+   "layer": "meble",
+   "z": [
+    {
+     "s": "front",
+     "d": 441,
+     "l": "po rozłożeniu",
+     "k": "unfold",
+     "st": 0,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    },
+    {
+     "s": "front",
+     "d": 600,
+     "l": "dojście",
+     "k": "use",
+     "st": 441,
+     "ex": 0,
+     "c0": 0,
+     "c1": 0,
+     "rect": null,
+     "off": false
+    }
+   ]
+  }
+ ],
+ "hidden": [],
+ "nextId": 115,
+ "set": {
+  "grid": 50,
+  "pitch": 30,
+  "overhang": 600,
+  "rate": "",
+  "newT": 120,
+  "newExt": false,
+  "minPass": 750
+ }
+}

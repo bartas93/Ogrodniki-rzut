@@ -1,0 +1,4 @@
+# prywatne notatki inwestora (działka, dokumenty, finanse) — nie publikować
+ogrodniki_raport_planowanej_budowy_*.md
+# model Revit — może zawierać metadane autora
+*.rvt
