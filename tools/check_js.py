@@ -13,8 +13,13 @@ js = s[s.index('<script>') + 8:s.index('</script>')]
 fd, tmp = tempfile.mkstemp(suffix='.js')
 with os.fdopen(fd, 'w', encoding='utf-8') as f:
     f.write(js)
-r = subprocess.run(['node', '--check', tmp], capture_output=True, text=True)
-os.remove(tmp)
+try:
+    r = subprocess.run(['node', '--check', tmp], capture_output=True, text=True, timeout=30)
+except subprocess.TimeoutExpired:
+    print('TIMEOUT: kontrola składni przekroczyła 30 s')
+    sys.exit(1)
+finally:
+    os.remove(tmp)
 if r.returncode:
     print(r.stderr)
     sys.exit(1)

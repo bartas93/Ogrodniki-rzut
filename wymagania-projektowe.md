@@ -75,3 +75,15 @@ Starsze szkice: 80 cm dojścia po bokach łóżka i 100 cm od łóżka do TV —
   internet przewodowy i Wi-Fi, bramę z kamerą i miejscem na przesyłki, kran ogrodowy.
 - Równe poziomy posadzek przy różnych okładzinach; przy wymiarowaniu uwzględniać tynki, kleje, płytki, GK.
 - **[PREFERENCJA HISTORYCZNA DO POTWIERDZENIA]** stolarka okienna i drzwiowa nie w kolorze czarnym.
+
+## 7. Decyzje dotyczące wyłącznie E2 (24.10.2026)
+
+- Garderoba: szafy głębokości 60 cm na całej górnej i prawej ścianie, w L; przejście 100 cm. Drzwi przy dolnej ścianie zewnętrznej, otwierane do garderoby na tę ścianę.
+- Łazienka przy sypialniach: szerokość w świetle 195 cm; od wejścia umywalka, następnie WC, na końcu wanna 180×80 cm, z 15 cm zapasu na szerokości pomieszczenia.
+- Łazienka przy salonie: prysznic walk-in po lewej, WC po prawej, wejście pośrodku, umywalka z lustrem naprzeciw drzwi. Przesunięcie ściany daje od salonu wnękę na szafę głębokości 35 cm.
+- Drzwi sypialni otwierane na prawą ścianę; drzwi pralni po lewej, otwierane do pralni na lewą ścianę. Zachowane wyjście z pralni do ogrodu.
+- Pralnia: zabudowa PAX głębokości 60 cm wzdłuż całej prawej ściany aż do ściany z oknami; blat pod oknami. Prawe okno dopasowane do szaf (90 cm szerokości), aby wysoka zabudowa go nie zasłaniała.
+- Kuchnia: zabudowa na całej górnej ścianie. Wszystkie trzy biurka E2: 140×70 cm.
+- Kotłownia zwężona o 30 cm, rekuperator obok urządzeń grzewczych; wolne ściany wykorzystane na regały stalowe i PAX. Zachowany brodzik do mycia psa.
+- Spiżarnia: regały stalowe naprzeciw blatu i na prawej ścianie.
+- Okap dachu: 1 m na całym obwodzie.

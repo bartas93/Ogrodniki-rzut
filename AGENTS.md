@@ -21,6 +21,7 @@ Przeczytaj ten plik w całości, zanim cokolwiek zmienisz.
 | `tools/pdf_extract.py` | Wyciąga ściany, drzwi (skrzydła + łuki), teksty i zielone meble z PDF w mm. |
 | `tools/render_pdf_tiles.py` | Renderuje fragment PDF z siatką mm (do czytania mebli/drzwi). |
 | `tools/check_js.py` | `node --check` dla skryptu edytora. |
+| `tools/check_variant.js` | Kontrola geometrii, dojść i miniatury bez przeglądarki; opcjonalny podgląd SVG. |
 | `tools/browser_report.js` | Raport kontroli wariantu do uruchomienia w przeglądarce (patrz §6). |
 
 ## 2. Najważniejsze decyzje i preferencje użytkownika (stan na 2026-10-23)
@@ -46,7 +47,8 @@ Przeczytaj ten plik w całości, zanim cokolwiek zmienisz.
   - ścianka instalacyjna 20 cm za WC/umywalką.
 - Aktualnie rozwijany jest **wariant E** (pochodna D) i jego udoskonalenia **E1–E4**. Pozostałe warianty zostają do porównania — nie zmieniaj ich bez prośby.
   - `variantE(o)` przyjmuje opcje: `exit` (drzwi z pralni do ogrodu + miejsce na suszarkę), `baths` (prysznic + WC dla gości
-    przy salonie, wanna przy sypialniach), `office` (gabinet od północy, pokój 3 od południa). E2 = `{exit}`, E3 = `{baths}`, E4 = wszystkie trzy.
+    przy salonie, wanna przy sypialniach), `office` (gabinet od północy, pokój 3 od południa). E3 = `{baths}`, E4 = wszystkie trzy.
+  - `variantE2()` to osobna funkcja: wyjście z pralni oraz poprawki z 24.10.2026 opisane w §7 `wymagania-projektowe.md` (wanna w łazience o szerokości 195 cm, walk-in przy salonie, zabudowy, biurka 140×70, okap 1 m). Nie przenoś tych zmian do E/E1/E3/E4.
   - `variantE1()` to osobna funkcja: E skrócone o 45 cm (pokój 2 o 20 cm węższy, wiatrołap 2,00 m, kotłownia 2,75 m).
 - Użytkownik ogląda rzuty także na **Androidzie (Pixel 9 Pro / Pixel 6 Pro, ok. 412 px szerokości)** — każda zmiana UI musi działać na telefonie (§7).
 
@@ -156,12 +158,14 @@ S = {
   łóżeczko odcina dojście do boku łóżka; strefy w narożniku zabudowy kuchennej (użyj `c0/c1`); wyspa zamyka kuchnię.
 - Raportuj liczby: obrys, pow. zabudowy, dach, szerokości przejść, szerokości drzwi (etykiety cm na rzucie).
 - Komunikacja z użytkownikiem po polsku, konkretnie, z wymiarami. Nie zmieniaj nieproszonych wariantów.
+- Polecenia diagnostyczne uruchamiaj z twardym limitem czasu: zwykle `timeout 30s`, test przeglądarkowy maks. 60 s. Dłuższe zadania dziel na etapy; nie czekaj 10 minut bez wyniku. `yield_time_ms` nie zastępuje timeoutu. Limit procesu nie obejmuje oczekiwania na zgodę lub uruchomienie narzędzia — nie ponawiaj zawieszonego żądania bez diagnozy.
 - Wymagania (`wymagania-projektowe.md`) traktuj jako wiążące, ale część jest historyczna — w razie wątpliwości pytaj.
-- Repozytorium jest **publiczne**: nie dodawaj danych identyfikujących działkę, właścicieli, dokumentów, kwot ani kontaktów; commituj z adresem `bartas93@users.noreply.github.com`.
+- Repozytorium jest **publiczne**: nie dodawaj danych identyfikujących działkę, właścicieli, dokumentów, kwot ani kontaktów.
 
 ## 6. Weryfikacja
 
 1. Składnia: `python tools/check_js.py` → `SYNTAX_OK`.
+   Szybka kontrola geometrii bez przeglądarki: `timeout 30s node tools/check_variant.js E2` (kolizje, dojścia, etykiety, miniatura; kod wyjścia 1 przy problemach). Opcjonalny trzeci argument zapisuje podgląd SVG.
 2. Otwórz `edytor-rzutu.html` w przeglądarce (lokalnie lub przez narzędzie przeglądarki agenta), wklej `tools/browser_report.js`
    do konsoli i wywołaj `report('E')`. Sprawdź: „Meble z problemem 0 / N”, „Pomieszczenia bez dojścia brak ✓”.
 3. Rzuć okiem na rzut (zrzut ekranu) — kontrola nie wykryje np. dziwnego układu czy nielogicznej funkcji.

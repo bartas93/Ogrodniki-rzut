@@ -8,3 +8,9 @@ Edytor rzutu parterowego domu z kontrolą ustawienia mebli, przejść i statysty
 - **Zapis i przenoszenie:** „Zapisz JSON” / „Wczytaj JSON”.
 - **Wymagania projektowe:** `wymagania-projektowe.md` (pełne notatki inwestora są prywatne i nie trafiają do repozytorium).
 - **Dla agentów (Codex / Claude):** `AGENTS.md`.
+
+E2 uwzględnia poprawki z 24.10.2026: zabudowy i drzwi, łazienkę z wanną o szerokości 195 cm, walk-in przy salonie, wnękę 35 cm, biurka 140×70 cm, węższą kotłownię i okap 1 m. Pozostałe warianty zachowują dotychczasowy układ.
+
+Kontrola bez przeglądarki: `python tools/check_js.py` oraz `node tools/check_variant.js E2`. Opcjonalnie `node tools/check_variant.js E2 podglad.svg` zapisuje podgląd rzutu. Każde polecenie kontrolne powinno zakończyć się w 30 sekund.
+
+Po aktualizacji do wersji zapisu v22 edytor pokaże nowe układy domyślne. Starsze ręczne edycje można przywrócić przez „Wczytaj JSON”; wcześniejsze zapisy v21 w przeglądarce nie są usuwane.
