@@ -78,6 +78,7 @@ Starsze szkice: 80 cm dojścia po bokach łóżka i 100 cm od łóżka do TV —
 
 ## 7. Decyzje dotyczące wyłącznie E2 (24.10.2026)
 
+- **[DECYZJA] E2 jest wariantem domyślnym:** otwiera się przy każdym uruchomieniu edytora, z zachowaniem zapisanych edycji. Polecenia zmian projektu dotyczą E2, chyba że inwestor wskaże inny wariant.
 - Garderoba: szafy głębokości 60 cm na całej górnej i prawej ścianie, w L; przejście 100 cm. Drzwi przy dolnej ścianie zewnętrznej, otwierane do garderoby na tę ścianę.
 - Łazienka przy sypialniach: szerokość w świetle 195 cm; od wejścia umywalka, następnie WC, na końcu wanna 180×80 cm, z 15 cm zapasu na szerokości pomieszczenia.
 - Łazienka przy salonie: prysznic walk-in po lewej, WC po prawej, wejście pośrodku, umywalka z lustrem naprzeciw drzwi. Przesunięcie ściany daje od salonu wnękę na szafę głębokości 35 cm.

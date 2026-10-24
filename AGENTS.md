@@ -24,7 +24,7 @@ Przeczytaj ten plik w całości, zanim cokolwiek zmienisz.
 | `tools/check_variant.js` | Kontrola geometrii, dojść i miniatury bez przeglądarki; opcjonalny podgląd SVG. |
 | `tools/browser_report.js` | Raport kontroli wariantu do uruchomienia w przeglądarce (patrz §6). |
 
-## 2. Najważniejsze decyzje i preferencje użytkownika (stan na 2026-10-23)
+## 2. Najważniejsze decyzje i preferencje użytkownika (stan na 2026-10-24)
 
 - **Bez garażu** (decyzja 18.10.2026). Parter, prosta bryła (prostokąt), dach kopertowy / wielospadowy symetryczny 25–40°.
 - Cel: jak najniższy koszt budowy przy wygodnym układzie → zwarty prostokąt, mało ścian zewnętrznych, bez koszy dachowych.
@@ -45,7 +45,7 @@ Przeczytaj ten plik w całości, zanim cokolwiek zmienisz.
   - pralnia/suszarnia: jak najwięcej szaf PAX, blat pod oknem; przejście między szafami może być węższe (~75–80 cm),
   - **drzwi do łazienek otwierane na zewnątrz (na korytarz), drzwi wejściowe na zewnątrz**,
   - ścianka instalacyjna 20 cm za WC/umywalką.
-- Aktualnie rozwijany jest **wariant E** (pochodna D) i jego udoskonalenia **E1–E4**. Pozostałe warianty zostają do porównania — nie zmieniaj ich bez prośby.
+- **Domyślnym i aktualnie rozwijanym wariantem jest E2. Każde polecenie zmiany projektu dotyczy E2, chyba że użytkownik wyraźnie wskaże inny wariant.** Edytor przy każdym uruchomieniu otwiera E2, zachowując jego zapisane edycje; ostatnio oglądany wariant nie zmienia tego wyboru. Pozostałe warianty zostają do porównania — nie zmieniaj ich bez prośby.
   - `variantE(o)` przyjmuje opcje: `exit` (drzwi z pralni do ogrodu + miejsce na suszarkę), `baths` (prysznic + WC dla gości
     przy salonie, wanna przy sypialniach), `office` (gabinet od północy, pokój 3 od południa). E3 = `{baths}`, E4 = wszystkie trzy.
   - `variantE2()` to osobna funkcja: wyjście z pralni oraz poprawki z 24.10.2026 opisane w §7 `wymagania-projektowe.md` (wanna w łazience o szerokości 195 cm, walk-in przy salonie, zabudowy, biurka 140×70, okap 1 m). Nie przenoś tych zmian do E/E1/E3/E4.
@@ -80,7 +80,7 @@ Kolejność sekcji w skrypcie:
 
 ```js
 S = {
-  variant: 'E',                      // klucz z VARIANTS
+  variant: 'E2',                     // klucz z VARIANTS; domyślny wariant
   walls: [{ id, x1,y1,x2,y2,        // OŚ ściany w mm; (0,0) = lewy górny narożnik lica zewn.; x → wschód, y → POŁUDNIE (w dół)
             t,                       // grubość mm (zewn. 200, działowe 150)
             ext,                     // ściana zewnętrzna
