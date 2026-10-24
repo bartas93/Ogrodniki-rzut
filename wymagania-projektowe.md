@@ -88,3 +88,21 @@ Starsze szkice: 80 cm dojścia po bokach łóżka i 100 cm od łóżka do TV —
 - Kotłownia zwężona o 30 cm, rekuperator obok urządzeń grzewczych; wolne ściany wykorzystane na regały stalowe i PAX. Zachowany brodzik do mycia psa.
 - Spiżarnia: regały stalowe naprzeciw blatu i na prawej ścianie.
 - Okap dachu: 1 m na całym obwodzie.
+
+## 8. E2 — poprawki po audycie (24.10.2026)
+
+Poniższe decyzje aktualizują §7 tam, gdzie zmieniły się wymiary i wyposażenie. Szczegóły i granice opracowania: [e2-wykonczenie.md](e2-wykonczenie.md).
+
+- Ściana zewnętrzna: od wnętrza tynk gipsowy 15 mm, silikat 180 mm, klej 10 mm, EPS grafit λ 0,031 grubości 200 mm, warstwa zbrojona 5 mm i tynk elewacyjny 2 mm — razem **412 mm**. Nośność i klasa silikatu do potwierdzenia przez konstruktora; U ≈ 0,15 orientacyjnie, do obliczenia projektowego.
+- Dotychczasowe lica wewnętrzne zachowane; warstwy przyrastają na zewnątrz. Obrys gotowej elewacji **17,824×10,624 m**, ok. **189,36 m²**; okap 1 m od gotowej elewacji, dach ok. **288,97 m²** przy 30°. To nie powierzchnia użytkowa ani ustalony rozmiar fundamentu. Ściany wewnętrzne 150 mm oznaczają gotową przegrodę z wykończeniem; materiał/nośność nadal do projektu.
+- Wejście główne przesunięte o 30 cm w dół, okno obok o 1 cm: odstęp otworów **30 cm** zamiast 1 cm. Prawe okno pralni usunięte; wyjście do ogrodu i jedno okno zachowane.
+- PAX: pojedyncze korpusy nominalne 50/75/100 cm, rzeczywiste szerokości 49,8/74,8/99,8 cm, korpus 58 cm + ok. 2 cm frontu, wysokość 236,4 cm. Garderoba i pralnia z zestawami narożnymi 110,2×110,2 cm i blendami.
+- Zaakceptowane przez inwestora: położenie stojącej suszarki mimo ograniczenia wyjścia i zwężenie korytarza przez otwarte drzwi łazienek. Nie traktować tych decyzji jako przeoczeń do automatycznego usunięcia.
+- Drzwi pralni i garderoby odsunięte o 10 cm od sąsiednich gotowych ścian; zwiększona rezerwa przy drzwiach sypialni. Otwory murowane i ościeżnice dobrać do konkretnych drzwi.
+- Sypialnia powiększona o **20 cm kosztem gabinetu** przez przesunięcie bloku łazienki i garderoby. Ich szerokości zachowane (łazienka 195 cm). Łóżeczko odsunięte od ściany z TV, poza wejście garderoby.
+- Wanna 180×80 cm i dwie półki po 7,5 cm w gotowej szerokości 195 cm. Walk-in przy salonie 130×90 cm, szkło boczne 90 cm + powrót 30 cm, otwarte wejście 100 cm; umywalka z lustrem naprzeciw centralnych drzwi, WC po prawej.
+- Kuchnia z przypisanym AGD, wyspa 140×90 wyłącznie jako blat roboczy, bez hokerów. Stół ustawiony wzdłuż pomieszczenia; stan 280 cm + 10 krzeseł do przełączenia w panelu. W stanie 10 osób część tylnej strefy wyspy jest zajęta.
+- Pralka i suszarka pod blatem, obok zlewu, w rezerwacji o głębokości 70 cm. Uzgodniony narożnik PAX zastępuje konflikt blatu z frontami; deska i odkurzacz w szafie. Urządzenia podblatowe zastępują wcześniejszą preferencję podniesionych urządzeń.
+- Wszystkie trzy biurka 140×70 cm; sofy w gabarycie odniesienia 200×97 cm i z rezerwacją spania 140×200 cm. Narożnik salonu 230×151 cm, przed otworem HST. Regał i PAX technicznego w jednym ciągu z dostępem od środka.
+- Wstępne wysokości wnętrz 280 cm, blatów kuchni 90 cm/pralni 92 cm/biurek 74 cm, parapetów i okien wpisane do modelu. To decyzje koncepcyjne, wymagające koordynacji z konstrukcją, sufitem, instalacjami i projektem stolarki.
+- Przechowywanie opisane przy modułach; robot pod ławką wiatrołapu, legowiska i miski przy zachodnim oknie salonu. Magazyn ogrodowy pozostaje do odrębnego zagospodarowania.

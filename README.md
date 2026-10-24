@@ -12,6 +12,8 @@ Edytor rzutu parterowego domu z kontrolą ustawienia mebli, przejść i statysty
 
 E2 uwzględnia poprawki z 24.10.2026: zabudowy i drzwi, łazienkę z wanną o szerokości 195 cm, walk-in przy salonie, wnękę 35 cm, biurka 140×70 cm, węższą kotłownię i okap 1 m. Pozostałe warianty zachowują dotychczasowy układ.
 
+Druga seria poprawek E2: ściana warstwowa 41,2 cm (silikat 18 + EPS 20), jedno okno pralni, rzeczywiste moduły i narożniki PAX, wyposażenie kuchni i pralni, detale łazienek oraz większa sypialnia. [Zakres punktów 1–18 i uwagi wykonawcze](e2-wykonczenie.md). Szczegóły wybranego mebla lub wysokości okna są dostępne w panelu po kliknięciu elementu. Przy stole można włączyć widok 280 cm z 10 zajętymi krzesłami.
+
 Kontrola bez przeglądarki: `python tools/check_js.py` oraz `node tools/check_variant.js E2`. Opcjonalnie `node tools/check_variant.js E2 podglad.svg` zapisuje podgląd rzutu. Każde polecenie kontrolne powinno zakończyć się w 30 sekund.
 
-Po aktualizacji do wersji zapisu v22 edytor pokaże nowe układy domyślne. Starsze ręczne edycje można przywrócić przez „Wczytaj JSON”; wcześniejsze zapisy v21 w przeglądarce nie są usuwane.
+Po aktualizacji do wersji zapisu v23 edytor pokaże nowe układy domyślne. Starsze ręczne edycje można przywrócić przez „Wczytaj JSON”; wcześniejsze zapisy v21/v22 w przeglądarce nie są usuwane. Import starego JSON przywraca dawny układ, bez automatycznego nakładania nowych poprawek.

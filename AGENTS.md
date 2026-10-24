@@ -22,6 +22,7 @@ Przeczytaj ten plik w całości, zanim cokolwiek zmienisz.
 | `tools/render_pdf_tiles.py` | Renderuje fragment PDF z siatką mm (do czytania mebli/drzwi). |
 | `tools/check_js.py` | `node --check` dla skryptu edytora. |
 | `tools/check_variant.js` | Kontrola geometrii, dojść i miniatury bez przeglądarki; opcjonalny podgląd SVG. |
+| `e2-wykonczenie.md` | Zakres poprawek po audycie, moduły, wysokości i pozostałe decyzje wykonawcze E2. |
 | `tools/browser_report.js` | Raport kontroli wariantu do uruchomienia w przeglądarce (patrz §6). |
 
 ## 2. Najważniejsze decyzje i preferencje użytkownika (stan na 2026-10-24)
@@ -49,6 +50,7 @@ Przeczytaj ten plik w całości, zanim cokolwiek zmienisz.
   - `variantE(o)` przyjmuje opcje: `exit` (drzwi z pralni do ogrodu + miejsce na suszarkę), `baths` (prysznic + WC dla gości
     przy salonie, wanna przy sypialniach), `office` (gabinet od północy, pokój 3 od południa). E3 = `{baths}`, E4 = wszystkie trzy.
   - `variantE2()` to osobna funkcja: wyjście z pralni oraz poprawki z 24.10.2026 opisane w §7 `wymagania-projektowe.md` (wanna w łazience o szerokości 195 cm, walk-in przy salonie, zabudowy, biurka 140×70, okap 1 m). Nie przenoś tych zmian do E/E1/E3/E4.
+  - **Nowszy §8 wymagań aktualizuje §7:** ściana warstwowa 412 mm przy zachowanych licach wnętrz, modułowe PAX i narożniki 1102×1102, sypialnia +200 mm kosztem gabinetu. Suszarka stojąca i zewnętrzne otwieranie łazienek są świadomie zaakceptowane. Pralnia ma urządzenia pod blatem. Przeczytaj `e2-wykonczenie.md` przed dalszymi zmianami E2.
   - `variantE1()` to osobna funkcja: E skrócone o 45 cm (pokój 2 o 20 cm węższy, wiatrołap 2,00 m, kotłownia 2,75 m).
 - Użytkownik ogląda rzuty także na **Androidzie (Pixel 9 Pro / Pixel 6 Pro, ok. 412 px szerokości)** — każda zmiana UI musi działać na telefonie (§7).
 
@@ -142,7 +144,7 @@ S = {
    - `F(key, x1,y1,x2,y2, rot, {name, z, parts, ref})` — mebel po prostokącie obrysu w świecie; `w/d` liczone z obrotu.
    - Pomocnicze modyfikatory stref: `zUnfold(n)`, `zAisle`, `zSvc(side)`, `zBed80`, `zLaundry`, `zIsland`, `zC0(n)`, `zC1(n)`; nazwy: `pax(cm)`, `LAUNDRY`, `PUFA`, `DEV`.
 2. Dopisz wpis w `VARIANTS` (klucz, nazwa z wymiarami, `build`).
-3. Ściany zewnętrzne: grubość 200, oś 100 mm od lica; działowe 150 (lica ±75). Licz lica, nie osie, gdy sprawdzasz miejsce na meble.
+3. Starsze warianty: ściany zewnętrzne 200, oś 100 mm od lica. E2: zewnętrzne **412 mm**, osie przesunięte na zewnątrz o 106 mm, dotychczasowe wewnętrzne lica zachowane; tablica `buildUp` opisuje materiały od wnętrza. Wewnętrzne 150 mm w E2 to gotowa grubość z wykończeniem. Licz lica, nie osie, gdy sprawdzasz miejsce na meble.
 4. Wnęka na szafę przy drzwiach: krótka ściana prostopadła (np. `W(5875,5650,5875,6350)`) obok ościeżnicy, szafa w lico.
 5. **Po każdej zmianie geometrii wariantu podbij `LS`** (`ogrodniki-rzut-vNN`). Inaczej przeglądarka wczyta stary zapis z localStorage
    i zmiany nie będą widoczne. Uprzedź użytkownika, że ręczne edycje trzeba odzyskać z JSON.
@@ -166,6 +168,7 @@ S = {
 
 1. Składnia: `python tools/check_js.py` → `SYNTAX_OK`.
    Szybka kontrola geometrii bez przeglądarki: `timeout 30s node tools/check_variant.js E2` (kolizje, dojścia, etykiety, miniatura; kod wyjścia 1 przy problemach). Opcjonalny trzeci argument zapisuje podgląd SVG.
+   Kontrola uwzględnia również rozłożony stół 280 cm i 10 zajętych krzeseł. Raster 50 mm nie zastępuje wymiarowania wykonawczego ani analizy 3D; wyposażenie wbudowane (`equipment`) sprawdzane jest przez obrys całej zabudowy.
 2. Otwórz `edytor-rzutu.html` w przeglądarce (lokalnie lub przez narzędzie przeglądarki agenta), wklej `tools/browser_report.js`
    do konsoli i wywołaj `report('E')`. Sprawdź: „Meble z problemem 0 / N”, „Pomieszczenia bez dojścia brak ✓”.
 3. Rzuć okiem na rzut (zrzut ekranu) — kontrola nie wykryje np. dziwnego układu czy nielogicznej funkcji.

@@ -34,12 +34,26 @@ const warnings = S.furn.filter(f => A.fs.get(f.id)?.warns.length)
 const unreachable = S.rooms.filter(r => !A.roomReach.has(A.rooms.get(r.id)?.reg?.k)).map(r => r.name);
 const invalidLabels = S.rooms.filter(r => A.rooms.get(r.id)?.state !== 'ok').map(r => r.name);
 const thumbnail = thumbFor(variant);
+const scenarios = [];
+if (S.furn.some(f=>f.arrangements)) {
+  const keep = JSON.stringify(S);
+  for (const f of S.furn.filter(f=>f.arrangements)) {
+    S = JSON.parse(keep);
+    const table = S.furn.find(x=>x.id===f.id);
+    setArrangement(table,'expanded'); A = analyse();
+    scenarios.push({name:'Stół 280 cm i 10 zajętych krzeseł',
+      problems:S.furn.filter(x=>A.fs.get(x.id)?.msgs.length).map(x=>({name:x.name,messages:A.fs.get(x.id).msgs})),
+      warnings:S.furn.filter(x=>A.fs.get(x.id)?.warns.length).map(x=>({name:x.name,messages:A.fs.get(x.id).warns})),
+      unreachable:S.rooms.filter(r=>!A.roomReach.has(A.rooms.get(r.id)?.reg?.k)).map(r=>r.name)});
+  }
+  S = JSON.parse(keep); A = analyse();
+}
 const roof = roofRect(), width = roof.x2-roof.x1, depth = roof.y2-roof.y1;
 view = {x:roof.x1-500, y:roof.y1-500, w:width+1000, h:depth+1000};
 S.ui.zones = false; S.ui.pass = false;
 drawRooms(); drawWalls(); drawOps(); drawFurn(); drawRoof();
 globalThis.result = {variant, problems, warnings, unreachable, invalidLabels, hasEntry:A.hasEntry,
-  bbox:A.bbox, area:A.fpArea/1e6, overhang:S.set.overhang,
+  bbox:A.bbox, area:(A.rect?(A.bbox.x2-A.bbox.x1)*(A.bbox.y2-A.bbox.y1):A.fpArea)/1e6, overhang:S.set.overhang, scenarios,
   roofArea:width*depth/Math.cos(S.set.pitch*Math.PI/180)/1e6,
   desks:S.furn.filter(f=>f.key==='desk').map(f=>[f.w,f.d]),
   thumbnailOk:thumbnail.svg.includes('<svg') && thumbnail.stats.includes('kontrola OK')};
@@ -60,4 +74,5 @@ if (process.argv[3]) {
   fs.writeFileSync(process.argv[3], preview);
 }
 const r = context.result;
-if (r.problems.length || r.unreachable.length || r.invalidLabels.length || !r.hasEntry || !r.thumbnailOk) process.exitCode = 1;
+if (r.problems.length || r.unreachable.length || r.invalidLabels.length || !r.hasEntry || !r.thumbnailOk
+    || r.scenarios.some(s=>s.problems.length || s.unreachable.length)) process.exitCode = 1;
