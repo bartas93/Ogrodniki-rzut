@@ -22,6 +22,7 @@ Przeczytaj ten plik w całości, zanim cokolwiek zmienisz.
 | `tools/render_pdf_tiles.py` | Renderuje fragment PDF z siatką mm (do czytania mebli/drzwi). |
 | `tools/check_js.py` | `node --check` dla skryptu edytora. |
 | `tools/check_variant.js` | Kontrola geometrii, dojść i miniatury bez przeglądarki; opcjonalny podgląd SVG. |
+| `tools/check_e2_south.js` | Sprawdza odbicie geometrii/stref/zawiasów i niezależność kopii E2S. |
 | `e2-wykonczenie.md` | Zakres poprawek po audycie, moduły, wysokości i pozostałe decyzje wykonawcze E2. |
 | `tools/browser_report.js` | Raport kontroli wariantu do uruchomienia w przeglądarce (patrz §6). |
 
@@ -51,6 +52,7 @@ Przeczytaj ten plik w całości, zanim cokolwiek zmienisz.
     przy salonie, wanna przy sypialniach), `office` (gabinet od północy, pokój 3 od południa). E3 = `{baths}`, E4 = wszystkie trzy.
   - `variantE2()` to osobna funkcja: wyjście z pralni oraz poprawki z 24.10.2026 opisane w §7 `wymagania-projektowe.md` (wanna w łazience o szerokości 195 cm, walk-in przy salonie, zabudowy, biurka 140×70, okap 1 m). Nie przenoś tych zmian do E/E1/E3/E4.
   - **Nowszy §8 wymagań aktualizuje §7:** ściana warstwowa 412 mm przy zachowanych licach wnętrz, modułowe PAX i narożniki 1102×1102, sypialnia +200 mm kosztem gabinetu. Suszarka stojąca i zewnętrzne otwieranie łazienek są świadomie zaakceptowane. Pralnia ma urządzenia pod blatem. Przeczytaj `e2-wykonczenie.md` przed dalszymi zmianami E2.
+  - `variantE2South()` buduje **E2S**, niezależną kopię E2 z kuchnią na południu (cały dom odbity północ–południe, wejście nadal na wschodzie). Ma skopiowany konstruktor stanu E2 z 24.10.2026 i na końcu wywołuje `mirrorPlanNorthSouth(s,10200)`. Nie synchronizuj go automatycznie z E2. Szczegóły w §9 wymagań. Domyślny nadal E2.
   - `variantE1()` to osobna funkcja: E skrócone o 45 cm (pokój 2 o 20 cm węższy, wiatrołap 2,00 m, kotłownia 2,75 m).
 - Użytkownik ogląda rzuty także na **Androidzie (Pixel 9 Pro / Pixel 6 Pro, ok. 412 px szerokości)** — każda zmiana UI musi działać na telefonie (§7).
 
@@ -148,6 +150,7 @@ S = {
 4. Wnęka na szafę przy drzwiach: krótka ściana prostopadła (np. `W(5875,5650,5875,6350)`) obok ościeżnicy, szafa w lico.
 5. **Po każdej zmianie geometrii wariantu podbij `LS`** (`ogrodniki-rzut-vNN`). Inaczej przeglądarka wczyta stary zapis z localStorage
    i zmiany nie będą widoczne. Uprzedź użytkownika, że ręczne edycje trzeba odzyskać z JSON.
+   Dodanie nowego klucza wariantu, np. E2S, nie wymaga zmiany `LS`, jeśli istniejące warianty nie zmieniły geometrii — nowy klucz nie ma jeszcze starych zapisów.
 6. Kopia wariantu (np. „E jako kopia D”): skopiuj funkcję, zmień nazwę i wpis w `VARIANTS`; nie modyfikuj oryginału.
 
 ## 5. Zasady pracy (wnioski z dotychczasowych sesji)
@@ -169,6 +172,7 @@ S = {
 1. Składnia: `python tools/check_js.py` → `SYNTAX_OK`.
    Szybka kontrola geometrii bez przeglądarki: `timeout 30s node tools/check_variant.js E2` (kolizje, dojścia, etykiety, miniatura; kod wyjścia 1 przy problemach). Opcjonalny trzeci argument zapisuje podgląd SVG.
    Kontrola uwzględnia również rozłożony stół 280 cm i 10 zajętych krzeseł. Raster 50 mm nie zastępuje wymiarowania wykonawczego ani analizy 3D; wyposażenie wbudowane (`equipment`) sprawdzane jest przez obrys całej zabudowy.
+   E2S: `timeout 30s node tools/check_variant.js E2S` oraz `timeout 15s node tools/check_e2_south.js`.
 2. Otwórz `edytor-rzutu.html` w przeglądarce (lokalnie lub przez narzędzie przeglądarki agenta), wklej `tools/browser_report.js`
    do konsoli i wywołaj `report('E')`. Sprawdź: „Meble z problemem 0 / N”, „Pomieszczenia bez dojścia brak ✓”.
 3. Rzuć okiem na rzut (zrzut ekranu) — kontrola nie wykryje np. dziwnego układu czy nielogicznej funkcji.

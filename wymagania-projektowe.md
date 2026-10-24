@@ -106,3 +106,12 @@ Poniższe decyzje aktualizują §7 tam, gdzie zmieniły się wymiary i wyposaże
 - Wszystkie trzy biurka 140×70 cm; sofy w gabarycie odniesienia 200×97 cm i z rezerwacją spania 140×200 cm. Narożnik salonu 230×151 cm, przed otworem HST. Regał i PAX technicznego w jednym ciągu z dostępem od środka.
 - Wstępne wysokości wnętrz 280 cm, blatów kuchni 90 cm/pralni 92 cm/biurek 74 cm, parapetów i okien wpisane do modelu. To decyzje koncepcyjne, wymagające koordynacji z konstrukcją, sufitem, instalacjami i projektem stolarki.
 - Przechowywanie opisane przy modułach; robot pod ławką wiatrołapu, legowiska i miski przy zachodnim oknie salonu. Magazyn ogrodowy pozostaje do odrębnego zagospodarowania.
+
+## 9. E2S — kopia E2 z kuchnią na południu
+
+- Osobny wariant **E2S**, utworzony na podstawie E2 po poprawkach z §8. E2 pozostaje wariantem domyślnym i nie zmienia układu.
+- Cały rzut odbity w osi północ–południe: kuchnia i przyległa spiżarnia na południu, wypoczynek na północy. Wejście pozostaje od wschodu. Również sypialnie, łazienki, pralnia i techniczne zamieniają położenia północ–południe.
+- „Południe” oznacza dolną krawędź rzutu; orientację geograficzną należy potwierdzić przy usytuowaniu na działce.
+- Zachowane wymiary i powierzchnie, warstwy ścian, okap 1 m, wyposażenie, biurka 140×70, drzwi i okna. Odbicie obejmuje również skrzydła drzwi, części narożnych mebli, strefy użytkowe oraz wyposażenie wbudowane.
+- Kopia ma osobny konstruktor i zapis w przeglądarce; przyszłe zmiany E2 nie przechodzą automatycznie do E2S.
+- E2S dziedziczy zaakceptowane ograniczenia suszarki i drzwi łazienek, trzy ostrzeżenia rastra przy szafach holu oraz ograniczenie tylnej strefy wyspy przy stole dla 10 osób. Zmiana stron świata wymaga ponownego rozpatrzenia doświetlenia, zacieniania i przegrzewania.

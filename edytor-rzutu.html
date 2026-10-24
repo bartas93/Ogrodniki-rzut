@@ -1149,6 +1149,264 @@ function variantE2(){
   return s;
 }
 
+// E2S — niezależna kopia E2 z 24.10.2026, z kuchnią na południu.
+function variantE2South(){
+  const {W,R,F,done} = vb();
+  // Jedno okno pralni i zachowane wyjście; północno-wschodni narożnik dla PAX.
+  W(100,100,17300,100,200,{ext:true, op:[['window',2250,1500],['window',5775,600],['door',7300,800,0,-1],['window',8600,900],['window',11700,1500],['window',16000,600]]});
+  // Wejście przesunięte o 30 cm: pomiędzy nim a oknem zostaje 30 cm muru.
+  W(17300,100,17300,10100,200,{ext:true, op:[['window',3800,600],['door',4900,1000,0,-1],['window',8350,900]]});
+  W(17300,10100,100,10100,200,{ext:true, op:[['window',1250,1500],['slide',3550,2000],['window',6550,1500],['window',9000,1800],['window',14950,1200]]});
+  W(100,10100,100,100,200,{ext:true, op:[['window',8500,1500],['window',4650,1500],['door',3000,1000,0,1]]});
+  W(4775,100,4775,2475,150,{op:[['door',1300,800,0,-1]]});
+  W(5125,2475,5125,4300);
+  W(4775,4300,4775,10100,150,{op:[['open',4975,1200]]});
+  // Pralnia: 100 mm między zawiasem a gotowym licem lewej ściany.
+  W(4775,4300,13925,4300,150,{op:[['door',6950,800,0,1],['door',9400,900,0,-1],['door',13300,900,1,-1]]});
+  W(4775,2475,8775,2475);
+  W(6775,100,6775,2475);
+  W(8775,2475,8775,4300);
+  W(10875,100,10875,4300);
+  W(12775,4300,12775,3600);
+  W(14225,100,14225,3400);
+  W(13925,3400,13925,4300);
+  W(13925,3400,17300,3400,150,{op:[['door',16700,800,1,-1]]});
+  W(14875,3400,14875,6900,150,{op:[['door',4975,900,0,1]]});
+  // Sypialnia: również 100 mm rezerwy przy zawiasie. Drzwi łazienek bez zmian.
+  W(4775,5650,13825,5650,150,{op:[['door',5350,900,0,1],['open',9075,2350],['door',10800,900,1,1],['door',12000,800,0,-1]]});
+  W(5875,5650,5875,6350);
+  W(7775,5650,7775,10100);
+  W(7775,6425,10325,6425); W(10325,5650,10325,6425);
+  // Garderoba: zawias 100 mm od gotowej ściany zewnętrznej.
+  W(11425,5650,11425,10100,150,{op:[['door',9500,800,1,-1]]});
+  W(11425,8225,13825,8225);
+  W(13525,5650,13525,8225);
+  W(13525,8225,13825,8225);
+  W(13825,8225,13825,10100);
+  W(13525,6200,17300,6200,150,{op:[['door',14350,800,0,1]]});
+
+  R('Salon + kuchnia + jadalnia + komunikacja',1000,5500); R('Spiżarnia',5600,1600);
+  R('Łazienka (walk-in)',6900,3950); R('Pralnia / suszarnia',9800,2900);
+  R('Pokój 3',12000,2400); R('Kotłownia / gospodarcze',15600,2300);
+  R('Wiatrołap',16000,4700); R('Pokój 2',6300,7600); R('Sypialnia',9300,8300);
+  R('Łazienka (wanna)',12200,6800); R('Garderoba',12300,9100); R('Gabinet',15200,8000);
+
+  // Moduły PAX: rzeczywiste szerokości korpusów; 58 cm + ok. 2 cm frontu.
+  const P = (x,y,cm,rot=0,content='',strict=false) => {
+    const w = cm*10-2, d = 600, vert = rot%180 !== 0;
+    return F(cm===100?'pax':cm===75?'pax75':'pax50',x,y,x+(vert?d:w),y+(vert?w:d),rot,{
+      name:`PAX ${cm} — ${content}`, joinery:{nominalWidth:cm*10,bodyWidth:w,bodyDepth:580,frontDepth:20,height:2364},
+      notes:['Korpus nominalny '+cm+' cm; mocowanie do ściany; front bez wystających uchwytów.','Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu.'],
+      z:strict?zAisle:undefined,
+    });
+  };
+  const C = (x,y) => F('paxcorner',x,y,x+1102,y+1102,0,{
+    name:'PAX narożny 110,2×110,2', joinery:{corner:true,height:2364},
+    notes:['Zestaw narożny PAX: korpus 100 + dostawka 53, zawiasy KOMPLEMENT do sekcji narożnej.','Obrys 110,2×110,2 cm według kombinacji producenta; nie dwa zwykłe korpusy wsunięte jeden przed drugi.'],
+  });
+  const fill = (x,y,w,d,name) => F('ref',x,y,x+w,y+d,0,{name:'Blenda / wypełnienie — '+name});
+  const E = (kind,x,y,w,d,label) => ({kind,x,y,w,d,label});
+  const sofa = (x,y,rot) => {
+    const vert = rot%180 !== 0;
+    return F('sofabed',x,y,x+(vert?970:2000),y+(vert?2000:970),rot,{
+      name:'Sofa 200×97 — spanie 140×200', z:zUnfold(430),
+      notes:['Gabaryt odniesienia: IKEA NYHAMN, 200×97 cm, materac 140×200 cm.','Rezerwa po rozłożeniu: 200×140 cm; ostateczny model i ruch mechanizmu potwierdzić przed zakupem.'],
+    });
+  };
+
+  // Kuchnia: urządzenia mają przypisane miejsca wewnątrz obrysu zabudowy.
+  F('tall',200,200,800,2400,270,{name:'Słupki: lodówka, piekarnik, zapasy', z:zC1(600),
+    equipment:[E('fridge',0,0,600,600,'LOD'),E('oven',600,0,600,600,'PIEK'),E('cabinet',1200,0,1000,600,'ZAPASY')],
+    notes:['Lodówka i słupek piekarnika po 60 cm; pozostałe 100 cm na zapasy i odstawianie.','Wentylacja słupków, otwieranie lodówki i zasilanie według kart urządzeń.']});
+  F('k240',800,200,4700,800,0,{name:'Kuchnia: zlew, zmywarka, blat, płyta',
+    equipment:[E('cabinet',0,0,600,600,'BLAT'),E('sink',600,0,800,600,'ZLEW'),E('dishwasher',1400,0,600,600,'ZM'),E('cabinet',2000,0,600,600,'BLAT'),E('hob',2600,0,600,600,'PŁYTA'),E('cabinet',3200,0,700,600,'BLAT')],
+    vertical:{worktop:900}, notes:['Kosze segregacji pod zlewem; okap nad płytą, bez doprowadzania tłuszczu do rekuperatora.','Ekspres i Thermomix na odcinkach blatu; gniazda przy urządzeniach poza strefą zlewu i płyty.']});
+  F('island',1800,1800,3200,2700,180,{name:'Wyspa 140×90 — blat roboczy',
+    z:z=>{z[1].d=750; z[1].l='dostęp, bez hokerów';},
+    notes:['Wyspa bez zlewu i płyty; szuflady od kuchni, zasilanie w boku.','Przy 10 osobach końcowe krzesło stołu wykorzystuje część strefy wyspy — praca i biesiada to różne stany.']});
+  const dining = F('tableext',2450,4000,3350,5600,90,{name:'Stół 160→280, 4→10 os.',
+    notes:['Przycisk w panelu przełącza pełny stan 10 osób: blat 280×90 oraz zajęte krzesła.','Przy rozłożeniu przejście po stronie holu ma nominalnie 75 cm; nie ustawiać tam dodatkowych mebli.']});
+  const occupied = [[0,0,1,1]];
+  for(let i=0;i<4;i++) for(const y of [-600,900]) occupied.push([(125+i*700)/2800,y/900,450/2800,600/900]);
+  occupied.push([-600/2800,225/900,600/2800,450/900],[1,225/900,600/2800,450/900]);
+  dining.arrangements = {mode:'closed',closed:{w:1600,d:900,parts:[[0,0,1,1]]},expanded:{w:2800,d:900,parts:occupied}};
+  sofa(200,6200,0);
+  F('corner',200,8490,2500,10000,0,{name:'Narożnik 230×151 — siedziska na północ',
+    parts:[[0,610/1510,1,900/1510],[0,0,1000/2300,610/1510]],
+    z:z=>{z[0].rect=[0,-600,2300,600];z[0].l='dojście po rozłożeniu';z.push(Z('front',610,'po rozłożeniu',{rect:[1000,0,1300,610],k:'unfold'}));}, notes:['Gabaryt odniesienia IKEA FRIHETEN 230×151 cm; lewa otomana, główny front na północ.','Narożnik kończy się przed otworem HST. Pełny obrys 230×151 cm zarezerwowany również na rozłożenie; spanie 140×204 cm.']});
+  F('coffee',2700,7900,3800,8500,0,{name:'Stolik 110×60'});
+  F('tvwall',4600,7300,4700,8530,90,{name:'TV 55" (ściana wschodnia)',vertical:{screenCentre:1100}});
+  F('shelf',4700,2550,5050,4225,90,{name:'Wnęka 167,5×35 — książki i dokumenty',
+    notes:['Płytkie półki z frontem; bez standardowego poprzecznego drążka na wieszaki.']});
+
+  F('bench',4850,200,6100,800,0,{name:'Spiżarnia: blat 125 — małe AGD',vertical:{worktop:900}});
+  F('steel',6100,900,6700,1800,90,{name:'Regał 90×60 — zapasy'});
+  F('steel',4850,1800,6650,2400,180,{name:'Regały 2×90×60 — słoiki i zapasy', z:zC0(550)});
+
+  // Walk-in powiększony do 130×90; szkło po prawej, natrysk od ściany zachodniej.
+  F('walkin120',5200,2550,6500,3450,0,{name:'Walk-in 130×90 — szkło 90 + powrót 30',
+    notes:['Szyba prawa 90 cm i stały powrót 30 cm przy wejściu; otwarte wejście 100 cm od południa.','Głowica na ścianie zachodniej, natrysk na wschód w stronę szyby. Odpływ liniowy przy ścianie północnej.','Spadek projektowy 2% ku odpływowi; rezerwa 12 cm w warstwach podłogi do potwierdzenia kartą syfonu.','Hydroizolacja całej podłogi i ścian natrysku; bezprogowy styk z resztą łazienki.'],
+    equipment:[E('drain',100,35,1100,50,'ODPŁYW'),E('glass',1270,0,20,900,''),E('glass',1000,870,300,20,''),E('head',20,350,70,300,'NATRYSK')],
+    z:z=>{z[0].rect=[0,900,1000,750]; z[0].l='otwarte wejście 100 cm';}});
+  F('instwall',6550,2550,7350,2750,0,{name:'Ścianka umywalki 20 cm'});
+  F('sink80',6550,2750,7350,3210,0,{name:'Umywalka 80 + lustro',vertical:{basinTop:850,mirrorBottom:1100},notes:['Lustro nad umywalką; oświetlenie po bokach; gniazdo poza strefami natrysku według projektu elektrycznego.']});
+  F('instwall',8500,2550,8700,4100,90,{name:'Ścianka WC 20 cm'});
+  F('wcw',7970,3450,8500,3810,90,{name:'WC podwieszane',vertical:{seat:430}});
+
+  // Pralnia: narożnik PAX zastępuje usunięte prawe okno i konflikt z blatem.
+  F('k240',7850,200,9650,900,0,{name:'Pralnia: zlew 60 + pralka 60 + suszarka 60',
+    equipment:[E('sink',0,0,600,700,'ZLEW'),E('washer',600,0,600,700,'PRALKA'),E('dryer',1200,0,600,700,'SUSZARKA')],
+    vertical:{worktop:920}, z:z=>{z[0].d=900;z[0].l='załadunek i wyjęcie urządzeń';},
+    notes:['Urządzenia pod blatem, nie podniesione: wybrano ciąg roboczy pod jednym oknem.','Głębokość rezerwacji 70 cm z przyłączami; fronty urządzeń otwierane na środek.','Powyżej blatu drążek/suszarka ścienna; deska składana w szafie. Syfony i zawory dostępne.']});
+  F('ref',6900,900,8600,1700,0,{ref:true,name:'Suszarka stojąca — ograniczenie zaakceptowane',notes:['Pozostawiona na życzenie inwestora; po rozłożeniu ogranicza dojście do ogrodu. Kontrola jej nie uwzględnia.']});
+  P(6900,1800,100,180,'chemia, kosze i tekstylia'); P(7900,1800,75,180,'deska i odkurzacz');
+  C(9698,300);
+  fill(9698,200,1102,100,'dystans przy ścianie północnej');
+  fill(9650,300,48,600,'narożnik pralni');
+  P(10200,1450,100,90,'pościel'); P(10200,2450,100,90,'ubrania sezonowe'); P(10200,3450,75,90,'walizki');
+  fill(10200,1402,600,48,'łączenie narożnika'); fill(10200,4198,600,27,'przy drzwiach pralni');
+
+  F('desk',10950,200,12350,900,0,{name:'Biurko 140×70 (przy oknie)',vertical:{worktop:740}});
+  sofa(12150,1800,180);
+  P(10975,3625,100,180,'ubrania'); P(11975,3625,75,180,'zabawki i książki');
+  P(14025,3475,75,0,'kurtki gości');
+
+  for(const x of [14300,14914,15528]) F('round',x,200,x+594,794,0,{name:DEV,z:zSvc('front'),notes:['Rezerwacja gabarytu; konkretny model i wymagania serwisowe do doboru instalatora.']});
+  F('ref',16200,200,17190,788,0,{name:'Rekuperator 99×59 obok urządzeń',z:zSvc('front'),notes:['Front serwisowy od środka pomieszczenia; wymiana filtrów bez demontażu szaf.']});
+  F('steel',14300,1475,14900,2375,270,{name:'Regał stalowy 90×60 — gospodarcze'});
+  P(14300,2525,75,270,'mop i sprzęt porządkowy');
+  F('dogbath',16400,1450,17200,2450,90,{name:'Brodzik dla psa 100×80',notes:['Odpływ z wyjmowanym sitkiem na sierść i rewizją; ręczniki w szafie gospodarczej.']});
+  F('hall180',14950,5475,17200,6125,180,{name:'Szafa przesuwna 225 — kurtki i buty',notes:['Zabudowa na wymiar; nie oznacza modułu PAX. Wydzielić mokre kurtki i obuwie.']});
+  F('bench',14950,3475,16150,3875,0,{name:'Ławka 120×40 — stacja robota pod spodem',
+    equipment:[E('robot',50,25,350,350,'ROBOT')],
+    notes:['Stacja robota pod siedziskiem, gniazdo za ławką; wyjazd na środek wiatrołapu.'],
+    z:z=>{z[0].d=600;z[0].l='siadanie / wyjazd robota';}});
+
+  P(5975,5725,100,0,'ubrania'); P(6975,5725,75,0,'zabawki');
+  F('desk',5850,9300,7250,10000,180,{name:'Biurko 140×70 (przy oknie)',vertical:{worktop:740}});
+  sofa(4850,7200,270);
+  P(7950,5725,100,180,'pościel'); P(8950,5725,75,180,'ręczniki'); P(9700,5725,50,180,'leki i dokumenty');
+  F('bed180',7850,7300,9950,9200,270,{name:'Łóżko 180×200 — rama 190×210',z:zBed80});
+  F('night',7850,6850,8296,7296,270); F('night',7850,9204,8296,9650,270);
+  F('crib',10000,7750,10650,9000,270,{name:'Łóżeczko 60×120 — dojście od wschodu'});
+  F('tvwall',11250,7620,11350,8850,90,{name:'TV 55" — poza łóżeczkiem',vertical:{screenCentre:1100},notes:['Uchwyt zabezpieczony, przewody schowane; ekran nie znajduje się nad łóżeczkiem.']});
+
+  // Wanna 180 cm + dwie półki po 7,5 cm = 195 cm po wykończeniu.
+  F('instwall',13250,5725,13450,7350,90,{name:'Ścianka instalacyjna 20 cm'});
+  F('sink80',12790,5850,13250,6650,90,{name:'Umywalka 80 + lustro',vertical:{basinTop:850,mirrorBottom:1100}});
+  F('wcw',12720,6750,13250,7110,90,{name:'WC podwieszane',vertical:{seat:430}});
+  F('bath',11575,7350,13375,8150,180,{name:'Wanna 180×80 + półki 2×7,5',
+    z:z=>{z[0].c0=875;z[0].l='wejście do wanny 92,5 cm';},
+    notes:['195 cm to wymiar gotowy: 180 cm wanny + 7,5 cm z każdej strony.','Bateria ścienna na ścianie południowej, nie na wąskiej półce. Syfon od dostępnego końca, rewizja od frontu.','Hydroizolacja pod wanną i na ścianach; wysokość górnej krawędzi ok. 60 cm, według wybranego modelu.']});
+  fill(11500,7350,75,800,'lewa półka wanny'); fill(13375,7350,75,800,'prawa półka wanny');
+
+  // Prawdziwy narożnik PAX; moduł 100 na górze i 50 po prawej, reszta blendy.
+  P(11575,8300,100,0,'ubrania wiszące',true);
+  C(12648,8300);
+  P(13150,9450,50,90,'akcesoria',true);
+  fill(11500,8300,75,600,'lewy koniec garderoby'); fill(12573,8300,75,600,'przy narożniku garderoby');
+  fill(13150,9402,600,48,'łączenie narożnika garderoby'); fill(13150,9948,600,52,'prawy koniec garderoby');
+  P(14975,6275,100,0,'dokumenty'); P(15975,6275,75,0,'elektronika'); P(16725,6275,50,0,'materiały plastyczne');
+  F('desk',16500,7650,17200,9050,90,{name:'Biurko 140×70 (przy oknie)',vertical:{worktop:740}});
+  sofa(13950,9030,180);
+  F('ref',200,4050,1000,5550,270,{name:'Legowiska 2×60×80 + miski',
+    equipment:[E('bed',0,0,600,800,'PIES'),E('bed',600,0,600,800,'PIES'),E('bowls',1200,200,300,400,'MISKI')],
+    notes:['Dwa legowiska przy zachodnim oknie salonu; miski na zmywalnej macie. Nie zajmują głównego przejścia.']});
+
+  const s = done();
+  // +20 cm dla sypialni: łazienka i garderoba przesunięte bez zmiany swoich szerokości.
+  // Gabinet oddaje pas 20 cm przy tej części wspólnej ściany.
+  for(const w of s.walls.filter(w=>!w.ext)){
+    const dx=w.x2-w.x1,dy=w.y2-w.y1,L=Math.hypot(dx,dy);
+    const openings=w.op.map(o=>({o,x:w.x1+dx/L*o.pos,y:w.y1+dy/L*o.pos}));
+    if([11425,13525,13825].includes(w.x1)) w.x1+=200;
+    if([11425,13525,13825].includes(w.x2)) w.x2+=200;
+    for(const {o,x,y} of openings){
+      const shift=Math.abs(y-5650)<1 && Math.abs(x-12000)<1?200:0;
+      o.pos=dx?Math.abs(x+shift-w.x1):Math.abs(y-w.y1);
+    }
+  }
+  for(const f of s.furn){
+    if(f.x>=11500 && f.x<=13750 && f.y>5700) f.x+=200;
+    if(f.key==='tvwall' && f.x>11000 && f.x<11425) f.x+=200;
+    if(f.key==='sofabed' && f.x>13900 && f.x<16000 && f.y>9000) f.x+=200;
+  }
+  for(const r of s.rooms) if(['Garderoba','Łazienka (wanna)'].includes(r.name)) r.x+=200;
+  // Zewnętrzne 41,2 cm: tynk 1,5 + silikat 18 + klej 1 + EPS 20 + zbrojenie 0,5 + tynk 0,2.
+  // Zachowujemy gotowe lica wnętrz: x=200/17200, y=200/10000. Warstwy przyrastają na zewnątrz.
+  const layers = [{name:'Tynk gipsowy',t:15},{name:'Silikat',t:180},{name:'Klej EPS',t:10},{name:'EPS grafit λ 0,031',t:200},{name:'Warstwa zbrojona',t:5},{name:'Tynk elewacyjny',t:2}];
+  const t = layers.reduce((v,l)=>v+l.t,0), delta=(t-200)/2;
+  for(const w of s.walls.filter(w=>w.ext)){
+    const dx=w.x2-w.x1,dy=w.y2-w.y1,L=Math.hypot(dx,dy),nx=-dy/L,ny=dx/L;
+    const openings=w.op.map(o=>({o,x:w.x1+dx/L*o.pos,y:w.y1+dy/L*o.pos}));
+    w.x1-=nx*delta;w.x2-=nx*delta;w.y1-=ny*delta;w.y2-=ny*delta;
+    if(dx){w.x1+=Math.sign(dx)*-delta;w.x2+=Math.sign(dx)*delta;}
+    else {w.y1+=Math.sign(dy)*-delta;w.y2+=Math.sign(dy)*delta;}
+    w.t=t; w.buildUp=layers.map(l=>({...l}));
+    for(const {o,x,y} of openings){
+      o.pos=dx?Math.abs(x-w.x1):Math.abs(y-w.y1);
+      if(o.type==='window'){
+        const kitchen=Math.abs(y-100)<1 && x<4700;
+        const laundry=Math.abs(y-100)<1 && x>6800 && x<10800;
+        const small=o.w<=600;
+        o.sill=small?1500:kitchen?1100:laundry?1200:900;
+        o.height=small?600:kitchen||laundry?1200:1500;
+        o.opening=kitchen?'FIX — bateria bez kolizji':laundry?'dół FIX, uchylne od 180 cm':'dół FIX, uchylne od 170 cm';
+      } else {o.sill=0;o.height=o.type==='slide'||Math.abs(x-100)<1?2300:2100;}
+    }
+  }
+  s.construction={wallLayers:layers,finishedInterior:true,partition:'150 mm łącznie z wykończeniem; materiał i nośność do projektu',roomHeight:2800,uIndicative:0.15,
+    note:'U orientacyjne, nie obliczenie projektowe. Silikat 18 cm i klasa 15/20 wymagają potwierdzenia konstruktora.'};
+  s.acceptedLimitations=['Rozstawiona suszarka stojąca ogranicza wyjście pralni.','Otwarte drzwi łazienek lokalnie zwężają korytarz.'];
+  s.storagePlan=['Robot sprzątający: stacja pod ławką wiatrołapu z gniazdem.','Legowiska i miski: oznaczona strefa przy zachodnim oknie salonu.','Sprzęt ogrodowy, rowery i opony: magazyn poza bryłą — do osobnego zagospodarowania.'];
+  s.set = {overhang:1000};
+  mirrorPlanNorthSouth(s,10200);
+  return s;
+}
+
+// Odbicie planu w osi północ–południe. Obracamy też lokalne części i strefy mebli.
+function mirrorPlanNorthSouth(s,height){
+  const directions = {
+    'północnej':'południowej','południowej':'północnej',
+    'północna':'południowa','południowa':'północna',
+    'północny':'południowy','południowy':'północny',
+    'północnym':'południowym','południowym':'północnym',
+    'północne':'południowe','południowe':'północne',
+    'północy':'południa','południa':'północy','północ':'południe','południe':'północ',
+  };
+  const expression = new RegExp(Object.keys(directions).sort((a,b)=>b.length-a.length).join('|'),'gi');
+  const text = value => value.replace(expression,word=>{
+    const next=directions[word.toLowerCase()];
+    return word[0]===word[0].toUpperCase()?next[0].toUpperCase()+next.slice(1):next;
+  });
+  const parts = list => list.map(([x,y,w,d])=>[1-x-w,y,w,d]);
+  for(const w of s.walls){
+    const {x1,y1,x2,y2}=w, L=Math.hypot(x2-x1,y2-y1);
+    // Odwrócenie końców zachowuje normalną do wnętrza i kolejność warstw ściany.
+    w.x1=x2;w.y1=height-y2;w.x2=x1;w.y2=height-y1;
+    for(const o of w.op){o.pos=L-o.pos;if(o.type==='door')o.hinge=o.hinge?0:1;}
+  }
+  for(const r of s.rooms)r.y=height-r.y;
+  for(const f of s.furn){
+    f.y=height-f.y;f.rot=(180-f.rot+360)%360;f.decoMirrorX=!f.decoMirrorX;
+    const bodyParts=f.parts || LIBK[f.key]?.parts;
+    if(bodyParts)f.parts=parts(bodyParts);
+    for(const z of f.z){
+      if(z.rect){const [x,y,w,d]=z.rect;z.rect=[f.w-x-w,y,w,d];}
+      else if(z.s==='front'||z.s==='back'){const c=z.c0;z.c0=z.c1;z.c1=c;}
+      if(z.s==='left')z.s='right';else if(z.s==='right')z.s='left';
+      z.l=text(z.l);
+    }
+    for(const it of f.equipment||[])it.x=f.w-it.x-it.w;
+    if(f.arrangements)for(const mode of ['closed','expanded']){
+      const a=f.arrangements[mode];if(a?.parts)a.parts=parts(a.parts);
+    }
+    f.name=text(f.name);if(f.notes)f.notes=f.notes.map(text);
+  }
+  if(s.storagePlan)s.storagePlan=s.storagePlan.map(text);
+  s.designNote='E2S: niezależna kopia E2 z 24.10.2026, odbita północ–południe. Kuchnia i spiżarnia na południu; salon na północy; wejście nadal od wschodu.';
+}
+
 const VARIANTS = {
   base: {name:'Rzut z PDF (zmieniony) 17,70 × 10,20', build: () => buildBase()},
   A: {name:'A — prawie kwadrat 13,85 × 13,15', build: variantA},
@@ -1158,6 +1416,7 @@ const VARIANTS = {
   E: {name:'E — D z poprawkami 17,40 × 10,20', build: () => variantE()},
   E1: {name:'E1 — E kompakt 16,95 × 10,20', build: variantE1},
   E2: {name:'E2 — poprawiony układ, wyjście z pralni, okap 1 m', build: variantE2},
+  E2S: {name:'E2S — kopia E2, kuchnia na południu', build: variantE2South},
   E3: {name:'E3 — E + prysznic przy salonie, wanna przy sypialniach', build: () => variantE({baths:true})},
   E4: {name:'E4 — E2 + E3 + gabinet od północy', build: () => variantE({exit:true, baths:true, office:true})},
 };
@@ -1834,9 +2093,9 @@ function decoPath(f){
   switch (D) {
     case 'bed': if (w >= 1300) { rc(w*.07,90,w*.4,320); rc(w*.53,90,w*.4,320); } else rc(w*.12,90,w*.76,320); line(0,620,w,620); break;
     case 'sofa': rc(0,0,w,220); rc(0,220,Math.min(160,w*.2),d-220); rc(w-Math.min(160,w*.2),220,Math.min(160,w*.2),d-220); break;
-    case 'corner': line(0,220,w,220); line(220,220,220,d); break;
+    case 'corner': line(0,220,w,220); {const x=f.decoMirrorX?w-220:220;line(x,220,x,d);} break;
     case 'ward': line(40,d/2,w-40,d/2); for (let x=w/Math.max(1,Math.round(w/500)); x<w-1; x+=w/Math.max(1,Math.round(w/500))) line(x,0,x,d); break;
-    case 'paxcorner': line(20,580,502,580); line(522,600,522,1082); line(502,600,720,380); break;
+    case 'paxcorner': { const X=x=>f.decoMirrorX?w-x:x; line(X(20),580,X(502),580); line(X(522),600,X(522),1082); line(X(502),600,X(720),380); break; }
     case 'wards': line(40,d*.4,w-40,d*.4); line(40,d*.6,w-40,d*.6); break;
     case 'drawers': line(30,d-60,w-30,d-60); line(w/2,0,w/2,d-60); break;
     case 'desk': line(0,d-40,w,d-40); break;
@@ -1846,11 +2105,11 @@ function decoPath(f){
       if (w >= 2200) { rc(-330,d/2-210,280,420); rc(w+50,d/2-210,280,420); }
       break;
     }
-    case 'counter': line(0,d-40,w,d-40); for (let x=600; x<w-1; x+=600) line(x,0,x,d-40); break;
+    case 'counter': line(0,d-40,w,d-40); for (let x=600; x<w-1; x+=600) {const u=f.decoMirrorX?w-x:x;line(u,0,u,d-40);} break;
     case 'fridge': line(0,0,w,d); line(w,0,0,d); break;
     case 'wc': rc(20,0,w-40,160); el(w/2,160+(d-160)/2,w/2-25,(d-160)/2-15); break;
     case 'sink': el(w/2,d*.55,w*.38,d*.3); break;
-    case 'bath': rc(70,70,w-140,d-140); el(w-230,d/2,45,45); break;
+    case 'bath': rc(70,70,w-140,d-140); el(f.decoMirrorX?230:w-230,d/2,45,45); break;
     case 'shower': line(0,0,w,d); line(w,0,0,d); el(w/2,d/2,45,45); break;
     case 'walkin': if (!f.equipment) {line(w-35,0,w-35,d); line(w-65,0,w-65,d); line(150,100,w-150,100);} break;
     case 'washer': el(w/2,d/2,Math.min(w,d)*.35,Math.min(w,d)*.35); break;
