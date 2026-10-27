@@ -23,10 +23,12 @@ Przeczytaj ten plik w całości, zanim cokolwiek zmienisz.
 | `tools/check_js.py` | `node --check` dla skryptu edytora. |
 | `tools/check_variant.js` | Kontrola geometrii, dojść i miniatury bez przeglądarki; opcjonalny podgląd SVG. |
 | `tools/check_e2_south.js` | Sprawdza odbicie geometrii/stref/zawiasów i niezależność kopii E2S. |
+| `tools/check_r1.js` | Kontrakt R1: wejście północne, trzy pokoje, mniejsza bryła, wyposażenie i dojścia. |
+| `R1-koncepcja.md` | Program, wymiary i założenia nowego wariantu R1. |
 | `e2-wykonczenie.md` | Zakres poprawek po audycie, moduły, wysokości i pozostałe decyzje wykonawcze E2. |
 | `tools/browser_report.js` | Raport kontroli wariantu do uruchomienia w przeglądarce (patrz §6). |
 
-## 2. Najważniejsze decyzje i preferencje użytkownika (stan na 2026-10-24)
+## 2. Najważniejsze decyzje i preferencje użytkownika (stan na 2026-10-27)
 
 - **Bez garażu** (decyzja 18.10.2026). Parter, prosta bryła (prostokąt), dach kopertowy / wielospadowy symetryczny 25–40°.
 - Cel: jak najniższy koszt budowy przy wygodnym układzie → zwarty prostokąt, mało ścian zewnętrznych, bez koszy dachowych.
@@ -53,6 +55,7 @@ Przeczytaj ten plik w całości, zanim cokolwiek zmienisz.
   - `variantE2()` to osobna funkcja: wyjście z pralni oraz poprawki z 24.10.2026 opisane w §7 `wymagania-projektowe.md` (wanna w łazience o szerokości 195 cm, walk-in przy salonie, zabudowy, biurka 140×70, okap 1 m). Nie przenoś tych zmian do E/E1/E3/E4.
   - **Nowszy §8 wymagań aktualizuje §7:** ściana warstwowa 412 mm przy zachowanych licach wnętrz, modułowe PAX i narożniki 1102×1102, sypialnia +200 mm kosztem gabinetu. Suszarka stojąca i zewnętrzne otwieranie łazienek są świadomie zaakceptowane. Pralnia ma urządzenia pod blatem. Przeczytaj `e2-wykonczenie.md` przed dalszymi zmianami E2.
   - `variantE2South()` buduje **E2S**, niezależną kopię E2 z kuchnią na południu (cały dom odbity północ–południe, wejście nadal na wschodzie). Ma skopiowany konstruktor stanu E2 z 24.10.2026 i na końcu wywołuje `mirrorPlanNorthSouth(s,10200)`. Nie synchronizuj go automatycznie z E2. Szczegóły w §9 wymagań. Domyślny nadal E2.
+  - `variantR1()` to **nowa, mniejsza koncepcja** z wejściem północnym, salonem i trzema pokojami (sypialnia + dwa dodatkowe, bez czwartego gabinetu). Zachowuje dwie łazienki, pralnię, techniczne, spiżarnię i garderobę. Obrys gotowy 15,174×9,824 m (149,07 m²). Nie jest kopią/odbiciem E2; nie przenoś zmian między wariantami. Wymagania §10 i `R1-koncepcja.md`. Domyślny nadal E2.
   - `variantE1()` to osobna funkcja: E skrócone o 45 cm (pokój 2 o 20 cm węższy, wiatrołap 2,00 m, kotłownia 2,75 m).
 - Użytkownik ogląda rzuty także na **Androidzie (Pixel 9 Pro / Pixel 6 Pro, ok. 412 px szerokości)** — każda zmiana UI musi działać na telefonie (§7).
 
@@ -173,6 +176,7 @@ S = {
    Szybka kontrola geometrii bez przeglądarki: `timeout 30s node tools/check_variant.js E2` (kolizje, dojścia, etykiety, miniatura; kod wyjścia 1 przy problemach). Opcjonalny trzeci argument zapisuje podgląd SVG.
    Kontrola uwzględnia również rozłożony stół 280 cm i 10 zajętych krzeseł. Raster 50 mm nie zastępuje wymiarowania wykonawczego ani analizy 3D; wyposażenie wbudowane (`equipment`) sprawdzane jest przez obrys całej zabudowy.
    E2S: `timeout 30s node tools/check_variant.js E2S` oraz `timeout 15s node tools/check_e2_south.js`.
+   R1: `timeout 30s node tools/check_variant.js R1` oraz `timeout 15s node tools/check_r1.js`. Etykieta stanu stołu wynika z opcjonalnego `arrangements.label` (R1: 240 cm / 8 osób; E2/E2S: 280 cm / 10 osób).
 2. Otwórz `edytor-rzutu.html` w przeglądarce (lokalnie lub przez narzędzie przeglądarki agenta), wklej `tools/browser_report.js`
    do konsoli i wywołaj `report('E')`. Sprawdź: „Meble z problemem 0 / N”, „Pomieszczenia bez dojścia brak ✓”.
 3. Rzuć okiem na rzut (zrzut ekranu) — kontrola nie wykryje np. dziwnego układu czy nielogicznej funkcji.

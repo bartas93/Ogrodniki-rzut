@@ -1407,6 +1407,143 @@ function mirrorPlanNorthSouth(s,height){
   s.designNote='E2S: niezależna kopia E2 z 24.10.2026, odbita północ–południe. Kuchnia i spiżarnia na południu; salon na północy; wejście nadal od wschodu.';
 }
 
+// R1 — nowa, mniejsza koncepcja: wejście północne, trzy pokoje poza salonem.
+function variantR1(){
+  const {W,R,F,done}=vb();
+  // Siatka wyjściowa przed korektą zaplecza i pokoi: x=200..14200, y=200..9400; ściana 412 mm.
+  W(-6,-6,14406,-6,412,{ext:true,op:[['door',1300,1000,0,-1],['window',2850,600],['window',6350,1200],['window',8350,600],['window',10350,600]]});
+  W(14406,-6,14406,9606,412,{ext:true,op:[['window',1300,1500],['window',6500,1400]]});
+  W(14406,9606,-6,9606,412,{ext:true,op:[['slide',4000,2400],['window',8150,1500],['window',12700,1600]]});
+  W(-6,9606,-6,-6,412,{ext:true,op:[['window',5700,1800],['door',7200,1000,0,1],['window',8650,1200]]});
+  // Północny pas: wiatrołap, techniczne, pralnia, spiżarnia i duża łazienka.
+  W(2475,-6,2475,2775,150,{op:[['door',1800,800,1,-1]]});
+  W(5225,-6,5225,2775);
+  W(7475,-6,7475,2775);
+  W(9225,-6,9225,2775);
+  W(-6,2775,11475,2775,150,{op:[['door',1750,900,1,-1],['door',6350,900,1,-1],['door',8350,800,0,-1],['slide',10300,900]]});
+  // Dwa osobne pokoje wschodnie i korytarz o szerokości 125 cm.
+  W(11475,-6,11475,9606,150,{op:[['door',3650,900,1,-1],['door',8000,900,0,-1]]});
+  W(11475,4525,14406,4525);
+  // Centralny blok łazienki i garderoby; sypialnia od południa.
+  W(6275,4325,6275,9606);
+  W(6275,4325,10075,4325);
+  W(10075,4325,10075,9606,150,{op:[['slide',5250,900],['door',8850,900,1,1]]});
+  W(8075,4325,8075,6375);
+  W(6275,6375,10075,6375,150,{op:[['door',6900,900,1,-1]]});
+
+  R('Salon + kuchnia + jadalnia + hol',3800,6350);
+  R('Wiatrołap',1400,2100);
+  R('Techniczne',3850,1800);
+  R('Pralnia',6500,1800);
+  R('Spiżarnia',8350,1500);
+  R('Łazienka z wanną',10300,1550);
+  R('Pokój 2',13100,3050);
+  R('Pokój 3',13200,7500);
+  R('Sypialnia',8200,8000);
+  R('Garderoba',7450,5400);
+  R('Łazienka z prysznicem',9000,5650);
+
+  const E=(kind,x,y,w,d,label)=>({kind,x,y,w,d,label});
+  const P=(x,y,cm,rot,name,strict=false)=>{
+    const w=cm*10-2,vert=rot%180!==0;
+    return F(cm===100?'pax':cm===75?'pax75':'pax50',x,y,x+(vert?600:w),y+(vert?w:600),rot,{
+      name:'PAX '+cm+' — '+name,joinery:{nominalWidth:cm*10,bodyWidth:w,bodyDepth:580,frontDepth:20,height:2364},
+      notes:['Korpus 58 cm + ok.2 cm frontu, wysokość 236,4 cm. Rezerwy i montaż do potwierdzenia z wybranym frontem.'],
+      z:strict?zAisle:undefined});
+  };
+  F('hall180',200,600,850,2400,270,{name:'Szafa przesuwna 180 — kurtki i buty'});
+  F('bench',1850,200,2350,600,0,{name:'Siedzisko 50×40',z:z=>{z[0].d=600;}});
+  F('ref',2550,200,3150,800,0,{name:'Moduł pompy ciepła 60×60',z:zSvc('front'),
+    notes:['Rezerwacja niskiego modułu wewnętrznego pod wysokim oknem; konkretny model i serwis do doboru instalatora.']});
+  F('round',3300,200,3894,794,0,{name:'Zasobnik CWU Ø59',z:zSvc('front')});
+  F('ref',4125,200,5115,788,0,{name:'Rekuperator 99×59',z:zSvc('front')});
+  F('steel',4550,1500,5150,2400,90,{name:'Regał techniczny 90×60'});
+  F('k240',5300,200,7100,900,0,{name:'Pralnia — zlew, pralka, suszarka',
+    equipment:[E('sink',0,0,600,700,'ZLEW'),E('washer',600,0,600,700,'PRALKA'),E('dryer',1200,0,600,700,'SUSZARKA')],
+    vertical:{worktop:920},z:z=>{z[0].d=900;z[0].l='załadunek i wyjęcie urządzeń';},
+    notes:['Urządzenia pod blatem, rezerwacja 70 cm z przyłączami. Suszarka ścienna nad blatem; deska i kosze w szafie.']});
+  P(6875,1900,50,180,'chemia i kosze');
+  F('pantry',7550,200,7900,2000,270,{name:'Regały 180×35 — zapasy'});
+  F('pantry',8800,200,9150,2000,90,{name:'Regały 180×35 — słoiki',notes:['Pomiędzy regałami 90 cm przejścia.']});
+
+  F('bath',9500,200,11200,950,0,{name:'Wanna 170×75',notes:['Bateria i rewizja od dostępnego boku; wysokość montażu według modelu.']});
+  F('instwall',11200,1450,11400,2500,90,{name:'Ścianka WC 20 cm'});
+  F('wcw',10650,1900,11200,2260,90,{name:'WC podwieszane'});
+  F('sink60',9300,1700,9760,2300,270,{name:'Umywalka 60 + lustro',vertical:{basinTop:850,mirrorBottom:1100}});
+  F('shower90',8150,4400,9050,5300,0,{name:'Prysznic 90×90 — bez progu',
+    notes:['Drzwi przesuwne/składane wewnątrz kabiny; odpływ i spadki do skoordynowania z podłogą.']});
+  F('instwall',9200,4400,10000,4600,0,{name:'Ścianka WC 20 cm'});
+  F('wcw',9420,4600,9780,5150,0,{name:'WC podwieszane'});
+  F('sink60',9300,5900,9900,6300,180,{name:'Umywalka 60×40 + lustro',z:z=>{z[0].ex=100;},vertical:{basinTop:850,mirrorBottom:1100}});
+
+  // Kuchnia ma oddzielny pas słupków i blat 365 cm; wyspa służy do przygotowania.
+  F('tall',200,3000,800,4800,270,{name:'Lodówka, piekarnik i zapasy',
+    equipment:[E('fridge',0,0,600,600,'LOD'),E('oven',600,0,600,600,'PIEK'),E('cabinet',1200,0,600,600,'ZAPASY')]});
+  F('k240',2550,2850,6200,3450,0,{name:'Kuchnia — ciąg 365 cm',
+    equipment:[E('cabinet',0,0,600,600,'BLAT'),E('sink',600,0,800,600,'ZLEW'),E('dishwasher',1400,0,600,600,'ZM'),E('cabinet',2000,0,600,600,'BLAT'),E('hob',2600,0,600,600,'PŁYTA'),E('cabinet',3200,0,450,600,'BLAT')],
+    vertical:{worktop:900},notes:['Do spiżarni z holu obok kuchni. Okap nad płytą i zasilanie według projektu instalacji.']});
+  F('island',2350,4600,3950,5500,180,{name:'Wyspa robocza 160×90',z:z=>{z[1].d=750;z[1].l='przejście, bez hokerów';}});
+  const table=F('tableext',4250,6000,5150,7600,90,{name:'Stół 160→240, 4→8 osób',
+    z:z=>{z[2].d=400;z[3].d=400;},notes:['W panelu można sprawdzić stół 240 cm z ośmioma zajętymi krzesłami.']});
+  const chairs=[[0,0,1,1]];
+  for(let i=0;i<3;i++)for(const y of [-600,900])chairs.push([(175+i*800)/2400,y/900,450/2400,600/900]);
+  chairs.push([-600/2400,225/900,600/2400,450/900],[1,225/900,600/2400,450/900]);
+  table.arrangements={mode:'closed',label:'Stół 240 cm i 8 zajętych krzeseł',closed:{w:1600,d:900,parts:[[0,0,1,1]]},expanded:{w:2400,d:900,parts:chairs}};
+  F('sofa3',1600,6750,2550,8950,270,{name:'Sofa 220×95'});
+  F('armchair',300,5200,1150,6050,270,{name:'Fotel 85×85'});
+  F('coffee',3200,8100,4300,8700,0,{name:'Stolik 110×60'});
+  F('tvwall',6100,8100,6200,9330,90,{name:'TV 55" — ściana wschodnia',vertical:{screenCentre:1100}});
+  // Dwa pokoje dodatkowe: biurka 140×70, łóżka 90×200 i modułowe szafy.
+  P(11600,200,100,0,'ubrania — pokój 2');
+  F('desk',13500,600,14200,2000,90,{name:'Biurko 140×70',vertical:{worktop:740}});
+  F('bed90',13200,2300,14200,4400,0,{name:'Łóżko 90×200',z:z=>{z[0].s='left';}});
+  F('bed90',11600,5200,12600,7300,0,{name:'Łóżko 90×200'});
+  P(13600,4700,100,90,'ubrania — pokój 3');
+  F('desk',12000,8700,13400,9400,180,{name:'Biurko 140×70',vertical:{worktop:740}});
+  // Sypialnia: łóżko 180, dojścia 90 i 85 cm; osobna garderoba.
+  F('bed180',7250,6500,9150,8600,0,{name:'Łóżko 180×200 — rama 190×210',z:zBed80,notes:['Półka w wezgłowiu zamiast stojących szafek nocnych; wolne dojście do garderoby.']});
+  P(6425,4400,75,0,'ubrania wiszące',true);
+  P(7175,4400,75,0,'półki i pościel',true);
+  const s=done();
+
+  // Wschodnie pokoje poszerzone do 3 m; północne zaplecze krótsze o 20 cm.
+  // Ostateczny obrys gotowy 15,174×9,824 m (149,07 m²), bez zmniejszania przejść przy łóżku.
+  const compactY=y=>y>=2750?y-200:y,wideX=x=>x>14200?x+350:x;
+  for(const w of s.walls){
+    const dx=w.x2-w.x1,dy=w.y2-w.y1,L=Math.hypot(dx,dy);
+    const openings=w.op.map(o=>({o,x:w.x1+dx/L*o.pos,y:w.y1+dy/L*o.pos}));
+    w.x1=wideX(w.x1);w.x2=wideX(w.x2);w.y1=compactY(w.y1);w.y2=compactY(w.y2);
+    for(const {o,x,y} of openings){
+      const xx=wideX(x)+(y>9000&&x>11500&&x<14200?350:0),yy=compactY(y);
+      o.pos=Math.abs(dx?xx-w.x1:yy-w.y1);
+    }
+  }
+  for(const f of s.furn){
+    f.y=compactY(f.y);
+    if(f.x>13000||(f.key==='desk'&&f.rot===180))f.x+=350;
+  }
+  for(const r of s.rooms){r.y=compactY(r.y);if(r.name==='Pokój 2'||r.name==='Pokój 3')r.x+=175;}
+  const layers=[{name:'Tynk gipsowy',t:15},{name:'Silikat',t:180},{name:'Klej EPS',t:10},{name:'EPS grafit λ 0,031',t:200},{name:'Warstwa zbrojona',t:5},{name:'Tynk elewacyjny',t:2}];
+  for(const w of s.walls.filter(w=>w.ext)){
+    w.buildUp=layers.map(l=>({...l}));
+    const horiz=Math.abs(w.x2-w.x1)>Math.abs(w.y2-w.y1);
+    for(const o of w.op){
+      const x=w.x1+(w.x2-w.x1)/Math.hypot(w.x2-w.x1,w.y2-w.y1)*o.pos;
+      if(o.type==='window'){
+        const north=horiz&&w.y1<0,tech=north&&x<5225,laundry=north&&x>5225&&x<7475,small=o.w<=600;
+        o.sill=tech?1800:laundry?1200:small?1500:900;
+        o.height=tech||small?600:laundry?1200:1500;
+        o.opening=laundry?'dół FIX, uchylne od 180 cm':small?'uchylne':'dół FIX, uchylne od 170 cm';
+      }else{o.sill=0;o.height=o.type==='slide'?2300:2100;}
+    }
+  }
+  s.construction={wallLayers:layers,finishedInterior:true,partition:'150 mm łącznie z wykończeniem; nośność i materiał do projektu',roomHeight:2800,uIndicative:0.15,note:'Silikat 18 cm i posadowienie do obliczeń konstruktora; U orientacyjne.'};
+  s.set={overhang:1000};
+  s.designNote='R1 — osobny układ z wejściem od północy, trzema pokojami poza salonem i mniejszą bryłą. Dwie łazienki, pralnia, techniczne, spiżarnia i garderoba. Nie jest kopią ani odbiciem E2.';
+  s.storagePlan=['Kurtki i obuwie w wiatrołapie; środki porządkowe w pralni; zapasy w spiżarni.','Garderoba przy sypialni i po jednym module PAX w pokojach dodatkowych.'];
+  return s;
+}
+
 const VARIANTS = {
   base: {name:'Rzut z PDF (zmieniony) 17,70 × 10,20', build: () => buildBase()},
   A: {name:'A — prawie kwadrat 13,85 × 13,15', build: variantA},
@@ -1419,6 +1556,7 @@ const VARIANTS = {
   E2S: {name:'E2S — kopia E2, kuchnia na południu', build: variantE2South},
   E3: {name:'E3 — E + prysznic przy salonie, wanna przy sypialniach', build: () => variantE({baths:true})},
   E4: {name:'E4 — E2 + E3 + gabinet od północy', build: () => variantE({exit:true, baths:true, office:true})},
+  R1: {name:'R1 — mniejszy dom, wejście od północy, 3 pokoje', build: variantR1},
 };
 function freshState(v){ const s = defaults(VARIANTS[v].build()); s.variant = v; return s; }
 
@@ -2382,7 +2520,7 @@ function renderPanel(){
         <div class="row"><span>Warstwa</span><input type="text" id="pLayer" value="${esc(f.layer)}" placeholder="główna"></div>
         ${f.vertical ? '<div class="hint">Wysokości od gotowej podłogi: '+Object.entries(f.vertical).map(([k,v])=>esc(({worktop:'blat',screenCentre:'środek TV',basinTop:'umywalka',mirrorBottom:'dół lustra',seat:'siedzisko WC'})[k]||k)+' '+v+' mm').join(' · ')+'</div>' : ''}
         ${f.notes ? '<ul class="hint">'+f.notes.map(n=>'<li>'+esc(n)+'</li>').join('')+'</ul>' : ''}
-        ${f.arrangements ? '<div class="row"><button id="pArrangement">'+(f.arrangements.mode==='expanded'?'Pokaż stół złożony':'Pokaż stół 280 cm + 10 zajętych krzeseł')+'</button></div>' : ''}
+        ${f.arrangements ? '<div class="row"><button id="pArrangement">'+(f.arrangements.mode==='expanded'?'Pokaż stół złożony':esc(f.arrangements.label||'Pokaż stół 280 cm + 10 zajętych krzeseł'))+'</button></div>' : ''}
         ${f.ref ? '<div class="hint warn">Element z rysunku bez jednoznacznego opisu — nie jest sprawdzany ani traktowany jak przeszkoda. Opisz go albo zamień na mebel z biblioteki.</div><div class="row"><span>Sprawdzaj kolizje</span><input type="checkbox" id="pFRef"></div>' : ''}
         <div class="row"><span>Kontrola</span>${f.ref ? '—' : !info ? '—' : info.msgs.length ? `<b class="bad">${info.msgs.length} problem(y)</b>` : '<b class="ok">OK ✓</b>'}</div>
         ${info && info.msgs.length ? '<ul class="msgs">' + info.msgs.map(m => '<li>'+esc(m)+'</li>').join('') + '</ul>' : ''}

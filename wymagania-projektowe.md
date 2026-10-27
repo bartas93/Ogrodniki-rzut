@@ -115,3 +115,15 @@ Poniższe decyzje aktualizują §7 tam, gdzie zmieniły się wymiary i wyposaże
 - Zachowane wymiary i powierzchnie, warstwy ścian, okap 1 m, wyposażenie, biurka 140×70, drzwi i okna. Odbicie obejmuje również skrzydła drzwi, części narożnych mebli, strefy użytkowe oraz wyposażenie wbudowane.
 - Kopia ma osobny konstruktor i zapis w przeglądarce; przyszłe zmiany E2 nie przechodzą automatycznie do E2S.
 - E2S dziedziczy zaakceptowane ograniczenia suszarki i drzwi łazienek, trzy ostrzeżenia rastra przy szafach holu oraz ograniczenie tylnej strefy wyspy przy stole dla 10 osób. Zmiana stron świata wymaga ponownego rozpatrzenia doświetlenia, zacieniania i przegrzewania.
+
+## 10. R1 — nowy układ, wejście od północy (27.10.2026)
+
+- **[DECYZJA]** Osobna, mniejsza propozycja **R1**, z wejściem od północy. Program podobny do E2, ale **trzy pokoje zamiast czterech**, poza salonem. Przyjęta interpretacja: sypialnia i dwa dodatkowe pokoje, bez osobnego gabinetu.
+- R1 ma nową organizację: północny pas wejścia i zaplecza, strefa dzienna od południowego zachodu, pokoje od wschodu i południa, centralny blok garderoby i małej łazienki. To nie kopia ani odbicie E2.
+- Roboczy obrys po elewacji **15,174×9,824 m = 149,07 m²**, około 21% mniej niż E2. Około121,4 m² wnętrz z komunikacją według rastra edytora, bez utożsamiania z normową powierzchnią użytkową.
+- Zachowane: dwie łazienki (wanna i prysznic), osobna pralnia, techniczne, spiżarnia, garderoba, szafy przy wejściu, wyspa i rozkładany stół. Brak łóżeczka i wyposażenia dla psów; gabinet może pełnić jeden z dwóch dodatkowych pokoi.
+- Sypialnia z łóżkiem 180×200 i dojściami ok. 90/85 cm, półką w wezgłowiu zamiast szafek stojących; garderoba z dwoma modułami PAX 75. Dwa dodatkowe pokoje o szerokości 3 m: łóżka 90×200, biurka **140×70**, po jednym PAX 100.
+- Główny korytarz nocny 125 cm. Drzwi pokojowe 90 cm i główne wejście 100 cm w modelu. Drzwi obu łazienek przesuwne, aby nie zajmowały korytarza.
+- Wspólna strefa salonu/kuchni/jadalni ma ok. 39,3 m²; etykieta edytora obejmuje dodatkowo otwarty hol i korytarze, łącznie ok. 53,0 m². Stół 160→240 cm, stan rozłożony z 8 zajętymi krzesłami. Przy 8 osobach część tylnego przejścia wyspy jest zajęta.
+- Ściany warstwowe 412 mm i dach kopertowy 30° z okapem 1 m przyjęte roboczo jak w E2, do osobnego projektu konstrukcji i sprawdzenia usytuowania. Dach geometrycznie ok. 234,48 m².
+- R1 ma niezależny konstruktor i osobny zapis w v23. **E2 nadal jest wariantem domyślnym**; dodanie R1 nie resetuje pozostałych wariantów.

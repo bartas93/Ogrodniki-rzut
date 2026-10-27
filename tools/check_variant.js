@@ -41,7 +41,7 @@ if (S.furn.some(f=>f.arrangements)) {
     S = JSON.parse(keep);
     const table = S.furn.find(x=>x.id===f.id);
     setArrangement(table,'expanded'); A = analyse();
-    scenarios.push({name:'Stół 280 cm i 10 zajętych krzeseł',
+    scenarios.push({name:f.arrangements.label||'Stół 280 cm i 10 zajętych krzeseł',
       problems:S.furn.filter(x=>A.fs.get(x.id)?.msgs.length).map(x=>({name:x.name,messages:A.fs.get(x.id).msgs})),
       warnings:S.furn.filter(x=>A.fs.get(x.id)?.warns.length).map(x=>({name:x.name,messages:A.fs.get(x.id).warns})),
       unreachable:S.rooms.filter(r=>!A.roomReach.has(A.rooms.get(r.id)?.reg?.k)).map(r=>r.name)});
