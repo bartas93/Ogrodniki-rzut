@@ -7,7 +7,7 @@ Edytor rzutu parterowego domu z kontrolą ustawienia mebli, przejść i statysty
 - **Domyślnie E2:** link bez parametru wariantu otwiera E2 z jego zapisanymi edycjami, także po wcześniejszym oglądaniu innego wariantu. Kolejne zmiany projektu dotyczą E2, chyba że wskażesz inaczej.
 - **E2S — kuchnia na południu:** osobna kopia E2, odbita w osi północ–południe. Kuchnia ze spiżarnią jest na dole rzutu, salon na górze, wejście nadal od wschodu. Odbicie obejmuje cały dom; oryginalne E2 pozostaje bez zmian. Wybierz E2S z listy lub przez „▦ Warianty”.
 - **R1 — mniejszy dom z wejściem od północy:** nowy układ z salonem i trzema pokojami, bez osobnego gabinetu. Obrys 15,174×9,824 m, 149,1 m² zabudowy — około 21% mniej niż E2. Zachowane dwie łazienki, pralnia, techniczne, spiżarnia i garderoba. [Opis R1](R1-koncepcja.md). Wybierz R1 z listy lub przez „▦ Warianty”; domyślny nadal E2.
-- **Telefon (Android):** zoom dwoma palcami, przesuwanie jednym; przycisk „Podgląd” chroni rzut przed przypadkową edycją, „Panel” pokazuje szczegóły.
+- **Telefon (Android):** zoom dwoma palcami, przesuwanie jednym; przycisk „Podgląd” chroni rzut przed przypadkową edycją, „Panel” pokazuje szczegóły. **Miarka (ikona linijki):** stuknij punkt A i B — działa także w Podglądzie. W trakcie pomiaru możesz przesuwać i przybliżać rzut. Wynik, anulowanie punktu i czyszczenie pomiarów są dostępne na rzucie bez otwierania panelu.
 - **Zapis i przenoszenie:** „Zapisz JSON” / „Wczytaj JSON”.
 - **Wymagania projektowe:** `wymagania-projektowe.md` (pełne notatki inwestora są prywatne i nie trafiają do repozytorium).
 - **Dla agentów (Codex / Claude):** `AGENTS.md`.
@@ -36,3 +36,5 @@ Aktualizacja 11.11.2026:
 - Zapis pozostaje w przeglądarce (v24), oddzielnie dla wariantów. Nie wdrożono zapisu w chmurze. Numery wyposażenia są zapisane wewnątrz obiektów i zachowywane w JSON.
 
 Testy nowych funkcji: `timeout 30s node tools/check_r2_r3.js`, `timeout 30s node tools/check_variant.js R2`, `timeout 30s node tools/check_variant.js R3`. Test przeglądarkowy: `timeout 60s node tools/check_browser.js` (wymaga Playwright i Chromium; ścieżkę przeglądarki można wskazać przez `CHROMIUM_PATH`).
+
+Test miarki dotykowej: `timeout 60s node tools/check_mobile_measure.js` — dwa stuknięcia, przyciąganie do krawędzi, pan/pinch, tolerancja drżenia palca, anulowanie, czyszczenie i brak zmian geometrii.

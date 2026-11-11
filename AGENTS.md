@@ -232,3 +232,8 @@ R2 i R3 mają zamrożone, osobne konstruktory oparte na siatce R1; nie zastępuj
 ID korzystają z istniejących `id`, a wyposażenie otrzymuje lokalne `equipment[].id` oraz `nextEquipmentId` w `defaults`. Nie przeliczaj numerów z indeksów tablicy; zachowuj je przy zmianie konstruktorów. `elementRecords`, `findElement`, `drawIds` obsługują wyszukiwanie i widoczne oznaczenia. `nextId` musi być większe od wszystkich istniejących numerów także przy imporcie JSON. Test UI: `timeout 60s node tools/check_browser.js` (Playwright + Chromium), obejmuje telefon 412 px, zapis, schowek i eksport.
 
 Sprawdzona 11.11.2026 droga sieciowa: sandbox nie łączy się z `proxy:8080`, ale zatwierdzone polecenie poza sandboxem poprawnie wykonuje `git ls-remote` i `git fetch` przy zachowanym proxy/TLS. W pierwszej kolejności stosuj tę udokumentowaną ścieżkę środowiska zamiast zakładać awarię całej sieci. Sam udany odczyt nie potwierdza uwierzytelnienia push.
+
+
+### Miarka na telefonie
+
+Miarka dotykowa działa również przy `viewOnly`. `pointerdown` tworzy kandydat stuknięcia (`ptr.measureTap`), a punkt jest przyjmowany dopiero na `pointerup`, jeśli palec nie przesunął się o więcej niż 6 px. Przeciągnięcie przesuwa widok, drugi palec odrzuca kandydat i rozpoczyna pinch; oba gesty zachowują wcześniej wybrany punkt A. Nie przenoś zatwierdzania punktu na `pointerdown`, bo doda to przypadkowe pomiary podczas zoomu. Pasek `measureBar` pokazuje wynik i przyciski bez otwierania panelu. Test regresji: `timeout 60s node tools/check_mobile_measure.js` (Playwright + Chromium); sprawdza też niezmienność zapisanego projektu i obsługę myszy.
