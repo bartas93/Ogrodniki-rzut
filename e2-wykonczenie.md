@@ -106,3 +106,8 @@ Po obrocie stołu dziesięć krzeseł wymaga innego układu: dwa rzędy po pię�
 W stanie codziennym pozostają cztery ostrzeżenia: trzy wcześniejsze PAX oraz 12% strefy dojścia M101 zajęte przez biurko. Korpusy i obrys spania M101 są wolne. Przy jednoczesnym rozłożeniu wszystkich wskazanych mebli M117 zajmuje 17% strefy krzesła M116 — nie należy traktować tego jako pełnego stanowiska do pracy podczas spania. W każdym sprawdzonym stanie brak problemów i wszystkie pomieszczenia osiągalne. Strefy i progi kontroli nie były zmieniane dla ukrycia uwag.
 
 V26 przenosi v25, aktualizując tylko wskazane otwory i meble. Nie kasuje starszych zapisów ani nie odtwarza usuniętych ręcznie mebli. Zmiana O3 nie przelicza numerów pozostałych obiektów. Edycje M75 z poprzedniego etapu i geometria innych wariantów są zachowane. Test kontraktu, migracji i fizycznego rozłożenia: `timeout 30s node tools/check_e2_room_updates.js`.
+
+
+## Zlicowanie S42 z S54
+
+Prawy koniec osi S42 skrócony z x=14025 do x=13725 mm, do osi pionowej S54. Automatyczne połączenie ścian grubości 150 mm wyrównuje gotowe prawe lica na x=13800 mm. Położenia otworów i ich numery zachowane. Zapis v27 przenosi v26 bez ponawiania wcześniejszych korekt mebli, aktualizując tylko x2 S42; kopia v26 pozostaje.

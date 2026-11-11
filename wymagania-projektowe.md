@@ -173,3 +173,10 @@ Decyzje z tej sekcji zastępują wcześniejsze położenia wskazanych elementów
 Kontrola: zero problemów i brak niedostępnych pomieszczeń w stanie codziennym, z rozłożonym stołem, ze wszystkimi pięcioma miejscami spania oraz przy obu stanach jednocześnie. Pozostają trzy dawne ostrzeżenia PAX i częściowo zajęta strefa M101; przy spaniu dochodzi uwaga o strefie krzesła M116. Raster 50 mm nie zastępuje projektu wykonawczego i oceny wygody przy ciasnym rozstawie krzeseł.
 
 V26 migruje zapisy v25/v24/v23 bez resetowania pozostałych edycji. Z v25 zmieniane są tylko O3/O52 i M74/M101/M116/M117/M143; wcześniejsze migracje nadal obsługiwane. Inne warianty bez zmian. Oryginalne zapisy pozostają, a późniejsze edycje v26 nie są ponownie nadpisywane.
+
+
+## 16. E2 — zakończenie ściany S42
+
+- **[DECYZJA]** Skrócić S42 od prawej do połączenia z pionową S54: oś kończy się na x=13725 zamiast 14025 mm, przy niezmienionym y=5650 mm. Długość osi mniejsza o 30 cm; gotowe prawe lico narożnika x=13800 mm. Otwory i ich ID pozostają.
+- V27 przenosi zapis v26, zmieniając wyłącznie współrzędną x2 S42, z zachowaniem pozostałych edycji. Starsze zapisy nadal przechodzą odpowiednie wcześniejsze migracje; kopie pozostają. Inne warianty bez zmian.
+- Pytanie o ergonomię wyspy nie jest zleceniem przesunięcia mebli. Zalecenie do rozważenia: 120–130 cm pomiędzy wystającymi frontami; 100 cm zwykle wystarcza jednej osobie, 130–140 cm daje więcej miejsca przy mijaniu i otwartych urządzeniach. W tej aktualizacji wyspa pozostaje bez zmian.

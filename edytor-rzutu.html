@@ -218,8 +218,9 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 'use strict';
 const $ = s => document.querySelector(s);
 const svg = $('#cv');
-const LS = 'ogrodniki-rzut-v26';
-const RECENT_LS = 'ogrodniki-rzut-v25';
+const LS = 'ogrodniki-rzut-v27';
+const RECENT_LS = 'ogrodniki-rzut-v26';
+const SOFA_LS = 'ogrodniki-rzut-v25';
 const PREVIOUS_LS = 'ogrodniki-rzut-v24';
 const LEGACY_LS = 'ogrodniki-rzut-v23';
 const DEFAULT_VARIANT = 'E2';
@@ -1189,7 +1190,14 @@ function variantE2(){
   s.storagePlan=['Robot sprzątający: stacja pod ławką wiatrołapu z gniazdem.','Legowiska i miski: oznaczona strefa przy zachodnim oknie salonu.','Sprzęt ogrodowy, rowery i opony: magazyn poza bryłą — do osobnego zagospodarowania.'];
   s.set = {overhang:1000};
   applyE2NovemberRoomEdits(s);
+  alignE2Wall42(s);
   return s;
+}
+
+// Prawy koniec S42 łączy się z osią S54; computeExt wyrównuje gotowe lica narożnika.
+function alignE2Wall42(s){
+  const wall=s.walls.find(w=>w.id===42),join=s.walls.find(w=>w.id===54);
+  if(wall&&join)wall.x2=join.x1;
 }
 
 // Zmiany zlecone według ID; wspólne dla nowego E2 i migracji starszych zapisów.
@@ -2021,9 +2029,9 @@ function defaults(s){
   return s;
 }
 
-// V26 aktualizuje tylko wskazane ID. Zachowuje także migracje M75 i pięciu obiektów v23.
+// V27 wyrównuje tylko S42; starsze migracje są stosowane wyłącznie do odpowiednich zapisów.
 function loadSavedVariant(v){
-  for(const key of [LS,RECENT_LS,PREVIOUS_LS,LEGACY_LS]){
+  for(const key of [LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
     try{
       const raw=localStorage.getItem(key+':'+v);if(!raw)continue;
       const s=defaults(JSON.parse(raw));s.variant=v;
@@ -2042,7 +2050,8 @@ function loadSavedVariant(v){
           notes:[...n.notes],
         }:f);
       }
-      if(key!==LS&&v==='E2')applyE2NovemberRoomEdits(s);
+      if(key!==LS&&key!==RECENT_LS&&v==='E2')applyE2NovemberRoomEdits(s);
+      if(key!==LS&&v==='E2')alignE2Wall42(s);
       return s;
     }catch(e){}
   }

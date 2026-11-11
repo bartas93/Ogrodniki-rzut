@@ -5,10 +5,14 @@ const prefix=html.split('<script>')[1].split('/* ---------- widok ---------- */'
 const clone=x=>JSON.parse(JSON.stringify(x));
 function launch(saved=new Map()){
  const c=vm.createContext({document:{querySelector:()=>null},localStorage:{getItem:k=>saved.get(k)||null}});
- vm.runInContext(prefix+`globalThis.api={state:()=>S,fresh:freshState,load:loadSavedVariant,bodies:furnBodies,zones:furnZones,arrange:setArrangement,analyse:()=>{A=analyse();return A;}};})();`,c,{timeout:5000});return c.api;
+ vm.runInContext(prefix+`globalThis.api={state:()=>S,fresh:freshState,load:loadSavedVariant,bodies:furnBodies,zones:furnZones,extensions:computeExt,arrange:setArrangement,analyse:()=>{A=analyse();return A;}};})();`,c,{timeout:5000});return c.api;
 }
 const api=launch(),s=api.state(),f=id=>s.furn.find(f=>f.id===id),openings=s.walls.flatMap(w=>w.op);
 assert.ok(!openings.some(o=>o.id===3),'Usunięte wyłącznie okno O3');
+const wall42=s.walls.find(w=>w.id===42),wall54=s.walls.find(w=>w.id===54);
+assert.equal(wall42.x2,13725);assert.equal(wall42.x2,wall54.x1);
+assert.equal(wall42.x2+api.extensions().get(42)[1],wall54.x1+wall54.t/2,'Zlicowany prawy koniec S42 i S54');
+assert.ok(wall42.op.every(o=>o.pos+o.w/2<=wall42.x2-wall42.x1),'Otwory pozostają wewnątrz S42');
 const door=openings.find(o=>o.id===52);assert.equal(door.side,1);assert.equal(door.hinge,1);
 const box=(id,expected)=>{const b=api.bodies(f(id))[0];for(const [key,value] of Object.entries(expected))assert.equal(b[key],value,'M'+id+' '+key);};
 box(101,{x1:13180,x2:14150,y1:200,y2:2200});
@@ -51,6 +55,10 @@ for(const id of changed){const item=m.furn.find(f=>f.id===id);assert.equal(item.
 assert.ok(m.furn.find(f=>f.id===74).notes.includes('Moja uwaga o stole'),'Zachowaj własne notatki stołu');
 assert.equal(m.furn.find(f=>f.id===74).arrangements.mode,'expanded');assert.equal(m.furn.find(f=>f.id===74).parts.length,11);
 assert.equal(saved.get('ogrodniki-rzut-v25:E2'),JSON.stringify(old),'Stary zapis zachowany');
-const v26=clone(m);v26.furn.find(f=>f.id===74).rot=180;saved.set('ogrodniki-rzut-v26:E2',JSON.stringify(v26));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(v26),'V26 ma pierwszeństwo i nie jest ponownie migrowane');
+// V26 -> v27: zmienia się wyłącznie x2 ściany S42, bez ponawiania zmian mebli.
+const v26=clone(m);v26.walls.find(w=>w.id===42).x2=14025;v26.furn.find(f=>f.id===74).x+=100;v26.furn.find(f=>f.id===101).y+=50;
+saved.set('ogrodniki-rzut-v26:E2',JSON.stringify(v26));const expected27=clone(v26);expected27.walls.find(w=>w.id===42).x2=expected27.walls.find(w=>w.id===54).x1;
+assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(expected27),'Tylko x2 S42 może się zmienić');assert.equal(saved.get('ogrodniki-rzut-v26:E2'),JSON.stringify(v26),'Kopia v26 pozostaje');
+const v27=clone(expected27);v27.walls.find(w=>w.id===42).x2-=100;saved.set('ogrodniki-rzut-v27:E2',JSON.stringify(v27));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(v27),'V27 ma pierwszeństwo i nie jest ponownie migrowane');
 for(const v of ['E2S','R1','R2','R3']){const state=clone(api.fresh(v));state.furn[0].name='Własny '+v;saved.set('ogrodniki-rzut-v25:'+v,JSON.stringify(state));assert.equal(JSON.stringify(launch(saved).load(v)),JSON.stringify(state),v+' bez synchronizacji');}
-console.log('E2_ROOM_UPDATES_OK: O3, M101, M143, O52, M117/M116, M74; rozłożenie pięciu mebli i stołu, trwałe ID i migracja bez utraty edycji');
+console.log('E2_ROOM_UPDATES_OK: O3, M101, M143, O52, M117/M116, M74; rozłożenie pięciu mebli i stołu, S42 zlicowana z S54, trwałe ID i migracja bez utraty edycji');
