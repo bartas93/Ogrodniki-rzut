@@ -218,7 +218,8 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 'use strict';
 const $ = s => document.querySelector(s);
 const svg = $('#cv');
-const LS = 'ogrodniki-rzut-v25';
+const LS = 'ogrodniki-rzut-v26';
+const RECENT_LS = 'ogrodniki-rzut-v25';
 const PREVIOUS_LS = 'ogrodniki-rzut-v24';
 const LEGACY_LS = 'ogrodniki-rzut-v23';
 const DEFAULT_VARIANT = 'E2';
@@ -1187,7 +1188,59 @@ function variantE2(){
   s.acceptedLimitations=['Rozstawiona suszarka stojąca ogranicza wyjście pralni.','Otwarte drzwi łazienek lokalnie zwężają korytarz.'];
   s.storagePlan=['Robot sprzątający: stacja pod ławką wiatrołapu z gniazdem.','Legowiska i miski: oznaczona strefa przy zachodnim oknie salonu.','Sprzęt ogrodowy, rowery i opony: magazyn poza bryłą — do osobnego zagospodarowania.'];
   s.set = {overhang:1000};
+  applyE2NovemberRoomEdits(s);
   return s;
+}
+
+// Zmiany zlecone według ID; wspólne dla nowego E2 i migracji starszych zapisów.
+// Nie odbudowujemy geometrii ani numerów pozostałych obiektów.
+function applyE2NovemberRoomEdits(s){
+  for(const w of s.walls){
+    w.op=w.op.filter(o=>o.id!==3);
+    const door=w.op.find(o=>o.id===52);
+    if(door){door.hinge=1;door.side=1;}
+  }
+  const f=id=>s.furn.find(f=>f.id===id);
+  const note=(it,message)=>{
+    it.notes=[...(it.notes||[]).filter(n=>!n.startsWith('Układ E2 11.11 — ')),'Układ E2 11.11 — '+message];
+  };
+  const northSofa=f(101);
+  if(northSofa?.key==='sofabed'){
+    northSofa.rot=90;northSofa.y=200+northSofa.w/2;
+    note(northSofa,'dosunięta do północnej ściany, przy ścianie wschodniej. Część strefy dojścia od zachodu zajmuje biurko; dostęp od środka pokoju pozostaje.');
+  }
+  const officeSofa=f(143);
+  if(officeSofa?.key==='sofabed'){
+    officeSofa.rot=270;officeSofa.x=14100+officeSofa.d/2;officeSofa.y=10000-officeSofa.w/2;
+    note(officeSofa,'w południowo-zachodnim rogu gabinetu, oparciem do ściany zachodniej; rozłożenie na wschód.');
+  }
+  const roomSofa=f(117);
+  if(roomSofa?.key==='sofabed'){
+    roomSofa.rot=90;roomSofa.x=7700-roomSofa.d/2;roomSofa.y=10000-roomSofa.w/2;
+    note(roomSofa,'przy przeciwległej, wschodniej ścianie pokoju 2, w południowo-wschodnim rogu; rozłożenie na zachód.');
+  }
+  const desk=f(116);
+  if(desk?.key==='desk'){
+    desk.rot=270;desk.x=4850+desk.d/2;desk.y=10000-desk.w/2;
+    note(desk,'w południowo-zachodnim rogu pokoju 2, oparciem do ściany zachodniej; krzesło od wschodu. Przy rozłożonej sofie M117 część strefy krzesła jest zajęta.');
+  }
+  const table=f(74);
+  if(table?.key==='tableext'){
+    table.x=2500;table.y=4800;table.rot=0;
+    if(table.arrangements?.expanded){
+      // Po obrocie krzesła na końcach kolidowałyby z legowiskami / przejściem.
+      // Dziesięć miejsc okazjonalnych po pięć na długich bokach: 56 cm na osobę.
+      const parts=[[0,0,1,1]];
+      for(let i=0;i<5;i++)for(const y of [-600,900])parts.push([(55+i*560)/2800,y/900,450/2800,600/900]);
+      table.arrangements.expanded.parts=parts;
+      table.arrangements.label='Stół 280 cm — 10 krzeseł (5+5, ciasny rozstaw 56 cm)';
+      if(table.arrangements.mode==='expanded')table.parts=parts.map(p=>[...p]);
+    }
+    const layoutNotes=['Stół obrócony na osi wschód–zachód; środek x=2500, y=4800 mm.',
+      'Rozłożenie 280 cm: dziesięć miejsc po pięć na długich bokach, bez krzeseł na końcach; rozstaw 56 cm jest ciasny i przeznaczony na okazjonalne spotkania.',
+      'Przy rozłożeniu stół kończy się na x=3900, do lica ściany przy holu pozostaje nominalnie 80 cm. Legowiska bez zmiany położenia.'];
+    table.notes=[...(table.notes||[]).filter(n=>n!=='Przy rozłożeniu przejście po stronie holu ma nominalnie 75 cm; nie ustawiać tam dodatkowych mebli.'&&!layoutNotes.includes(n)),...layoutNotes];
+  }
 }
 
 // E2S — niezależna kopia E2 z 24.10.2026, z kuchnią na południu.
@@ -1968,9 +2021,9 @@ function defaults(s){
   return s;
 }
 
-// V25 obraca tylko E2-M75. Nadal obsługujemy wcześniejszą migrację pięciu obiektów v23.
+// V26 aktualizuje tylko wskazane ID. Zachowuje także migracje M75 i pięciu obiektów v23.
 function loadSavedVariant(v){
-  for(const key of [LS,PREVIOUS_LS,LEGACY_LS]){
+  for(const key of [LS,RECENT_LS,PREVIOUS_LS,LEGACY_LS]){
     try{
       const raw=localStorage.getItem(key+':'+v);if(!raw)continue;
       const s=defaults(JSON.parse(raw));s.variant=v;
@@ -1989,6 +2042,7 @@ function loadSavedVariant(v){
           notes:[...n.notes],
         }:f);
       }
+      if(key!==LS&&v==='E2')applyE2NovemberRoomEdits(s);
       return s;
     }catch(e){}
   }

@@ -244,3 +244,10 @@ Miarka dotykowa działa również przy `viewOnly`. `pointerdown` tworzy kandydat
 Najnowszy §14 wymagań zastępuje wcześniejsze ustawienie M75 z §11: sofa obrócona do `rot:0`, korpus x=200–2200, y=6270–7240 mm. Górne ramię U otwartego na TV na wschodzie. M76 i wszystkie inne obiekty bez zmian. Między korpusami 46 cm (nie przejście), po rozłożeniu sofy 3 cm; dojście do sofy od wschodu w pasie 60×140 cm. Test `check_e2_november.js` obejmuje także równoczesne rozłożenie i migrację.
 
 Aktualny zapis **v25**. `loadSavedVariant` najpierw odczytuje v25; z v24 migruje tylko geometrię/strefy/opis E2-M75 (zachowuje nazwę, warstwę, wymiary i wszystkie inne edycje), a z v23 nadal aktualizuje pięć wcześniejszych obiektów. Nie kasuje dawnych zapisów. Inne warianty przenoszone bez zmian; import JSON odtwarza plik. Testy przeglądarkowe używają bieżącego v25. Nie resetuj całych wariantów przy drobnej zmianie geometrii.
+
+
+### Aktualne korekty sześciu punktów E2 — zapis v26
+
+Najnowszy §15 wymagań zastępuje wcześniejsze położenia: usuń O3, M101 do północy, M143 do rogu SW gabinetu, O52 do sypialni wzdłuż południowej ściany, M117 do SE pokoju 2 i M116 do SW, M74 wschód–zachód. `applyE2NovemberRoomEdits` działa na istniejących ID po zbudowaniu E2 i podczas migracji; nie zmieniaj z tego powodu innych konstruktorów ani nie przeliczaj numerów po usunięciu O3. Przy 10 krzesłach stół ma układ 5+5 (ciasne 56 cm na osobę), co chroni legowiska i przejście 80 cm od wschodu. Zostały ostrzeżenia M101 12% + trzy PAX; po rozłożeniu M117 także strefa krzesła M116 17%.
+
+Aktualny `LS` to **v26**, odczyt starszych: v25, v24, v23. Z v25 migrowane są tylko O3/O52 i M74/M101/M116/M117/M143; ręczne edycje M75 pozostają. V24/v23 najpierw otrzymują poprzednie poprawki, następnie aktualne. V26 ma pierwszeństwo i nie podlega ponownej migracji; oryginały nie są kasowane. Nazwy, warstwy, wymiary i pozostałe obiekty są zachowywane. `tools/check_e2_room_updates.js` sprawdza ID, geometrię, zakres migracji, pięć rozłożonych miejsc spania oraz stół, także jednocześnie.

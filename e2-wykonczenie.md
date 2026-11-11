@@ -95,3 +95,14 @@ Między zamkniętą sofą a narożnikiem pozostaje 46 cm, a po rozłożeniu sofy
 Kontrola stanu codziennego, stołu 280 cm i jednoczesnego rozłożenia trzech wskazanych mebli: zero problemów i wszystkie pomieszczenia dostępne. Pozostają trzy ostrzeżenia PAX. Przy 10 osobach przy stole częściowo zajęte są strefy wyspy (32%) i bocznego dojścia sofy (10%). Rozłożenie, konkretne mechanizmy i wymagania producenta trzeba potwierdzić na etapie wyposażenia; 3 cm nie jest rezerwą montażową sprawdzoną dla konkretnego modelu.
 
 V25 przenosi zapisy v24 bez resetowania projektu, aktualizując tylko geometrię, strefy i opis M75 w E2. Zachowuje jego nazwę, warstwę, wymiary oraz edycje pozostałych obiektów i wariantów. Oryginały v24/v23 pozostają w przeglądarce. Przy imporcie JSON nadal odtwarzana jest zawartość pliku. Test migracji i układu: `node tools/check_e2_november.js`.
+
+
+## Sześć zmian według ID — 11.11.2026
+
+Aktualne położenia i decyzje zapisane są w [§15 wymagań](wymagania-projektowe.md#15-e2--korekty-według-id-11112026). Usunięto okno O3 spiżarni; M101 dosunięto do północy; M143 obrócono w rogu SW gabinetu; O52 otwiera się do sypialni na południową ścianę; M117 stoi w rogu SE pokoju 2, a M116 w rogu SW. Stół M74 ustawiony wschód–zachód, środek (2500,4800) mm.
+
+Po obrocie stołu dziesięć krzeseł wymaga innego układu: dwa rzędy po pięć przy długich bokach, z rozstawem 56 cm na osobę. To wariant okazjonalny i ciasny, nie zapewnienie komfortowych miejsc dla dziesięciu dorosłych. Krzesła na końcach usunięto z tego stanu, aby zachować legowiska i 80 cm nominalnego przejścia od strony holu. W nowym ustawieniu nie ma wcześniejszych uwag o zajęciu stref wyspy i M75 przez rozłożony stół.
+
+W stanie codziennym pozostają cztery ostrzeżenia: trzy wcześniejsze PAX oraz 12% strefy dojścia M101 zajęte przez biurko. Korpusy i obrys spania M101 są wolne. Przy jednoczesnym rozłożeniu wszystkich wskazanych mebli M117 zajmuje 17% strefy krzesła M116 — nie należy traktować tego jako pełnego stanowiska do pracy podczas spania. W każdym sprawdzonym stanie brak problemów i wszystkie pomieszczenia osiągalne. Strefy i progi kontroli nie były zmieniane dla ukrycia uwag.
+
+V26 przenosi v25, aktualizując tylko wskazane otwory i meble. Nie kasuje starszych zapisów ani nie odtwarza usuniętych ręcznie mebli. Zmiana O3 nie przelicza numerów pozostałych obiektów. Edycje M75 z poprzedniego etapu i geometria innych wariantów są zachowane. Test kontraktu, migracji i fizycznego rozłożenia: `timeout 30s node tools/check_e2_room_updates.js`.

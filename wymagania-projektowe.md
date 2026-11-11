@@ -157,3 +157,19 @@ Poniższe decyzje aktualizują §7 tam, gdzie zmieniły się wymiary i wyposaże
 - Korpus sofy 200×97 cm: x=200–2200, y=6270–7240 mm. Między korpusami 46 cm (to nie przejście); po rozłożeniu sofy 3 cm do narożnika. Do sofy i rozłożonego łóżka dojście od wschodu, sprawdzane w pasie 60×140 cm.
 - Numer M75 zachowany, narożnik i pozostałe obiekty bez zmian. V25 migruje v24, zmieniając tylko położenie, obrót, strefy i opis M75 w E2; nazwa, warstwa i pozostałe edycje zostają. V23 przechodzi także wcześniejsze poprawki pięciu obiektów. Kopie v24/v23 pozostają; późniejsze edycje v25 mają pierwszeństwo.
 - Zero wykrytych problemów, dostęp do wszystkich pomieszczeń również przy jednocześnie rozłożonych miejscach spania. Przy stole 280 cm z 10 krzesłami 10% bocznej strefy sofy i 32% strefy wyspy jest zajęte. Pozostają trzy wcześniejsze ostrzeżenia PAX. Raster 50 mm jest kontrolą koncepcji, nie wykonawczą gwarancją prześwitów.
+
+
+## 15. E2 — korekty według ID (11.11.2026)
+
+Decyzje z tej sekcji zastępują wcześniejsze położenia wskazanych elementów:
+
+1. Usunięte okno **O3** w spiżarni; pozostałe numery bez zmian.
+2. Sofa **M101** dosunięta do północnej ściany, nadal przy wschodniej: x=13180–14150, y=200–2200 mm, front na zachód. Biurko zajmuje około 12% jej strefy dojścia; brak kolizji korpusów i pola rozłożenia.
+3. Sofa **M143** obrócona do zachodniej ściany gabinetu, w rogu południowo-zachodnim: x=14100–15070, y=8000–10000 mm, front na wschód.
+4. Drzwi **O52** między garderobą a sypialnią otwierają się do sypialni, wzdłuż południowej ściany. Dolny zawias zachowany; szerokość 80 cm i położenie otworu bez zmian. Skrzydło po otwarciu około 10 cm od gotowej południowej ściany.
+5. Sofa **M117** przy przeciwległej, wschodniej ścianie pokoju 2, w rogu południowo-wschodnim: x=6730–7700, y=8000–10000 mm, front na zachód. Biurko **M116** przeniesione w lewo i obrócone do zachodniej ściany: x=4850–5550, y=8600–10000 mm. Biurko nadal 140×70 cm. Przy rozłożonej sofie część strefy krzesła (17%) jest zajęta; pomieszczenie i meble pozostają osiągalne.
+6. Stół **M74** obrócony na osi wschód–zachód, środek x=2500, y=4800 mm. Złożony 160×90, rozłożony 280×90. W stanie 10 osób po pięć krzeseł na długich bokach; bez krzeseł na końcach, które po obrocie kolidowałyby z legowiskami albo ścianą. Rozstaw 56 cm na osobę jest ciasnym wariantem okazjonalnym. Po wschodniej stronie rozłożonego blatu nominalnie 80 cm do gotowej ściany przy holu.
+
+Kontrola: zero problemów i brak niedostępnych pomieszczeń w stanie codziennym, z rozłożonym stołem, ze wszystkimi pięcioma miejscami spania oraz przy obu stanach jednocześnie. Pozostają trzy dawne ostrzeżenia PAX i częściowo zajęta strefa M101; przy spaniu dochodzi uwaga o strefie krzesła M116. Raster 50 mm nie zastępuje projektu wykonawczego i oceny wygody przy ciasnym rozstawie krzeseł.
+
+V26 migruje zapisy v25/v24/v23 bez resetowania pozostałych edycji. Z v25 zmieniane są tylko O3/O52 i M74/M101/M116/M117/M143; wcześniejsze migracje nadal obsługiwane. Inne warianty bez zmian. Oryginalne zapisy pozostają, a późniejsze edycje v26 nie są ponownie nadpisywane.
