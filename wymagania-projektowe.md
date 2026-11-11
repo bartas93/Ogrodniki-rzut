@@ -149,3 +149,11 @@ Poniższe decyzje aktualizują §7 tam, gdzie zmieniły się wymiary i wyposaże
 - Numery istniejących obiektów nie zmieniają się po przesuwaniu, zmianie nazwy, wymiarów, typu otworu ani zapisie/odczycie. Nowe obiekty dostają kolejne numery. Wyposażenie ma zapisane numery lokalne w obrębie rodzica.
 - Przełącznik ID, pełne ID w panelu, kopiowanie i wyszukiwanie są dostępne także na telefonie. Pełne ID przełącza wariant, zaznacza i przybliża element; skrót działa w bieżącym. Na oddalonym rzucie etykiety są ograniczane, by nie nakładały się; widoczne oznaczenia są zachowane w PNG.
 - Zapis w chmurze pozostaje propozycją, bez wdrożenia.
+
+
+## 14. E2 — M75 i narożnik w układzie U (11.11.2026)
+
+- **[DECYZJA]** E2-M75 obrócona o 90° względem ustawienia z §11: stoi poprzecznie nad narożnikiem E2-M76, frontem na południe. Sofa tworzy górne ramię U, a narożnik zachodni i południowy bok; układ otwarty na TV na wschodzie.
+- Korpus sofy 200×97 cm: x=200–2200, y=6270–7240 mm. Między korpusami 46 cm (to nie przejście); po rozłożeniu sofy 3 cm do narożnika. Do sofy i rozłożonego łóżka dojście od wschodu, sprawdzane w pasie 60×140 cm.
+- Numer M75 zachowany, narożnik i pozostałe obiekty bez zmian. V25 migruje v24, zmieniając tylko położenie, obrót, strefy i opis M75 w E2; nazwa, warstwa i pozostałe edycje zostają. V23 przechodzi także wcześniejsze poprawki pięciu obiektów. Kopie v24/v23 pozostają; późniejsze edycje v25 mają pierwszeństwo.
+- Zero wykrytych problemów, dostęp do wszystkich pomieszczeń również przy jednocześnie rozłożonych miejscach spania. Przy stole 280 cm z 10 krzesłami 10% bocznej strefy sofy i 32% strefy wyspy jest zajęte. Pozostają trzy wcześniejsze ostrzeżenia PAX. Raster 50 mm jest kontrolą koncepcji, nie wykonawczą gwarancją prześwitów.

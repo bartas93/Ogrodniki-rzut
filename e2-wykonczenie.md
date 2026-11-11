@@ -84,3 +84,14 @@ Są to gabaryty do sprawdzenia układu, bez zobowiązania do zakupu konkretnych 
 - Zapis v24 odczytuje dane v23: w E2 aktualizuje tylko wymienione pięć obiektów (jeśli nadal istnieją i mają zgodny typ), zachowując pozostałe edycje, warstwy oraz wszystkie inne warianty. Oryginalne dane v23 pozostają w przeglądarce. Późniejsze edycje v24 nie są ponownie nadpisywane. Import dawnego JSON nadal odtwarza zawartość tego pliku.
 
 Kontrola: `node tools/check_e2_november.js` oraz `node tools/check_variant.js E2`.
+
+
+## Aktualizacja E2-M75 — U w salonie (11.11.2026)
+
+Ta decyzja zastępuje ustawienie drugiej sofy z poprzedniej sekcji. Sofa M75 obrócona o 90°, frontem na południe: x=200–2200, y=6270–7240 mm. Tworzy górne ramię U otwartego na TV na wschodzie; nie zmieniano narożnika M76, stolika ani pozostałych mebli.
+
+Między zamkniętą sofą a narożnikiem pozostaje 46 cm, a po rozłożeniu sofy — 3 cm. Są to odstępy, nie przejścia. Obie bryły spania są rozłączne. Do sofy i łóżka dochodzi się od wschodu, z prawego boku; model sprawdza tę strefę 60×140 cm zamiast pełnego dojścia od frontu, którego zachodni odcinek zajmowałby narożnik. Strefy nie wyłączono ani nie zmieniano progów kontroli.
+
+Kontrola stanu codziennego, stołu 280 cm i jednoczesnego rozłożenia trzech wskazanych mebli: zero problemów i wszystkie pomieszczenia dostępne. Pozostają trzy ostrzeżenia PAX. Przy 10 osobach przy stole częściowo zajęte są strefy wyspy (32%) i bocznego dojścia sofy (10%). Rozłożenie, konkretne mechanizmy i wymagania producenta trzeba potwierdzić na etapie wyposażenia; 3 cm nie jest rezerwą montażową sprawdzoną dla konkretnego modelu.
+
+V25 przenosi zapisy v24 bez resetowania projektu, aktualizując tylko geometrię, strefy i opis M75 w E2. Zachowuje jego nazwę, warstwę, wymiary oraz edycje pozostałych obiektów i wariantów. Oryginały v24/v23 pozostają w przeglądarce. Przy imporcie JSON nadal odtwarzana jest zawartość pliku. Test migracji i układu: `node tools/check_e2_november.js`.

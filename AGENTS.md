@@ -237,3 +237,10 @@ Sprawdzona 11.11.2026 droga sieciowa: sandbox nie łączy się z `proxy:8080`, a
 ### Miarka na telefonie
 
 Miarka dotykowa działa również przy `viewOnly`. `pointerdown` tworzy kandydat stuknięcia (`ptr.measureTap`), a punkt jest przyjmowany dopiero na `pointerup`, jeśli palec nie przesunął się o więcej niż 6 px. Przeciągnięcie przesuwa widok, drugi palec odrzuca kandydat i rozpoczyna pinch; oba gesty zachowują wcześniej wybrany punkt A. Nie przenoś zatwierdzania punktu na `pointerdown`, bo doda to przypadkowe pomiary podczas zoomu. Pasek `measureBar` pokazuje wynik i przyciski bez otwierania panelu. Test regresji: `timeout 60s node tools/check_mobile_measure.js` (Playwright + Chromium); sprawdza też niezmienność zapisanego projektu i obsługę myszy.
+
+
+### Aktualne E2-M75 — U w salonie (11.11.2026)
+
+Najnowszy §14 wymagań zastępuje wcześniejsze ustawienie M75 z §11: sofa obrócona do `rot:0`, korpus x=200–2200, y=6270–7240 mm. Górne ramię U otwartego na TV na wschodzie. M76 i wszystkie inne obiekty bez zmian. Między korpusami 46 cm (nie przejście), po rozłożeniu sofy 3 cm; dojście do sofy od wschodu w pasie 60×140 cm. Test `check_e2_november.js` obejmuje także równoczesne rozłożenie i migrację.
+
+Aktualny zapis **v25**. `loadSavedVariant` najpierw odczytuje v25; z v24 migruje tylko geometrię/strefy/opis E2-M75 (zachowuje nazwę, warstwę, wymiary i wszystkie inne edycje), a z v23 nadal aktualizuje pięć wcześniejszych obiektów. Nie kasuje dawnych zapisów. Inne warianty przenoszone bez zmian; import JSON odtwarza plik. Testy przeglądarkowe używają bieżącego v25. Nie resetuj całych wariantów przy drobnej zmianie geometrii.

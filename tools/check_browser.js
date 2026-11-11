@@ -14,7 +14,7 @@ const {chromium}=require('playwright'),http=require('node:http'),fs=require('nod
   const page=await context.newPage();page.setDefaultTimeout(5000);page.on('pageerror',e=>errors.push(e.message));
   const variant=async v=>assert.equal(await page.locator('#sVar').inputValue(),v);
   const find=async id=>{await page.locator('#bFindId').click();await page.locator('#idQuery').fill(id);await page.locator('#idForm button[type=submit]').click();assert.equal(await page.locator('#idDialog').evaluate(d=>d.open),false,id);};
-  const state=async v=>JSON.parse(await page.evaluate(v=>localStorage.getItem('ogrodniki-rzut-v24:'+v),v));
+  const state=async v=>JSON.parse(await page.evaluate(v=>localStorage.getItem('ogrodniki-rzut-v25:'+v),v));
   await page.goto(base+'/?variant=R2&source=test#plan');await variant('R2');assert.ok(page.url().includes('source=test#plan'));
   await page.locator('#sVar').selectOption('R3');await variant('R3');assert.equal(new URL(page.url()).searchParams.get('variant'),'R3');
   await page.goBack();await variant('R2');await page.goForward();await variant('R3');
@@ -43,8 +43,12 @@ const {chromium}=require('playwright'),http=require('node:http'),fs=require('nod
   const exported=JSON.parse(fs.readFileSync('/tmp/ogrodniki-export.json'));assert.equal(exported.furn.find(f=>f.id===r2Furniture).name,'Własny R2');
   await page.locator('#fImp').setInputFiles('/tmp/ogrodniki-export.json');await find('M'+r2Furniture);assert.equal(await page.locator('#pFName').inputValue(),'Własny R2');
   // Migracja starego zapisu zachowuje własne zmiany poza pięcioma meblami E2.
-  await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('ogrodniki-rzut-v24:E2'));s.furn.find(f=>f.id===75).x+=123;s.furn.find(f=>f.id!==75&&f.key==='k240').name='Własna kuchnia v23';localStorage.setItem('ogrodniki-rzut-v23:E2',JSON.stringify(s));localStorage.removeItem('ogrodniki-rzut-v24:E2');});
+  await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('ogrodniki-rzut-v25:E2'));s.furn.find(f=>f.id===75).x+=123;s.furn.find(f=>f.id!==75&&f.key==='k240').name='Własna kuchnia v23';localStorage.setItem('ogrodniki-rzut-v23:E2',JSON.stringify(s));localStorage.removeItem('ogrodniki-rzut-v25:E2');});
   await page.goto(base+'/');await variant('E2');assert.ok((await state('E2')).furn.some(f=>f.name==='Własna kuchnia v23'));assert.ok(await page.evaluate(()=>localStorage.getItem('ogrodniki-rzut-v23:E2')));
+  // V24 -> v25: na istniejącym rzucie obraca się wyłącznie wskazana sofa.
+  await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('ogrodniki-rzut-v25:E2'));const f=s.furn.find(f=>f.id===75);f.x=685;f.y=6650;f.rot=270;f.name='Moja sofa v24';s.rooms[0].name='Mój salon v24';localStorage.setItem('ogrodniki-rzut-v24:E2',JSON.stringify(s));localStorage.removeItem('ogrodniki-rzut-v25:E2');});
+  await page.reload();await find('M75');assert.equal((await state('E2')).furn.find(f=>f.id===75).rot,0);assert.equal(await page.locator('#pFName').inputValue(),'Moja sofa v24');assert.equal((await state('E2')).rooms[0].name,'Mój salon v24');assert.ok(await page.evaluate(()=>localStorage.getItem('ogrodniki-rzut-v24:E2')));
+  await page.locator('#bFit').click();await page.screenshot({path:'/tmp/e2-u-desktop.png'});
   await context.close();
   const mobile=await browser.newContext({viewport:{width:412,height:915},isMobile:true,hasTouch:true});
   const phone=await mobile.newPage();phone.setDefaultTimeout(5000);phone.on('pageerror',e=>errors.push(e.message));

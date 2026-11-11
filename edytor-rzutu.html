@@ -218,8 +218,9 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 'use strict';
 const $ = s => document.querySelector(s);
 const svg = $('#cv');
-const LS = 'ogrodniki-rzut-v24';
-const PREVIOUS_LS = 'ogrodniki-rzut-v23';
+const LS = 'ogrodniki-rzut-v25';
+const PREVIOUS_LS = 'ogrodniki-rzut-v24';
+const LEGACY_LS = 'ogrodniki-rzut-v23';
 const DEFAULT_VARIANT = 'E2';
 const PALETTE = ['#f6d6c2','#cfe3f2','#d8ecd0','#efe2bb','#e3d5ef','#f3cfd8','#cdeae6','#e9e4d8','#dfe7c4','#f0d9e6'];
 // Podkład: render PDF z Revita w tym samym układzie co rzut (lewy górny narożnik lica zewn. = 0,0 mm)
@@ -1048,8 +1049,11 @@ function variantE2(){
   for(let i=0;i<4;i++) for(const y of [-600,900]) occupied.push([(125+i*700)/2800,y/900,450/2800,600/900]);
   occupied.push([-600/2800,225/900,600/2800,450/900],[1,225/900,600/2800,450/900]);
   dining.arrangements = {mode:'closed',closed:{w:1600,d:900,parts:[[0,0,1,1]]},expanded:{w:2800,d:900,parts:occupied}};
-  const sofaSalon=sofa(200,5650,270);
-  sofaSalon.notes.push('Przy zachodniej ścianie, frontem do TV na wschodzie; rozłożenie na wschód. Ustawienie powyżej narożnika pozostawia oba obrysy spania rozłączne.');
+  const sofaSalon=sofa(200,6270,0);
+  // Górne ramię U: siedzisko na południe, narożnik po zachodniej i południowej stronie.
+  // Do rozłożonego łóżka dochodzimy od wschodu, nie przez zachodni bok narożnika.
+  sofaSalon.z[1]={...sofaSalon.z[1],s:'right',st:0,rect:[2000,0,600,1400],l:'dojście od wschodu'};
+  sofaSalon.notes.push('Górne ramię układu U otwartego na TV na wschodzie; sofa poprzecznie nad narożnikiem, frontem na południe.','Do narożnika 46 cm między korpusami (to nie przejście); po rozłożeniu sofy 3 cm odstępu. Oba pola spania rozłączne, dostęp od wschodu.');
   const corner=F('corner',200,7700,1710,10000,90,{name:'Narożnik 230×151 — dłuższy bok przy ścianie zachodniej',
     parts:[[0,610/1510,1,900/1510],[1300/2300,0,1000/2300,610/1510]],
     z:z=>{z[0].rect=[0,-600,2300,600];z[0].l='dojście po rozłożeniu';z.push(Z('front',610,'po rozłożeniu',{rect:[0,0,1300,610],k:'unfold'}));},
@@ -1964,18 +1968,26 @@ function defaults(s){
   return s;
 }
 
-// V24 zmienia tylko pięć obiektów E2; pozostałe zapisane edycje i warianty zostają.
+// V25 obraca tylko E2-M75. Nadal obsługujemy wcześniejszą migrację pięciu obiektów v23.
 function loadSavedVariant(v){
-  for(const key of [LS,PREVIOUS_LS]){
+  for(const key of [LS,PREVIOUS_LS,LEGACY_LS]){
     try{
       const raw=localStorage.getItem(key+':'+v);if(!raw)continue;
       const s=defaults(JSON.parse(raw));s.variant=v;
-      if(key===PREVIOUS_LS&&v==='E2'){
+      if(key===LEGACY_LS&&v==='E2'){
         const updated=new Map(freshState('E2').furn.filter(f=>[75,76,86,87,101].includes(f.id)).map(f=>[f.id,f]));
         s.furn=s.furn.map(f=>{
           const n=updated.get(f.id);
           return n&&n.key===f.key?{...JSON.parse(JSON.stringify(n)),layer:f.layer}:f;
         });
+      }
+      if(key===PREVIOUS_LS&&v==='E2'){
+        const n=freshState('E2').furn.find(f=>f.id===75);
+        s.furn=s.furn.map(f=>f.id===75&&f.key===n.key?{
+          ...f,x:n.x,y:n.y,rot:n.rot,
+          z:JSON.parse(JSON.stringify(n.z)).map(z=>z.k==='use'?{...z,rect:[f.w,0,600,f.d+430]}:z),
+          notes:[...n.notes],
+        }:f);
       }
       return s;
     }catch(e){}

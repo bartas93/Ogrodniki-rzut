@@ -1,4 +1,4 @@
-// Poprawki E2 z 10.11.2026 i migracja zapisu v23 -> v24.
+// Poprawki E2 z 10/11.11.2026, układ U i migracje v23/v24 -> v25.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const text=fs.readFileSync(path.join(__dirname,'..','edytor-rzutu.html'),'utf8');
 const prefix=text.split('<script>')[1].split('/* ---------- widok ---------- */')[0];
@@ -11,6 +11,11 @@ assert.equal(s.variant,'E2');
 const corner=s.furn.find(f=>f.id===76),boxes=api.bodies(corner);
 assert.equal(corner.rot,90);near(boxes[0].x1,200);near(boxes[0].x2,1100);near(boxes[0].y1,7700);near(boxes[0].y2,10000);
 near(boxes[1].x1,1100);near(boxes[1].x2,1710);near(boxes[1].y1,9000);near(boxes[1].y2,10000);
+const salonSofa=s.furn.find(f=>f.id===75),sofaBody=api.bodies(salonSofa)[0];
+assert.equal(salonSofa.rot,0,'Górne ramię U ma być skierowane na południe');
+near(sofaBody.x1,200);near(sofaBody.x2,2200);near(sofaBody.y1,6270);near(sofaBody.y2,7240);
+near(boxes[0].y1-sofaBody.y2,460);
+const sofaSleep=api.zones(salonSofa)[0];near(boxes[0].y1-sofaSleep.y2,30);
 const sink=s.furn.find(f=>f.key==='sink80'&&f.x===6950),wc=s.furn.find(f=>f.id===87);
 assert.equal(wc.rot,0);near(wc.y-wc.d/2,sink.y-sink.d/2);assert.ok(wc.x>sink.x);
 const roomSofa=s.furn.find(f=>f.id===101);assert.equal(roomSofa.rot,90);near(roomSofa.x+roomSofa.d/2,14150);
@@ -59,6 +64,18 @@ assert.ok(migrated.furn.some(f=>f.name==='Mój dodatkowy mebel'));
 assert.equal(saved.get('ogrodniki-rzut-v23:E2'),JSON.stringify(previous),'Nie usuwaj kopii v23');
 const e2s=api.fresh('E2S');e2s.furn[0].name='Moja kuchnia E2S';saved.set('ogrodniki-rzut-v23:E2S',JSON.stringify(e2s));
 assert.equal(JSON.stringify(launch(saved).load('E2S')),JSON.stringify(e2s));
-const v24=JSON.parse(JSON.stringify(s));v24.furn.find(f=>f.id===76).x+=50;saved.set('ogrodniki-rzut-v24:E2',JSON.stringify(v24));
-assert.equal(JSON.stringify(launch(saved).current()),JSON.stringify(v24),'Nie nadpisuj późniejszych edycji v24');
+// V24: obracamy tylko M75, zachowując jego nazwę/warstwę i wszystkie inne edycje.
+const v24=JSON.parse(JSON.stringify(s));
+const oldSofa=v24.furn.find(f=>f.id===75);oldSofa.rot=270;oldSofa.x=685;oldSofa.y=6650;oldSofa.name='Moja sofa';oldSofa.layer='Własna warstwa';
+v24.furn.find(f=>f.id===76).x+=50;v24.rooms[0].name='Mój salon';
+saved.set('ogrodniki-rzut-v24:E2',JSON.stringify(v24));
+const from24=launch(saved).current(),updatedSofa=from24.furn.find(f=>f.id===75);
+assert.equal(updatedSofa.rot,0);assert.equal(updatedSofa.x,1200);assert.equal(updatedSofa.y,6755);
+assert.equal(updatedSofa.name,'Moja sofa');assert.equal(updatedSofa.layer,'Własna warstwa');
+for(const field of ['walls','rooms','hidden','set','ui','nextId'])assert.equal(JSON.stringify(from24[field]),JSON.stringify(v24[field]),'Zachowaj '+field);
+assert.equal(JSON.stringify(from24.furn.filter(f=>f.id!==75)),JSON.stringify(v24.furn.filter(f=>f.id!==75)),'Tylko M75 może się zmienić');
+assert.equal(saved.get('ogrodniki-rzut-v24:E2'),JSON.stringify(v24),'Nie usuwaj kopii v24');
+for(const v of ['E2S','R1','R2','R3']){const state=api.fresh(v);state.furn[0].name='Własny '+v;saved.set('ogrodniki-rzut-v24:'+v,JSON.stringify(state));assert.equal(JSON.stringify(launch(saved).load(v)),JSON.stringify(state),'Niezależny '+v);}
+const v25=JSON.parse(JSON.stringify(s));v25.furn.find(f=>f.id===75).x+=50;saved.set('ogrodniki-rzut-v25:E2',JSON.stringify(v25));
+assert.equal(JSON.stringify(launch(saved).current()),JSON.stringify(v25),'Nie nadpisuj późniejszych edycji v25');
 console.log('E2_NOVEMBER_OK: narożnik, wspólna ściana WC/umywalki, sofa pokoju 3, rzeczywiste rozłożenie i migracja zapisów');

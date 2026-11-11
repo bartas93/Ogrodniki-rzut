@@ -38,3 +38,5 @@ Aktualizacja 11.11.2026:
 Testy nowych funkcji: `timeout 30s node tools/check_r2_r3.js`, `timeout 30s node tools/check_variant.js R2`, `timeout 30s node tools/check_variant.js R3`. Test przeglądarkowy: `timeout 60s node tools/check_browser.js` (wymaga Playwright i Chromium; ścieżkę przeglądarki można wskazać przez `CHROMIUM_PATH`).
 
 Test miarki dotykowej: `timeout 60s node tools/check_mobile_measure.js` — dwa stuknięcia, przyciąganie do krawędzi, pan/pinch, tolerancja drżenia palca, anulowanie, czyszczenie i brak zmian geometrii.
+
+E2 — najnowsze ustawienie salonu: **M75 obrócona poprzecznie nad narożnikiem M76**, tworząc U otwarte na TV na wschodzie. Pozostają rozłączne pola spania, dojście do sofy od wschodu oraz HST. Zapis v25 przenosi v24, zmieniając tylko ustawienie/strefy/opis M75; pozostałe edycje i warianty zostają. [Aktualny opis i odstępy](e2-wykonczenie.md#aktualizacja-e2-m75--u-w-salonie-11112026).
