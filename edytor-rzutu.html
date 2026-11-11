@@ -218,7 +218,8 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 'use strict';
 const $ = s => document.querySelector(s);
 const svg = $('#cv');
-const LS = 'ogrodniki-rzut-v29';
+const LS = 'ogrodniki-rzut-v30';
+const WINDOW_LS = 'ogrodniki-rzut-v29';
 const ISLAND_LS = 'ogrodniki-rzut-v28';
 const WALL_LS = 'ogrodniki-rzut-v27';
 const RECENT_LS = 'ogrodniki-rzut-v26';
@@ -1195,7 +1196,42 @@ function variantE2(){
   alignE2Wall42(s);
   enlargeE2Island(s);
   enlargeE2Window5(s);
+  optimizeE2Kitchen(s);
   return s;
+}
+
+// Ergonomia L: lodówka bliżej zlewu, płyta 30 cm na zachód; ID wyposażenia zostają.
+function optimizeE2Kitchen(s){
+  const note=(f,text)=>{f.notes=[...(f.notes||[]).filter(n=>!n.startsWith('Kuchnia E2 — ')),'Kuchnia E2 — '+text];};
+  const tall=s.furn.find(f=>f.id===71),counter=s.furn.find(f=>f.id===72);
+  if(tall?.key==='tall'){
+    const fridge=tall.equipment?.find(e=>e.kind==='fridge'),oven=tall.equipment?.find(e=>e.kind==='oven');
+    if(fridge&&oven){fridge.x=600;oven.x=0;}
+    const pantry=tall.equipment?.find(e=>e.kind==='cabinet'&&(e.id===3||e.x===1200));
+    if(pantry){
+      pantry.w=400;pantry.label='ZAP 40';
+      // Nadaj oryginalne ID przed dodaniem narożnika w surowym konstruktorze.
+      for(const [item,id] of [[fridge,1],[oven,2],[pantry,3]])if(item&&!Number.isInteger(item.id))item.id=id;
+      let corner=tall.equipment.find(e=>e.kind==='filler'&&e.x===1600);
+      if(!corner){
+        const next=Math.max(tall.nextEquipmentId||1,1+Math.max(0,...tall.equipment.map(e=>e.id||0)));
+        corner={id:next,kind:'filler',x:1600,y:0,w:600,d:600,label:'BLENDA',height:900};
+        tall.equipment.push(corner);tall.nextEquipmentId=next+1;
+      }
+    }
+    if(tall.name==='Słupki: lodówka, piekarnik, zapasy')tall.name='Piekarnik, lodówka, zapasy 40 i niski narożnik';
+    tall.notes=(tall.notes||[]).filter(n=>n!=='Lodówka i słupek piekarnika po 60 cm; pozostałe 100 cm na zapasy i odstawianie.');
+    note(tall,'od południa: piekarnik 60, lodówka 60, dostępny słupek zapasów 40 i niski ślepy narożnik 60 cm. Narożnika nie liczymy jako dostępnej wysokiej szafy. Blat odkładczy lodówki: 60 cm przy zlewie; gorące blachy na wyspę naprzeciw, przez przejście 130 cm. Zawiasy lodówki od strony piekarnika (południa), uchwyt od północy — potwierdzić pełne otwarcie i wysunięcie szuflad dla wybranego modelu.');
+  }
+  if(counter?.key==='k240'){
+    const hob=counter.equipment?.find(e=>e.kind==='hob');
+    const prep=counter.equipment?.find(e=>e.kind==='cabinet'&&(e.id===4||e.x===2000));
+    const landing=counter.equipment?.find(e=>e.kind==='cabinet'&&(e.id===6||e.x===3200));
+    if(hob&&prep&&landing){
+      hob.x=2300;prep.w=hob.x-prep.x;landing.x=hob.x+hob.w;landing.w=counter.w-landing.x;
+    }
+    note(counter,'zachód → wschód: blat 60, zlew 80, zmywarka 60, szuflady 30, płyta 60, blat 100 cm (np. moduły 2×50). Ciągły blat między zlewem a płytą 90 cm, w tym 60 cm nad zmywarką. Z prawego blatu 100 cm pierwsze 40 cm przy płycie zostawić wolne; końcowe 60 cm na ekspres/Thermomix, pozostałe małe AGD przechowywane i używane na blacie spiżarni po dobraniu miejsca oraz zasilania. Okap i zasilanie płyty przesunąć o 30 cm w lewo. Strefa przygotowania także na wyspie 170×90; podczas otwarcia zmywarki na 60 cm zostaje około 70 cm prześwitu, bez wygodnego mijania.');
+  }
 }
 
 // Okno O5 pralni: 90 -> 120 cm, bez przesunięcia środka i zmian wysokości.
@@ -2048,9 +2084,9 @@ function defaults(s){
   return s;
 }
 
-// V29 powiększa tylko O5; wcześniejsze migracje zależą od źródłowej wersji zapisu.
+// V30 aktualizuje wyposażenie M71/M72; wcześniejsze migracje zależą od źródłowej wersji zapisu.
 function loadSavedVariant(v){
-  for(const key of [LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
+  for(const key of [LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
     try{
       const raw=localStorage.getItem(key+':'+v);if(!raw)continue;
       const s=defaults(JSON.parse(raw));s.variant=v;
@@ -2072,7 +2108,8 @@ function loadSavedVariant(v){
       if([SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')applyE2NovemberRoomEdits(s);
       if([RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')alignE2Wall42(s);
       if([WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')enlargeE2Island(s);
-      if(key!==LS&&v==='E2')enlargeE2Window5(s);
+      if([ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')enlargeE2Window5(s);
+      if(key!==LS&&v==='E2')optimizeE2Kitchen(s);
       return s;
     }catch(e){}
   }

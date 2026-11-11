@@ -195,3 +195,15 @@ V26 migruje zapisy v25/v24/v23 bez resetowania pozostałych edycji. Z v25 zmieni
 - **[DECYZJA]** Powiększyć O5. Przyjęto szerokość **120 cm zamiast 90 cm**, bez przesunięcia środka x=8600 mm. Wysokość otworu 120 cm i parapet 120 cm bez zmian; dolna część FIX, uchylna od 180 cm.
 - Otwór x=8000–9200 mm. Do sąsiednich drzwi O4 pozostaje 30 cm ściany, a do początku wysokiej zabudowy narożnej PAX (x=9698) 49,8 cm. Okno nadal nad blatem pralni. To rezerwy koncepcyjne — nadproże i stolarka do projektu.
 - V29 przenosi v28, zmieniając wyłącznie szerokość O5. Zachowuje wysokość, parapet, położenie, typ, ID, pozostałe edycje i dawne kopie zapisów. Inne warianty bez zmian.
+
+
+## 19. E2 — ergonomia kuchni (11.11.2026)
+
+Przemyślany układ L z wyspą roboczą; bez zmian pozostałych wariantów. Szczegóły i schemat: [kuchnia-E2-ergonomia.md](kuchnia-E2-ergonomia.md).
+
+- W M71 zamienione miejscami lodówka E1 i piekarnik E2. Od południa: piekarnik 60, lodówka 60, zapasy 40 i niski ślepy narożnik 60 cm. Wcześniejsze 100 cm zapasów nie było w pełni dostępne: północny blat zasłaniał 60 cm frontu. Nowy narożnik E4, numery pozostałych modułów bez zmian.
+- W M72 płyta E5 przesunięta 30 cm w lewo. Od zachodu: blat 60, zlew 80, zmywarka 60, szuflady 30, płyta 60, blat 100 cm. Przygotowanie na ciągłym blacie 90 cm między zlewem a płytą i wyspie 170×90. Pierwsze 40 cm blatu na prawo od płyty wolne; końcowe 60 cm na wybrany sprzęt codzienny, po weryfikacji jego gabarytów.
+- Trójkąt między środkami frontów: 1,22 / 1,60 / 2,69 m, łącznie 5,51 m, bez przecięcia wyspą. To orientacyjna kontrola koncepcji, nie potwierdzenie norm ani dopasowania konkretnego AGD.
+- Przejścia przy wyspie 130/130/90 cm zachowane. Otwarta zmywarka około 60 cm pozostawia około 70 cm, bez wygodnego mijania. Gorące blachy z piekarnika trzeba przenieść na wyspę przez przejście 130 cm; blat tuż przy piekarniku byłby wygodniejszy. Stół dla 10 osób nadal okazjonalny, 75 cm za wyspą.
+- Dopasować okap i zasilanie do nowej pozycji płyty; otwieranie lodówki i szuflad sprawdzić dla wybranego modelu. Nie przenoszono instalacji do wyspy. Kontrola edytora nie obejmuje skrzydeł urządzeń w zabudowie.
+- Zapis v30 z v29 aktualizuje tylko wyposażenie/opisy M71/M72 w E2; nazwy własne, obrysy obu zabudów i pozostałe edycje zachowane. Starsze kopie pozostają, bieżącego v30 nie migruje się ponownie.

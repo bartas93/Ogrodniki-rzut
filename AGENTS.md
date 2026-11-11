@@ -268,3 +268,10 @@ Aktualny zapis **v28**; odczyt v27/v26/v25/v24/v23. Z v27 migruje tylko M73: sze
 ### Okno O5 — zapis v29
 
 Najnowszy §18: O5 pralni poszerzone 90 -> 120 cm. Środek x=8600, wysokość/parapet po 120 cm bez zmian, 30 cm ściany do O4 i 49,8 cm do wysokiego PAX. `enlargeE2Window5` modyfikuje wyłącznie `w` istniejącego O5 typu window, w E2. Aktualny zapis v29, starsze v28/v27/v26/v25/v24/v23. Z v28 nie ponawiaj zmian wyspy, ściany ani wcześniejszych mebli. Własne edycje v29 mają pierwszeństwo; nie odtwarzaj usuniętego O5. Test szerokości, odstępów i zakresu migracji: `tools/check_e2_room_updates.js`.
+
+
+### Kuchnia M71/M72 — zapis v30
+
+Najnowszy §19 wymagań i `kuchnia-E2-ergonomia.md`: `optimizeE2Kitchen` aktualizuje wyłącznie wyposażenie/opisy M71/M72 w E2. Lodówka E1 lokalne x=600, piekarnik E2 x=0. Zapasy E3 mają 400 mm, a zasłonięty północnym blatem odcinek 600 mm to nowy niski ślepy narożnik E4, nie dostępna wysoka szafa. Przed dodaniem narożnika w surowym konstruktorze nadaj istniejącym modułom ich oryginalne ID; inaczej defaults przeliczy je po nowym E4. Płyta M72-E5 lokalne x=2300; sąsiednie szafki 300 i 1000 mm. Trójkąt mierzony między środkami frontów 1,22/1,60/2,69 m. Blat przygotowania 900 mm, w tym blat nad zmywarką. Wyspa/przejścia bez zmian, nie zmieniaj stref ani progów kontroli.
+
+Aktualny LS **v30**, `WINDOW_LS` v29. Z v29 nie ponawiaj korekty okna, wyspy, ściany ani wcześniejszych mebli. Własne nazwy, obrysy M71/M72 i reszta stanu zachowane; bieżący v30 nie podlega ponownej migracji. Inne warianty i stare kopie pozostają. Test `timeout 30s node tools/check_e2_kitchen.js`: moduły bez luk/nakładania, ID, pomiary, zakres migracji i priorytet v30. Testy przeglądarkowe używają v30 i sprawdzają wyszukiwanie wyposażenia kuchni na komputerze i telefonie.

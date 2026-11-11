@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5500 3650" role="img" aria-labelledby="title desc">
+<title id="title">Kuchnia E2 — trójkąt pracy i przejścia</title><desc id="desc">Lodówka, zlew i płyta na zachodniej i północnej ścianie. Wyspa poza trójkątem, 130 cm od zabudowy.</desc>
+<style>text{font-family:Arial,sans-serif;fill:#23364b;font-size:92px}.small{font-size:75px}.dim{stroke:#526779;stroke-width:10;fill:none}.tri{fill:#d3eddf;fill-opacity:.5;stroke:#248259;stroke-width:16;stroke-dasharray:35 18}</style>
+<rect width="5500" height="3650" fill="#f8fafc"/><path d="M120 3050V120H5170" fill="none" stroke="#536475" stroke-width="80"/>
+<rect x="200" y="1200" width="600" height="600" fill="#b8ddf0" stroke="#6c7886" stroke-width="9"/>
+<text class="small" x="500.0" y="1525.0" text-anchor="middle">LOD 60</text>
+<rect x="200" y="1800" width="600" height="600" fill="#f2d1bd" stroke="#6c7886" stroke-width="9"/>
+<text class="small" x="500.0" y="2125.0" text-anchor="middle">PIEK 60</text>
+<rect x="200" y="800" width="600" height="400" fill="#eee4cd" stroke="#6c7886" stroke-width="9"/>
+<text class="small" x="500.0" y="1025.0" text-anchor="middle">ZAP 40</text>
+<rect x="200" y="200" width="600" height="600" fill="#d8d8d8" stroke="#6c7886" stroke-width="9"/>
+<text class="small" x="500.0" y="525.0" text-anchor="middle">ŚLEPY 60</text>
+<rect x="800" y="200" width="600" height="600" fill="#eee4cd" stroke="#6c7886" stroke-width="9"/>
+<text class="small" x="1100.0" y="525.0" text-anchor="middle">BLAT 60</text>
+<rect x="1400" y="200" width="800" height="600" fill="#c6e3ed" stroke="#6c7886" stroke-width="9"/>
+<text class="small" x="1800.0" y="525.0" text-anchor="middle">ZLEW 80</text>
+<rect x="2200" y="200" width="600" height="600" fill="#d9e4ef" stroke="#6c7886" stroke-width="9"/>
+<text class="small" x="2500.0" y="525.0" text-anchor="middle">ZM 60</text>
+<rect x="2800" y="200" width="300" height="600" fill="#eee4cd" stroke="#6c7886" stroke-width="9"/>
+<text class="small" x="2950.0" y="500.0" text-anchor="middle" transform="rotate(-90 2950.0 500.0)">BLAT 30</text>
+<rect x="3100" y="200" width="600" height="600" fill="#f2c8be" stroke="#6c7886" stroke-width="9"/>
+<text class="small" x="3400.0" y="525.0" text-anchor="middle">PŁYTA 60</text>
+<rect x="3700" y="200" width="1000" height="600" fill="#eee4cd" stroke="#6c7886" stroke-width="9"/>
+<text class="small" x="4200.0" y="525.0" text-anchor="middle">BLAT 100</text>
+<rect x="2100" y="2100" width="1700" height="900" rx="15" fill="#e3d6b7" stroke="#6c7886" stroke-width="12"/><text x="2950" y="2540" text-anchor="middle">WYSPA 170×90</text><text class="small" x="2950" y="2670" text-anchor="middle">blat przygotowania</text>
+<path class="tri" d="M800 1500L1800 800L3400 800Z"/>
+<g fill="#248259"><circle cx="800" cy="1500" r="28"/><circle cx="1800" cy="800" r="28"/><circle cx="3400" cy="800" r="28"/></g>
+<text x="1060" y="1070">1,22 m</text><text x="2320" y="965">1,60 m</text><text x="1940" y="1430">2,69 m</text>
+<path class="dim" d="M800 1900H2100M800 1850V1950M2100 1850V1950M4000 800V2100M3950 800H4050M3950 2100H4050"/>
+<text x="1450" y="1840" text-anchor="middle">130 cm</text><text x="4130" y="1510">130 cm</text>
+<path d="M2200 1160H3100" stroke="#cb8a24" stroke-width="22"/><text class="small" x="2670" y="1090" text-anchor="middle">blat 90 cm</text>
+<text x="220" y="3270">E2 — układ L i osobna wyspa robocza</text><text class="small" x="220" y="3420">Trójkąt między środkami frontów; wymiary w modelu.</text><text class="small" x="220" y="3540">Przejścia podane przy zamkniętych urządzeniach.</text>
+</svg>

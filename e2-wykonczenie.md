@@ -123,3 +123,10 @@ Brak nowych problemów oraz niedostępnych pomieszczeń. Zachowane wcześniejsze
 ## Okno O5 pralni — 120×120 cm
 
 Poszerzone z 90 do 120 cm, środek bez zmian (x=8600), otwór x=8000–9200 mm. Parapet 120 cm i wysokość 120 cm zachowane. Do drzwi ogrodowych pozostaje 30 cm ściany, do narożnego PAX 49,8 cm. Okno nad blatem, dół FIX i uchylna część od 180 cm. Przekrój nadproża i stolarkę dobrać projektowo. V29 aktualizuje z v28 tylko szerokość O5; ID i pozostałe edycje pozostają. Kontrola wymiarów i migracji w `tools/check_e2_room_updates.js`.
+
+
+## Ergonomia kuchni — trójkąt pracy
+
+Aktualizacja M71/M72: lodówka bliżej zlewu, piekarnik na południowym końcu słupków, płyta 30 cm w lewo. Trójkąt między środkami frontów skrócony z 6,72 do 5,51 m (boki 1,22/1,60/2,69 m). Blat między zlewem a płytą 90 cm, dodatkowo wyspa 170×90 i prawy blat 100 cm z pierwszymi 40 cm wolnymi przy płycie. Zamiast deklarowanej szafy zapasów 100 cm: realnie dostępny słupek 40 cm oraz niski ślepy narożnik 60 cm za północnym blatem.
+
+Przejścia przy zamkniętych urządzeniach pozostają 130/130/90 cm. Otwarta zmywarka ogranicza przejście do około 70 cm; odkładanie z piekarnika wymaga przeniesienia na wyspę przez 130 cm. To kompromisy opisane w [analizie ze schematem](kuchnia-E2-ergonomia.md), razem z ograniczeniami doboru AGD i okapu. V30 migruje z v29 tylko wyposażenie/opisy M71/M72, zachowuje istniejące ID i pozostałe edycje. Testy: `tools/check_e2_kitchen.js` oraz wcześniejsze kontrole geometrii i przeglądarki.
