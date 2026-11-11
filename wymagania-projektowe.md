@@ -188,3 +188,10 @@ V26 migruje zapisy v25/v24/v23 bez resetowania pozostałych edycji. Z v25 zmieni
 - Prześwity od korpusów zabudowy północnej i zachodnich słupków zwiększone z 100 do **130 cm**. Od wschodu pozostaje **90 cm** do lica ściany / regału. Do złożonego stołu 135 cm; do obrysu zajętych krzeseł przy stole 280 cm — **75 cm**. Są to odległości w modelu; wystające uchwyty i konkretne mechanizmy wymagają uwzględnienia w projekcie wyposażenia.
 - Zero nowych problemów i niedostępnych pomieszczeń, również przy rozłożonym stole i sofach. Cztery wcześniejsze ostrzeżenia pozostają (M101 i trzy PAX).
 - V28 przenosi v27, aktualizując wyłącznie wymiary/położenie/opis M73; ID, głębokość, obrót, warstwa i własna nazwa/notatki zachowane. Pozostałe edycje i warianty bez zmian; wcześniejsze zapisy nie są kasowane.
+
+
+## 18. E2 — większe okno O5 pralni
+
+- **[DECYZJA]** Powiększyć O5. Przyjęto szerokość **120 cm zamiast 90 cm**, bez przesunięcia środka x=8600 mm. Wysokość otworu 120 cm i parapet 120 cm bez zmian; dolna część FIX, uchylna od 180 cm.
+- Otwór x=8000–9200 mm. Do sąsiednich drzwi O4 pozostaje 30 cm ściany, a do początku wysokiej zabudowy narożnej PAX (x=9698) 49,8 cm. Okno nadal nad blatem pralni. To rezerwy koncepcyjne — nadproże i stolarka do projektu.
+- V29 przenosi v28, zmieniając wyłącznie szerokość O5. Zachowuje wysokość, parapet, położenie, typ, ID, pozostałe edycje i dawne kopie zapisów. Inne warianty bez zmian.

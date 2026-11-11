@@ -263,3 +263,8 @@ Najnowszy §16: S42 kończy się na osi S54 (x=13725, y=5650), zamiast x=14025. 
 Najnowszy §17: wyspa 170×90 (+30 cm), x=2100–3800, y=2100–3000 mm. `enlargeE2Island` działa tylko dla M73 typu island w E2. Północ/zachód: 130 cm do zabudowy; wschód: 90 cm; stół zamknięty: 135 cm, rozłożony z 10 krzesłami: 75 cm. Nie zmieniaj stref ani progów kontroli.
 
 Aktualny zapis **v28**; odczyt v27/v26/v25/v24/v23. Z v27 migruje tylko M73: szerokość, x/y i aktualny opis (własna nazwa i notatki zachowane). Nie powtarzaj z v27 ani wcześniejszego skrócenia S42, ani sześciu korekt mebli. Starsze wersje otrzymują tylko należne migracje. Test `tools/check_e2_island.js` sprawdza prześwity, zakres migracji, priorytet v28 i niezależność wariantów.
+
+
+### Okno O5 — zapis v29
+
+Najnowszy §18: O5 pralni poszerzone 90 -> 120 cm. Środek x=8600, wysokość/parapet po 120 cm bez zmian, 30 cm ściany do O4 i 49,8 cm do wysokiego PAX. `enlargeE2Window5` modyfikuje wyłącznie `w` istniejącego O5 typu window, w E2. Aktualny zapis v29, starsze v28/v27/v26/v25/v24/v23. Z v28 nie ponawiaj zmian wyspy, ściany ani wcześniejszych mebli. Własne edycje v29 mają pierwszeństwo; nie odtwarzaj usuniętego O5. Test szerokości, odstępów i zakresu migracji: `tools/check_e2_room_updates.js`.

@@ -218,7 +218,8 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 'use strict';
 const $ = s => document.querySelector(s);
 const svg = $('#cv');
-const LS = 'ogrodniki-rzut-v28';
+const LS = 'ogrodniki-rzut-v29';
+const ISLAND_LS = 'ogrodniki-rzut-v28';
 const WALL_LS = 'ogrodniki-rzut-v27';
 const RECENT_LS = 'ogrodniki-rzut-v26';
 const SOFA_LS = 'ogrodniki-rzut-v25';
@@ -1193,7 +1194,13 @@ function variantE2(){
   applyE2NovemberRoomEdits(s);
   alignE2Wall42(s);
   enlargeE2Island(s);
+  enlargeE2Window5(s);
   return s;
+}
+
+// Okno O5 pralni: 90 -> 120 cm, bez przesunięcia środka i zmian wysokości.
+function enlargeE2Window5(s){
+  for(const wall of s.walls){const opening=wall.op.find(o=>o.id===5);if(opening?.type==='window')opening.w=1200;}
 }
 
 // Wyspa M73: +30 cm długości, +30 cm prześwitu od północnej i zachodniej zabudowy.
@@ -2041,9 +2048,9 @@ function defaults(s){
   return s;
 }
 
-// V28 aktualizuje tylko M73; wcześniejsze migracje zależą od źródłowej wersji zapisu.
+// V29 powiększa tylko O5; wcześniejsze migracje zależą od źródłowej wersji zapisu.
 function loadSavedVariant(v){
-  for(const key of [LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
+  for(const key of [LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
     try{
       const raw=localStorage.getItem(key+':'+v);if(!raw)continue;
       const s=defaults(JSON.parse(raw));s.variant=v;
@@ -2064,7 +2071,8 @@ function loadSavedVariant(v){
       }
       if([SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')applyE2NovemberRoomEdits(s);
       if([RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')alignE2Wall42(s);
-      if(key!==LS&&v==='E2')enlargeE2Island(s);
+      if([WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')enlargeE2Island(s);
+      if(key!==LS&&v==='E2')enlargeE2Window5(s);
       return s;
     }catch(e){}
   }

@@ -76,6 +76,6 @@ for(const field of ['walls','rooms','hidden','set','ui','nextId'])assert.equal(J
 assert.equal(JSON.stringify(from24.furn.filter(f=>f.id!==75)),JSON.stringify(v24.furn.filter(f=>f.id!==75)),'Tylko M75 może się zmienić');
 assert.equal(saved.get('ogrodniki-rzut-v24:E2'),JSON.stringify(v24),'Nie usuwaj kopii v24');
 for(const v of ['E2S','R1','R2','R3']){const state=api.fresh(v);state.furn[0].name='Własny '+v;saved.set('ogrodniki-rzut-v24:'+v,JSON.stringify(state));assert.equal(JSON.stringify(launch(saved).load(v)),JSON.stringify(state),'Niezależny '+v);}
-const v28=JSON.parse(JSON.stringify(s));v28.furn.find(f=>f.id===75).x+=50;saved.set('ogrodniki-rzut-v28:E2',JSON.stringify(v28));
-assert.equal(JSON.stringify(launch(saved).current()),JSON.stringify(v28),'Nie nadpisuj późniejszych edycji v28');
+const v29=JSON.parse(JSON.stringify(s));v29.furn.find(f=>f.id===75).x+=50;saved.set('ogrodniki-rzut-v29:E2',JSON.stringify(v29));
+assert.equal(JSON.stringify(launch(saved).current()),JSON.stringify(v29),'Nie nadpisuj późniejszych edycji v29');
 console.log('E2_NOVEMBER_OK: narożnik, wspólna ściana WC/umywalki, sofa pokoju 3, rzeczywiste rozłożenie i migracja zapisów');

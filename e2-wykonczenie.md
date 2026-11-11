@@ -118,3 +118,8 @@ Prawy koniec osi S42 skrócony z x=14025 do x=13725 mm, do osi pionowej S54. Aut
 Wyspa wydłużona o 30 cm; północna i zachodnia krawędź odsunięte od zabudowy o dalsze 30 cm. Środek (2950,2550) mm, korpus x=2100–3800, y=2100–3000 mm. Prześwity: północ/zachód 130 cm, wschód 90 cm, do złożonego stołu 135 cm; przy 10 zajętych krzesłach za wyspą pozostaje 75 cm. Wymiary odnoszą się do modelu korpusów, bez doboru wystających uchwytów. Wyspa nadal wyłącznie robocza, bez hokerów i instalacji wodnej.
 
 Brak nowych problemów oraz niedostępnych pomieszczeń. Zachowane wcześniejsze ostrzeżenia: M101 12%, trzy PAX 25%; po rozłożeniu M117 także strefa krzesła M116 17%. Zapis v28 aktualizuje z v27 wyłącznie M73 i zachowuje pozostałe edycje, także ręczne zmiany S42 i mebli. Test: `timeout 30s node tools/check_e2_island.js`.
+
+
+## Okno O5 pralni — 120×120 cm
+
+Poszerzone z 90 do 120 cm, środek bez zmian (x=8600), otwór x=8000–9200 mm. Parapet 120 cm i wysokość 120 cm zachowane. Do drzwi ogrodowych pozostaje 30 cm ściany, do narożnego PAX 49,8 cm. Okno nad blatem, dół FIX i uchylna część od 180 cm. Przekrój nadproża i stolarkę dobrać projektowo. V29 aktualizuje z v28 tylko szerokość O5; ID i pozostałe edycje pozostają. Kontrola wymiarów i migracji w `tools/check_e2_room_updates.js`.
