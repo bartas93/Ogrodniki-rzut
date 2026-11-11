@@ -72,3 +72,15 @@ Pozostałe warianty pozostają bez zmian. E2 nadal jest otwierany domyślnie. No
 - [FRIHETEN](https://www.ikea.com/pl/pl/p/friheten-naroznik-z-funkcja-spania-faringe-jasnoszary-s29517045/) — narożnik 230×151, spanie 140×204 cm.
 
 Są to gabaryty do sprawdzenia układu, bez zobowiązania do zakupu konkretnych tkanin, kolorów czy całych zestawów.
+
+## Korekta salonu, walk-in i pokoju 3 — 10.11.2026
+
+- Narożnik 230×151 cm obrócony: dłuższy bok przy zachodniej ścianie, krótszy przy południowej. Rezerwacja x=200–1710, y=7700–10000 mm; otomana od południa, front na wschód i północ. Do początku otworu HST pozostaje 84 cm wzdłuż południowej ściany; to odległość od mebla do otworu, nie obliczona szerokość całej drogi dojścia.
+- Drugą sofę salonu ustawiono przy zachodniej ścianie powyżej narożnika, frontem do TV. Obrys 97×200 cm, x=200–1170 i y=5650–7650 mm. Zmiana potrzebna, aby rzeczywiste obrysy rozłożenia obu mebli nie nachodziły na siebie. Między korpusami zostaje 5 cm; nie jest to przejście.
+- WC w walk-in przeniesione na północną ścianę obok umywalki. Stelaż 20 cm przed tą samą ścianą; oś miski x=8175 mm, umywalki x=6950 mm. Miska skierowana na południe. Poprzednia zabudowa przy ścianie wschodniej usunięta z tego miejsca; przebieg kanalizacji i rewizja do koordynacji instalacyjnej.
+- Sofa pokoju 3 obrócona frontem na zachód, oparcie przy ścianie wschodniej. Korpus 97×200 cm, x=13180–14150 i y=800–2800 mm. Rozłożenie 140×200 cm w stronę środka, z dojściem do biurka i szaf; drzwi pozostają poza obrysem sofy i rozłożenia.
+- Zachowano numery obiektów 75, 76, 86, 87, 101 i całą geometrię pozostałych wariantów, także niezależnego E2S. Test odbicia E2S porównuje jego własny zamrożony konstruktor sprzed odbicia, a nie później rozwijane E2.
+- Kontrola: zero wykrytych problemów, wszystkie pomieszczenia osiągalne. Pozostają trzy wcześniejsze ostrzeżenia rastra przy korytarzowych PAX. Przy stole 280 cm i dziesięciu zajętych krzesłach dochodzi 13% zajęcia strefy dojścia sofy salonu, oprócz wcześniejszych 32% strefy wyspy; korpusy i zadeklarowane pola rozłożenia pozostają wolne od kolizji. Osobno sprawdzono dojścia po dodaniu pól rozłożenia do rzeczywistych przeszkód w modelu.
+- Zapis v24 odczytuje dane v23: w E2 aktualizuje tylko wymienione pięć obiektów (jeśli nadal istnieją i mają zgodny typ), zachowując pozostałe edycje, warstwy oraz wszystkie inne warianty. Oryginalne dane v23 pozostają w przeglądarce. Późniejsze edycje v24 nie są ponownie nadpisywane. Import dawnego JSON nadal odtwarza zawartość tego pliku.
+
+Kontrola: `node tools/check_e2_november.js` oraz `node tools/check_variant.js E2`.

@@ -127,3 +127,25 @@ Poniższe decyzje aktualizują §7 tam, gdzie zmieniły się wymiary i wyposaże
 - Wspólna strefa salonu/kuchni/jadalni ma ok. 39,3 m²; etykieta edytora obejmuje dodatkowo otwarty hol i korytarze, łącznie ok. 53,0 m². Stół 160→240 cm, stan rozłożony z 8 zajętymi krzesłami. Przy 8 osobach część tylnego przejścia wyspy jest zajęta.
 - Ściany warstwowe 412 mm i dach kopertowy 30° z okapem 1 m przyjęte roboczo jak w E2, do osobnego projektu konstrukcji i sprawdzenia usytuowania. Dach geometrycznie ok. 234,48 m².
 - R1 ma niezależny konstruktor i osobny zapis w v23. **E2 nadal jest wariantem domyślnym**; dodanie R1 nie resetuje pozostałych wariantów.
+
+
+## 11. E2 — salon, WC i sofa pokoju 3 (10.11.2026)
+
+- **[DECYZJA]** Narożnik w salonie: dłuższy bok przy zachodniej ścianie, krótszy przy południowej. Zachować wyjście HST. Druga sofa ustawiona powyżej narożnika przy zachodniej ścianie, frontem do TV; oba obrysy spania rozłączne.
+- **[DECYZJA]** WC w łazience walk-in na tej samej, północnej ścianie co umywalka, po jej prawej stronie. Oba stelaże po 20 cm; droga kanalizacji do opracowania instalacyjnego.
+- **[DECYZJA]** Poprawione ustawienie sofy pokoju 3: przy wschodniej ścianie, frontem do środka, bez kolizji drzwi, biurka, szaf i z miejscem do rozłożenia.
+- Bez zmian w pozostałych wariantach; E2 nadal domyślne. Zapis v24 migruje pięć zmienionych obiektów E2 z v23 i zachowuje pozostałe edycje oraz stare kopie. Szczegóły i ograniczenia w końcowej sekcji `e2-wykonczenie.md`.
+
+
+## 12. R2/R3 i wybór wariantu (11.11.2026)
+
+- **[DECYZJA]** Dwie dodatkowe, niezależne propozycje mniejszego domu z programem R1 i biurkami 140×70 cm. R2: wejście blisko środka północnej elewacji, salon SW. R3: wejście przy narożniku NE ze względu na dojazd od wschodu, salon SE. R3 może być niezależnym odbiciem R1 wschód–zachód.
+- Obrys obu propozycji 15,174×9,824 m, 149,07 m² zabudowy; [szczegóły, weryfikacja i kompromisy](R2-R3-koncepcje.md). R1 i E2S bez zmian geometrii.
+- Link bez parametru i nieznany `variant` otwierają E2. Jawny `?variant=R2` itd. wybiera wskazany wariant. Zmiana wariantu aktualizuje adres, a przekierowanie zachowuje parametry. Zapisy pozostają odrębne.
+
+## 13. Trwałe ID elementów (11.11.2026)
+
+- Wszystkie warianty mają oznaczenia: `E2-S12` ściana, `E2-O13` otwór dowolnego typu, `E2-M75` mebel/urządzenie, `E2-P40` pomieszczenie, `E2-M75-E1` wyposażenie wewnątrz zabudowy. Są to przykłady formatu; istniejące numery wynikają z obiektów modelu.
+- Numery istniejących obiektów nie zmieniają się po przesuwaniu, zmianie nazwy, wymiarów, typu otworu ani zapisie/odczycie. Nowe obiekty dostają kolejne numery. Wyposażenie ma zapisane numery lokalne w obrębie rodzica.
+- Przełącznik ID, pełne ID w panelu, kopiowanie i wyszukiwanie są dostępne także na telefonie. Pełne ID przełącza wariant, zaznacza i przybliża element; skrót działa w bieżącym. Na oddalonym rzucie etykiety są ograniczane, by nie nakładały się; widoczne oznaczenia są zachowane w PNG.
+- Zapis w chmurze pozostaje propozycją, bez wdrożenia.

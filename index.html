@@ -4,10 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Rzut Ogrodniki</title>
-<meta http-equiv="refresh" content="0; url=edytor-rzutu.html">
+<script>
+const target='edytor-rzutu.html'+location.search+location.hash;
+location.replace(target);
+</script>
 <style>body{font:15px system-ui,sans-serif;margin:2rem;background:#fbfaf7;color:#1f1e1b}</style>
 </head>
 <body>
 <p>Przekierowanie do <a href="edytor-rzutu.html">edytora rzutu</a>…</p>
+<script>document.querySelector('a').href=target;</script>
+<noscript>Otwórz edytor, a następnie wybierz wariant z listy. Linki wariantów wymagają JavaScript.</noscript>
 </body>
 </html>

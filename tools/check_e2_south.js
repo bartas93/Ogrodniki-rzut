@@ -7,10 +7,12 @@ const prefix=html.split('<script>')[1].split('/* ---------- widok ---------- */'
 const ctx=vm.createContext({document:{querySelector:()=>null}});
 vm.runInContext(prefix+`
  globalThis.model=v=>{const s=freshState(v);return {s,bodies:s.furn.map(f=>({id:f.id,boxes:furnBodies(f),zones:furnZones(f)}))};};
+ globalThis.frozenSourceModel=()=>{const keep=mirrorPlanNorthSouth;try{mirrorPlanNorthSouth=()=>{};return globalThis.model('E2S');}finally{mirrorPlanNorthSouth=keep;}};
  globalThis.verifyIndependence=()=>{const keep=variantE2;try{variantE2=()=>{throw Error('Kopia nie może zależeć od bieżącego E2');};freshState('E2S');}finally{variantE2=keep;}};
  globalThis.doorHinges=s=>s.walls.flatMap(w=>w.op.filter(o=>o.type==='door').map(o=>{const g=geom(w),u=o.pos+(o.hinge?1:-1)*o.w/2,v=o.side*w.t/2;return {id:o.id,x:g.a.x+g.d.x*u+g.n.x*v,y:g.a.y+g.d.y*u+g.n.y*v};}));
 })();`,ctx,{timeout:5000});
-const a=ctx.model('E2'),b=ctx.model('E2S');
+// E2S jest zamrożoną kopią z 24.10, a bieżące E2 może się dalej zmieniać.
+const a=ctx.frozenSourceModel(),b=ctx.model('E2S');
 const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-6,a+' != '+b);
 for(let i=0;i<a.bodies.length;i++){
  const x=a.bodies[i],y=b.bodies[i];assert.equal(x.id,y.id);

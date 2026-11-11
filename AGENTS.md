@@ -28,7 +28,7 @@ Przeczytaj ten plik w całości, zanim cokolwiek zmienisz.
 | `e2-wykonczenie.md` | Zakres poprawek po audycie, moduły, wysokości i pozostałe decyzje wykonawcze E2. |
 | `tools/browser_report.js` | Raport kontroli wariantu do uruchomienia w przeglądarce (patrz §6). |
 
-## 2. Najważniejsze decyzje i preferencje użytkownika (stan na 2026-10-27)
+## 2. Najważniejsze decyzje i preferencje użytkownika (stan na 2026-11-10)
 
 - **Bez garażu** (decyzja 18.10.2026). Parter, prosta bryła (prostokąt), dach kopertowy / wielospadowy symetryczny 25–40°.
 - Cel: jak najniższy koszt budowy przy wygodnym układzie → zwarty prostokąt, mało ścian zewnętrznych, bez koszy dachowych.
@@ -49,11 +49,12 @@ Przeczytaj ten plik w całości, zanim cokolwiek zmienisz.
   - pralnia/suszarnia: jak najwięcej szaf PAX, blat pod oknem; przejście między szafami może być węższe (~75–80 cm),
   - **drzwi do łazienek otwierane na zewnątrz (na korytarz), drzwi wejściowe na zewnątrz**,
   - ścianka instalacyjna 20 cm za WC/umywalką.
-- **Domyślnym i aktualnie rozwijanym wariantem jest E2. Każde polecenie zmiany projektu dotyczy E2, chyba że użytkownik wyraźnie wskaże inny wariant.** Edytor przy każdym uruchomieniu otwiera E2, zachowując jego zapisane edycje; ostatnio oglądany wariant nie zmienia tego wyboru. Pozostałe warianty zostają do porównania — nie zmieniaj ich bez prośby.
+- **Domyślnym i aktualnie rozwijanym wariantem jest E2. Każde polecenie zmiany projektu dotyczy E2, chyba że użytkownik wyraźnie wskaże inny wariant.** Link bez parametru i nieznany `variant` otwiera E2, zachowując jego zapisane edycje; ostatnio oglądany wariant nie zmienia tego wyboru. Pozostałe warianty zostają do porównania — nie zmieniaj ich bez prośby.
   - `variantE(o)` przyjmuje opcje: `exit` (drzwi z pralni do ogrodu + miejsce na suszarkę), `baths` (prysznic + WC dla gości
     przy salonie, wanna przy sypialniach), `office` (gabinet od północy, pokój 3 od południa). E3 = `{baths}`, E4 = wszystkie trzy.
   - `variantE2()` to osobna funkcja: wyjście z pralni oraz poprawki z 24.10.2026 opisane w §7 `wymagania-projektowe.md` (wanna w łazience o szerokości 195 cm, walk-in przy salonie, zabudowy, biurka 140×70, okap 1 m). Nie przenoś tych zmian do E/E1/E3/E4.
   - **Nowszy §8 wymagań aktualizuje §7:** ściana warstwowa 412 mm przy zachowanych licach wnętrz, modułowe PAX i narożniki 1102×1102, sypialnia +200 mm kosztem gabinetu. Suszarka stojąca i zewnętrzne otwieranie łazienek są świadomie zaakceptowane. Pralnia ma urządzenia pod blatem. Przeczytaj `e2-wykonczenie.md` przed dalszymi zmianami E2.
+  - **E2 10.11.2026 (§11 wymagań):** narożnik 230×151 długim bokiem na zachodzie, krótkim na południu; druga sofa również na zachodzie, frontem do TV, by zachować rozłączne pola spania. WC walk-in obok umywalki na północnej ścianie. Sofa pokoju 3 przy wschodniej ścianie, frontem na zachód. Zachowaj identyfikatory 75/76/86/87/101 i nie przenoś zmian do E2S. Szczegóły na końcu `e2-wykonczenie.md`. `loadSavedVariant` migruje v23 do v24 i nadpisuje tylko te pięć obiektów E2, pozostałe edycje/warstwy i inne warianty zachowuje. Nie usuwa starych zapisów. Nowe v24 ma pierwszeństwo, import JSON nadal odtwarza wskazany plik. Kontrola `tools/check_e2_november.js`. Test E2S porównuje jego zamrożony konstruktor przed/po odbiciu, nie aktualne E2.
   - `variantE2South()` buduje **E2S**, niezależną kopię E2 z kuchnią na południu (cały dom odbity północ–południe, wejście nadal na wschodzie). Ma skopiowany konstruktor stanu E2 z 24.10.2026 i na końcu wywołuje `mirrorPlanNorthSouth(s,10200)`. Nie synchronizuj go automatycznie z E2. Szczegóły w §9 wymagań. Domyślny nadal E2.
   - `variantR1()` to **nowa, mniejsza koncepcja** z wejściem północnym, salonem i trzema pokojami (sypialnia + dwa dodatkowe, bez czwartego gabinetu). Zachowuje dwie łazienki, pralnię, techniczne, spiżarnię i garderobę. Obrys gotowy 15,174×9,824 m (149,07 m²). Nie jest kopią/odbiciem E2; nie przenoś zmian między wariantami. Wymagania §10 i `R1-koncepcja.md`. Domyślny nadal E2.
   - `variantE1()` to osobna funkcja: E skrócone o 45 cm (pokój 2 o 20 cm węższy, wiatrołap 2,00 m, kotłownia 2,75 m).
@@ -215,3 +216,19 @@ Na Windows w Git Bash długie heredoki z Pythonem potrafią się uciąć — zap
 Repozytorium: https://github.com/bartas93/Ogrodniki-rzut (publiczne). GitHub Pages z gałęzi `main`, katalog główny:
 https://bartas93.github.io/Ogrodniki-rzut/ — `index.html` przekierowuje na edytor. Zmiany trafiają na stronę po `git push`.
 Prywatne notatki i model Revit są w `.gitignore`; przed każdym commitem sprawdź `git status`, czy nie dodajesz danych wrażliwych.
+
+
+### Publikacja przy niedziałającym Git w środowisku
+
+Jeżeli Git nie dociera do proxy, a integracja GitHuba działa, zapisuj pliki etapami: `github_create_blob` osobno dla każdego zmienionego pliku, następnie `github_create_tree` z małymi wpisami `{path,mode,type,sha}` zamiast pełnego `content`, `github_create_commit` i `github_update_ref` z `expected_sha` bieżącego `main` oraz `force:false`. Zweryfikuj nowy HEAD po aktualizacji. Przed zapisem porównaj SHA blobu z `git hash-object plik`. Duże zbiorcze wywołania create_tree z pełną zawartością wcześniej nie zwracały wyniku; zapis pojedynczego HTML przez create_blob został sprawdzony. Każdy etap ma osobny limit oczekiwania; po niejednoznacznym wyniku najpierw sprawdź stan zdalny. Sukces aktualizacji main nie oznacza jeszcze potwierdzonego wdrożenia Pages. Diagnostyka 10.11.2026: create_blob działa dla małego pliku i całego HTML; create_tree również z samymi SHA, update_file i create_commit nie zwróciły wyniku w limitach 15–20 s. Nie traktuj ścieżki etapowej jako potwierdzonego rozwiązania, dopóki HEAD main faktycznie się nie zmieni. Ponawianie tych samych operacji bez nowych danych nie rozwiązuje problemu.
+
+
+### R2/R3, linki i ID (11.11.2026)
+
+R2 i R3 mają zamrożone, osobne konstruktory oparte na siatce R1; nie zastępuj ich wywołaniem `variantR1()`. R2 zmienia pas zaplecza i kuchnię; R3 odbija cały plan wschód–zachód. Opis: `R2-R3-koncepcje.md`. Testy: `tools/check_r2_r3.js` i `tools/check_variant.js R2/R3`.
+
+`variantFromUrl()` wybiera E2 bez poprawnego parametru; `switchVariant()` zapisuje poprzedni wariant i aktualizuje adres oraz historię. `index.html` zachowuje query/hash. Zapis v24 i migracja z v23 pozostają; nowe warianty nie resetują starych.
+
+ID korzystają z istniejących `id`, a wyposażenie otrzymuje lokalne `equipment[].id` oraz `nextEquipmentId` w `defaults`. Nie przeliczaj numerów z indeksów tablicy; zachowuj je przy zmianie konstruktorów. `elementRecords`, `findElement`, `drawIds` obsługują wyszukiwanie i widoczne oznaczenia. `nextId` musi być większe od wszystkich istniejących numerów także przy imporcie JSON. Test UI: `timeout 60s node tools/check_browser.js` (Playwright + Chromium), obejmuje telefon 412 px, zapis, schowek i eksport.
+
+Sprawdzona 11.11.2026 droga sieciowa: sandbox nie łączy się z `proxy:8080`, ale zatwierdzone polecenie poza sandboxem poprawnie wykonuje `git ls-remote` i `git fetch` przy zachowanym proxy/TLS. W pierwszej kolejności stosuj tę udokumentowaną ścieżkę środowiska zamiast zakładać awarię całej sieci. Sam udany odczyt nie potwierdza uwierzytelnienia push.

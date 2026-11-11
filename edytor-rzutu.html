@@ -27,7 +27,7 @@ select,input{font:inherit}
 #tools button.on .k{color:#ccc}
 #stage{position:relative;overflow:hidden;background:#fff;min-height:0}
 #cv{width:100%;height:100%;display:block;touch-action:none;user-select:none}
-#gGrid,#gUnder,#gRoomFill,#gPass,#gRoof,#gDims,#gOver{pointer-events:none}
+#gGrid,#gUnder,#gRoomFill,#gPass,#gRoof,#gDims,#gOver,#gIds{pointer-events:none}
 #side{overflow:auto;background:var(--panel);border-left:1px solid var(--line);padding:10px 12px}
 #side h2{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:16px 0 6px}
 #props h2:first-child{margin-top:0}
@@ -69,6 +69,12 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 .tcard .tn{font-weight:600;font-size:13px}
 .tcard .ts{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 .tcard .ts b{color:var(--ink)}
+#idDialog{width:min(440px,calc(100vw - 24px));border:1px solid var(--line);border-radius:10px;padding:18px;background:var(--panel);color:var(--ink)}
+#idDialog::backdrop{background:#0005}
+#idDialog input{width:100%;padding:10px;margin:8px 0;border:1px solid var(--line);border-radius:5px}
+#idDialog h2{margin:0;font-size:16px}
+#idError{min-height:1.5em;color:#b91c1c}
+.id-code{font:12px ui-monospace,monospace;max-width:100%;overflow-wrap:anywhere}
 @media (max-width:800px){
   #app{grid-template-columns:44px 1fr;grid-template-rows:auto 1fr auto 24px;height:100dvh}
   #side{grid-column:1/-1;max-height:42vh;border-left:0;border-top:1px solid var(--line)}
@@ -92,6 +98,8 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
     <label class="tg">Wariant <select id="sVar"></select></label>
     <button id="bThumbs" title="Miniatury wszystkich wariantów naraz">▦ Warianty</button>
     <button id="bPanel" class="mobile-only" title="Pokaż / ukryj panel właściwości">Panel</button>
+    <label class="tg"><input type="checkbox" id="tIds" title="Przybliż rzut, aby zobaczyć więcej ID. Pełne ID znajdziesz w panelu zaznaczenia."> ID elementów</label>
+    <button id="bFindId">Znajdź ID</button>
     <button id="bView" title="Tryb podglądu (dotyk): przeciągnięcie przesuwa widok, stuknięcie pokazuje szczegóły, dwa palce = zoom">Podgląd</button>
     <span class="sep"></span>
     <button id="bUndo" title="Ctrl+Z">↶ Cofnij</button>
@@ -137,6 +145,7 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
       <g id="gRoof"></g>
       <g id="gDims"></g>
       <g id="gLabels"></g>
+      <g id="gIds"></g>
       <g id="gHandles"></g>
       <g id="gOver"></g>
     </svg>
@@ -182,12 +191,23 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 
 <div id="thumbs" role="dialog" aria-label="Miniatury wariantów"><header><h2>Warianty — kliknij, aby otworzyć</h2><button id="bThumbsClose">Zamknij</button></header><div class="tgrid" id="tgrid"></div></div>
 
+<dialog id="idDialog" aria-labelledby="idTitle">
+  <form id="idForm">
+    <h2 id="idTitle">Znajdź element</h2>
+    <label for="idQuery">Pełne lub skrócone ID</label>
+    <input id="idQuery" name="elementId" placeholder="E2-M75 lub M75" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
+    <div class="hint">S — ściana, O — otwór, M — mebel, P — pomieszczenie. Wyposażenie: M75-E1. Pełne ID otwiera właściwy wariant.</div>
+    <div id="idError" role="status" aria-live="polite"></div>
+    <div class="row"><button type="submit">Znajdź</button><button type="button" id="bCloseId">Zamknij</button></div>
+  </form>
+</dialog>
 <script>
 (() => {
 'use strict';
 const $ = s => document.querySelector(s);
 const svg = $('#cv');
-const LS = 'ogrodniki-rzut-v23';
+const LS = 'ogrodniki-rzut-v24';
+const PREVIOUS_LS = 'ogrodniki-rzut-v23';
 const DEFAULT_VARIANT = 'E2';
 const PALETTE = ['#f6d6c2','#cfe3f2','#d8ecd0','#efe2bb','#e3d5ef','#f3cfd8','#cdeae6','#e9e4d8','#dfe7c4','#f0d9e6'];
 // Podkład: render PDF z Revita w tym samym układzie co rzut (lewy górny narożnik lica zewn. = 0,0 mm)
@@ -1016,10 +1036,13 @@ function variantE2(){
   for(let i=0;i<4;i++) for(const y of [-600,900]) occupied.push([(125+i*700)/2800,y/900,450/2800,600/900]);
   occupied.push([-600/2800,225/900,600/2800,450/900],[1,225/900,600/2800,450/900]);
   dining.arrangements = {mode:'closed',closed:{w:1600,d:900,parts:[[0,0,1,1]]},expanded:{w:2800,d:900,parts:occupied}};
-  sofa(200,6200,0);
-  F('corner',200,8490,2500,10000,0,{name:'Narożnik 230×151 — siedziska na północ',
-    parts:[[0,610/1510,1,900/1510],[0,0,1000/2300,610/1510]],
-    z:z=>{z[0].rect=[0,-600,2300,600];z[0].l='dojście po rozłożeniu';z.push(Z('front',610,'po rozłożeniu',{rect:[1000,0,1300,610],k:'unfold'}));}, notes:['Gabaryt odniesienia IKEA FRIHETEN 230×151 cm; lewa otomana, główny front na północ.','Narożnik kończy się przed otworem HST. Pełny obrys 230×151 cm zarezerwowany również na rozłożenie; spanie 140×204 cm.']});
+  const sofaSalon=sofa(200,5650,270);
+  sofaSalon.notes.push('Przy zachodniej ścianie, frontem do TV na wschodzie; rozłożenie na wschód. Ustawienie powyżej narożnika pozostawia oba obrysy spania rozłączne.');
+  const corner=F('corner',200,7700,1710,10000,90,{name:'Narożnik 230×151 — dłuższy bok przy ścianie zachodniej',
+    parts:[[0,610/1510,1,900/1510],[1300/2300,0,1000/2300,610/1510]],
+    z:z=>{z[0].rect=[0,-600,2300,600];z[0].l='dojście po rozłożeniu';z.push(Z('front',610,'po rozłożeniu',{rect:[0,0,1300,610],k:'unfold'}));},
+    notes:['Dłuższy bok 230 cm przy ścianie zachodniej, krótszy 151 cm przy południowej; siedziska skierowane na wschód i północ.','Gabaryt odniesienia IKEA FRIHETEN, otomana od południa. Spanie 140×204 cm; pełny obrys narożnika rezerwuje miejsce rozłożenia.','Prawa krawędź narożnika kończy się 84 cm przed początkiem otworu HST.']});
+  corner.decoMirrorX=true;
   F('coffee',2700,7900,3800,8500,0,{name:'Stolik 110×60'});
   F('tvwall',4600,7300,4700,8530,90,{name:'TV 55" (ściana wschodnia)',vertical:{screenCentre:1100}});
   F('shelf',4700,2550,5050,4225,90,{name:'Wnęka 167,5×35 — książki i dokumenty',
@@ -1036,8 +1059,9 @@ function variantE2(){
     z:z=>{z[0].rect=[0,900,1000,750]; z[0].l='otwarte wejście 100 cm';}});
   F('instwall',6550,2550,7350,2750,0,{name:'Ścianka umywalki 20 cm'});
   F('sink80',6550,2750,7350,3210,0,{name:'Umywalka 80 + lustro',vertical:{basinTop:850,mirrorBottom:1100},notes:['Lustro nad umywalką; oświetlenie po bokach; gniazdo poza strefami natrysku według projektu elektrycznego.']});
-  F('instwall',8500,2550,8700,4100,90,{name:'Ścianka WC 20 cm'});
-  F('wcw',7970,3450,8500,3810,90,{name:'WC podwieszane',vertical:{seat:430}});
+  F('instwall',7650,2550,8700,2750,0,{name:'Ścianka WC 20 cm — wspólna ściana z umywalką'});
+  F('wcw',7995,2750,8355,3280,0,{name:'WC podwieszane — obok umywalki',vertical:{seat:430},
+    notes:['Stelaż przy północnej ścianie, na tej samej ścianie co umywalka. Rewizja od przycisku; kanalizacja do uzgodnienia z projektantem instalacji.']});
 
   // Pralnia: narożnik PAX zastępuje usunięte prawe okno i konflikt z blatem.
   F('k240',7850,200,9650,900,0,{name:'Pralnia: zlew 60 + pralka 60 + suszarka 60',
@@ -1053,7 +1077,8 @@ function variantE2(){
   fill(10200,1402,600,48,'łączenie narożnika'); fill(10200,4198,600,27,'przy drzwiach pralni');
 
   F('desk',10950,200,12350,900,0,{name:'Biurko 140×70 (przy oknie)',vertical:{worktop:740}});
-  sofa(12150,1800,180);
+  // Pokój 3: sofa przy wschodniej ścianie, rozkładana w stronę środka pokoju.
+  sofa(13180,800,90);
   P(10975,3625,100,180,'ubrania'); P(11975,3625,75,180,'zabawki i książki');
   P(14025,3475,75,0,'kurtki gości');
 
@@ -1544,6 +1569,351 @@ function variantR1(){
   return s;
 }
 
+// Odbicie wschód–zachód z zachowaniem ID, warstw, stref i wyposażenia.
+function mirrorPlanEastWest(s,width){
+  const directions = {
+    'zachodniej':'wschodniej','wschodniej':'zachodniej','zachodnia':'wschodnia','wschodnia':'zachodnia',
+    'zachodni':'wschodni','wschodni':'zachodni','zachodnim':'wschodnim','wschodnim':'zachodnim',
+    'zachodnie':'wschodnie','wschodnie':'zachodnie','zachodu':'wschodu','wschodu':'zachodu','zachód':'wschód','wschód':'zachód',
+  };
+  const expression = new RegExp(Object.keys(directions).sort((a,b)=>b.length-a.length).join('|'),'gi');
+  const text = value => value.replace(expression,word=>{
+    const next=directions[word.toLowerCase()];
+    return word[0]===word[0].toUpperCase()?next[0].toUpperCase()+next.slice(1):next;
+  });
+  const parts = list => list.map(([x,y,w,d])=>[1-x-w,y,w,d]);
+  for(const w of s.walls){
+    const {x1,y1,x2,y2}=w, L=Math.hypot(x2-x1,y2-y1);
+    // Odwrócenie końców zachowuje normalną do wnętrza i kolejność warstw ściany.
+    w.x1=width-x2;w.y1=y2;w.x2=width-x1;w.y2=y1;
+    for(const o of w.op){o.pos=L-o.pos;if(o.type==='door')o.hinge=o.hinge?0:1;}
+  }
+  for(const r of s.rooms)r.x=width-r.x;
+  for(const f of s.furn){
+    f.x=width-f.x;f.rot=(360-f.rot)%360;f.decoMirrorX=!f.decoMirrorX;
+    const bodyParts=f.parts || LIBK[f.key]?.parts;
+    if(bodyParts)f.parts=parts(bodyParts);
+    for(const z of f.z){
+      if(z.rect){const [x,y,w,d]=z.rect;z.rect=[f.w-x-w,y,w,d];}
+      else if(z.s==='front'||z.s==='back'){const c=z.c0;z.c0=z.c1;z.c1=c;}
+      if(z.s==='left')z.s='right';else if(z.s==='right')z.s='left';
+      z.l=text(z.l);
+    }
+    for(const it of f.equipment||[])it.x=f.w-it.x-it.w;
+    if(f.arrangements)for(const mode of ['closed','expanded']){
+      const a=f.arrangements[mode];if(a?.parts)a.parts=parts(a.parts);
+    }
+    f.name=text(f.name);if(f.notes)f.notes=f.notes.map(text);
+  }
+  if(s.storagePlan)s.storagePlan=s.storagePlan.map(text);
+}
+
+// R2/R3 mają zamrożone, niezależne konstruktory.
+function variantR2(){
+  const {W,R,F,done}=vb();
+  // Siatka wyjściowa przed korektą zaplecza i pokoi: x=200..14200, y=200..9400; ściana 412 mm.
+  W(-6,-6,14406,-6,412,{ext:true,op:[['door',1300,1000,0,-1],['window',2850,600],['window',6350,1200],['window',8350,600],['window',10350,600]]});
+  W(14406,-6,14406,9606,412,{ext:true,op:[['window',1300,1500],['window',6500,1400]]});
+  W(14406,9606,-6,9606,412,{ext:true,op:[['slide',4000,2400],['window',8150,1500],['window',12700,1600]]});
+  W(-6,9606,-6,-6,412,{ext:true,op:[['window',5700,1800],['door',7200,1000,0,1],['window',8650,1200]]});
+  // Północny pas: wiatrołap, techniczne, pralnia, spiżarnia i duża łazienka.
+  W(2475,-6,2475,2775,150,{op:[['door',1800,800,1,-1]]});
+  W(5225,-6,5225,2775);
+  W(7475,-6,7475,2775);
+  W(9225,-6,9225,2775);
+  W(-6,2775,11475,2775,150,{op:[['door',1750,900,1,-1],['door',6350,900,1,-1],['door',8350,800,0,-1],['slide',10300,900]]});
+  // Dwa osobne pokoje wschodnie i korytarz o szerokości 125 cm.
+  W(11475,-6,11475,9606,150,{op:[['door',3650,900,1,-1],['door',8000,900,0,-1]]});
+  W(11475,4525,14406,4525);
+  // Centralny blok łazienki i garderoby; sypialnia od południa.
+  W(6275,4325,6275,9606);
+  W(6275,4325,10075,4325);
+  W(10075,4325,10075,9606,150,{op:[['slide',5250,900],['door',8850,900,1,1]]});
+  W(8075,4325,8075,6375);
+  W(6275,6375,10075,6375,150,{op:[['door',6900,900,1,-1]]});
+
+  R('Salon + kuchnia + jadalnia + hol',3800,6350);
+  R('Wiatrołap',1400,2100);
+  R('Techniczne',3850,1800);
+  R('Pralnia',6500,1800);
+  R('Spiżarnia',8350,1500);
+  R('Łazienka z wanną',10300,1550);
+  R('Pokój 2',13100,3050);
+  R('Pokój 3',13200,7500);
+  R('Sypialnia',8200,8000);
+  R('Garderoba',7450,5400);
+  R('Łazienka z prysznicem',9000,5650);
+
+  const E=(kind,x,y,w,d,label)=>({kind,x,y,w,d,label});
+  const P=(x,y,cm,rot,name,strict=false)=>{
+    const w=cm*10-2,vert=rot%180!==0;
+    return F(cm===100?'pax':cm===75?'pax75':'pax50',x,y,x+(vert?600:w),y+(vert?w:600),rot,{
+      name:'PAX '+cm+' — '+name,joinery:{nominalWidth:cm*10,bodyWidth:w,bodyDepth:580,frontDepth:20,height:2364},
+      notes:['Korpus 58 cm + ok.2 cm frontu, wysokość 236,4 cm. Rezerwy i montaż do potwierdzenia z wybranym frontem.'],
+      z:strict?zAisle:undefined});
+  };
+  F('hall180',200,600,850,2400,270,{name:'Szafa przesuwna 180 — kurtki i buty'});
+  F('bench',1850,200,2350,600,0,{name:'Siedzisko 50×40',z:z=>{z[0].d=600;}});
+  F('ref',2550,200,3150,800,0,{name:'Moduł pompy ciepła 60×60',z:zSvc('front'),
+    notes:['Rezerwacja niskiego modułu wewnętrznego pod wysokim oknem; konkretny model i serwis do doboru instalatora.']});
+  F('round',3300,200,3894,794,0,{name:'Zasobnik CWU Ø59',z:zSvc('front')});
+  F('ref',4125,200,5115,788,0,{name:'Rekuperator 99×59',z:zSvc('front')});
+  F('steel',4550,1500,5150,2400,90,{name:'Regał techniczny 90×60'});
+  F('k240',5300,200,7100,900,0,{name:'Pralnia — zlew, pralka, suszarka',
+    equipment:[E('sink',0,0,600,700,'ZLEW'),E('washer',600,0,600,700,'PRALKA'),E('dryer',1200,0,600,700,'SUSZARKA')],
+    vertical:{worktop:920},z:z=>{z[0].d=900;z[0].l='załadunek i wyjęcie urządzeń';},
+    notes:['Urządzenia pod blatem, rezerwacja 70 cm z przyłączami. Suszarka ścienna nad blatem; deska i kosze w szafie.']});
+  P(6875,1900,50,180,'chemia i kosze');
+  F('pantry',7550,200,7900,2000,270,{name:'Regały 180×35 — zapasy'});
+  F('pantry',8800,200,9150,2000,90,{name:'Regały 180×35 — słoiki',notes:['Pomiędzy regałami 90 cm przejścia.']});
+
+  F('bath',9500,200,11200,950,0,{name:'Wanna 170×75',notes:['Bateria i rewizja od dostępnego boku; wysokość montażu według modelu.']});
+  F('instwall',11200,1450,11400,2500,90,{name:'Ścianka WC 20 cm'});
+  F('wcw',10650,1900,11200,2260,90,{name:'WC podwieszane'});
+  F('sink60',9300,1700,9760,2300,270,{name:'Umywalka 60 + lustro',vertical:{basinTop:850,mirrorBottom:1100}});
+  F('shower90',8150,4400,9050,5300,0,{name:'Prysznic 90×90 — bez progu',
+    notes:['Drzwi przesuwne/składane wewnątrz kabiny; odpływ i spadki do skoordynowania z podłogą.']});
+  F('instwall',9200,4400,10000,4600,0,{name:'Ścianka WC 20 cm'});
+  F('wcw',9420,4600,9780,5150,0,{name:'WC podwieszane'});
+  F('sink60',9300,5900,9900,6300,180,{name:'Umywalka 60×40 + lustro',z:z=>{z[0].ex=100;},vertical:{basinTop:850,mirrorBottom:1100}});
+
+  // Kuchnia ma oddzielny pas słupków i blat 365 cm; wyspa służy do przygotowania.
+  F('tall',200,3000,800,4800,270,{name:'Lodówka, piekarnik i zapasy',
+    equipment:[E('fridge',0,0,600,600,'LOD'),E('oven',600,0,600,600,'PIEK'),E('cabinet',1200,0,600,600,'ZAPASY')]});
+  F('k240',2550,2850,6200,3450,0,{name:'Kuchnia — ciąg 365 cm',
+    equipment:[E('cabinet',0,0,600,600,'BLAT'),E('sink',600,0,800,600,'ZLEW'),E('dishwasher',1400,0,600,600,'ZM'),E('cabinet',2000,0,600,600,'BLAT'),E('hob',2600,0,600,600,'PŁYTA'),E('cabinet',3200,0,450,600,'BLAT')],
+    vertical:{worktop:900},notes:['Do spiżarni z holu obok kuchni. Okap nad płytą i zasilanie według projektu instalacji.']});
+  F('island',2350,4600,3950,5500,180,{name:'Wyspa robocza 160×90',z:z=>{z[1].d=750;z[1].l='przejście, bez hokerów';}});
+  const table=F('tableext',4250,6000,5150,7600,90,{name:'Stół 160→240, 4→8 osób',
+    z:z=>{z[2].d=400;z[3].d=400;},notes:['W panelu można sprawdzić stół 240 cm z ośmioma zajętymi krzesłami.']});
+  const chairs=[[0,0,1,1]];
+  for(let i=0;i<3;i++)for(const y of [-600,900])chairs.push([(175+i*800)/2400,y/900,450/2400,600/900]);
+  chairs.push([-600/2400,225/900,600/2400,450/900],[1,225/900,600/2400,450/900]);
+  table.arrangements={mode:'closed',label:'Stół 240 cm i 8 zajętych krzeseł',closed:{w:1600,d:900,parts:[[0,0,1,1]]},expanded:{w:2400,d:900,parts:chairs}};
+  F('sofa3',1600,6750,2550,8950,270,{name:'Sofa 220×95'});
+  F('armchair',300,5200,1150,6050,270,{name:'Fotel 85×85'});
+  F('coffee',3200,8100,4300,8700,0,{name:'Stolik 110×60'});
+  F('tvwall',6100,8100,6200,9330,90,{name:'TV 55" — ściana wschodnia',vertical:{screenCentre:1100}});
+  // Dwa pokoje dodatkowe: biurka 140×70, łóżka 90×200 i modułowe szafy.
+  P(11600,200,100,0,'ubrania — pokój 2');
+  F('desk',13500,600,14200,2000,90,{name:'Biurko 140×70',vertical:{worktop:740}});
+  F('bed90',13200,2300,14200,4400,0,{name:'Łóżko 90×200',z:z=>{z[0].s='left';}});
+  F('bed90',11600,5200,12600,7300,0,{name:'Łóżko 90×200'});
+  P(13600,4700,100,90,'ubrania — pokój 3');
+  F('desk',12000,8700,13400,9400,180,{name:'Biurko 140×70',vertical:{worktop:740}});
+  // Sypialnia: łóżko 180, dojścia 90 i 85 cm; osobna garderoba.
+  F('bed180',7250,6500,9150,8600,0,{name:'Łóżko 180×200 — rama 190×210',z:zBed80,notes:['Półka w wezgłowiu zamiast stojących szafek nocnych; wolne dojście do garderoby.']});
+  P(6425,4400,75,0,'ubrania wiszące',true);
+  P(7175,4400,75,0,'półki i pościel',true);
+  const s=done();
+
+  // Wschodnie pokoje poszerzone do 3 m; północne zaplecze krótsze o 20 cm.
+  // Ostateczny obrys gotowy 15,174×9,824 m (149,07 m²), bez zmniejszania przejść przy łóżku.
+  const compactY=y=>y>=2750?y-200:y,wideX=x=>x>14200?x+350:x;
+  for(const w of s.walls){
+    const dx=w.x2-w.x1,dy=w.y2-w.y1,L=Math.hypot(dx,dy);
+    const openings=w.op.map(o=>({o,x:w.x1+dx/L*o.pos,y:w.y1+dy/L*o.pos}));
+    w.x1=wideX(w.x1);w.x2=wideX(w.x2);w.y1=compactY(w.y1);w.y2=compactY(w.y2);
+    for(const {o,x,y} of openings){
+      const xx=wideX(x)+(y>9000&&x>11500&&x<14200?350:0),yy=compactY(y);
+      o.pos=Math.abs(dx?xx-w.x1:yy-w.y1);
+    }
+  }
+  for(const f of s.furn){
+    f.y=compactY(f.y);
+    if(f.x>13000||(f.key==='desk'&&f.rot===180))f.x+=350;
+  }
+  for(const r of s.rooms){r.y=compactY(r.y);if(r.name==='Pokój 2'||r.name==='Pokój 3')r.x+=175;}
+  const layers=[{name:'Tynk gipsowy',t:15},{name:'Silikat',t:180},{name:'Klej EPS',t:10},{name:'EPS grafit λ 0,031',t:200},{name:'Warstwa zbrojona',t:5},{name:'Tynk elewacyjny',t:2}];
+  for(const w of s.walls.filter(w=>w.ext)){
+    w.buildUp=layers.map(l=>({...l}));
+    const horiz=Math.abs(w.x2-w.x1)>Math.abs(w.y2-w.y1);
+    for(const o of w.op){
+      const x=w.x1+(w.x2-w.x1)/Math.hypot(w.x2-w.x1,w.y2-w.y1)*o.pos;
+      if(o.type==='window'){
+        const north=horiz&&w.y1<0,tech=north&&x<5225,laundry=north&&x>5225&&x<7475,small=o.w<=600;
+        o.sill=tech?1800:laundry?1200:small?1500:900;
+        o.height=tech||small?600:laundry?1200:1500;
+        o.opening=laundry?'dół FIX, uchylne od 180 cm':small?'uchylne':'dół FIX, uchylne od 170 cm';
+      }else{o.sill=0;o.height=o.type==='slide'?2300:2100;}
+    }
+  }
+  s.construction={wallLayers:layers,finishedInterior:true,partition:'150 mm łącznie z wykończeniem; nośność i materiał do projektu',roomHeight:2800,uIndicative:0.15,note:'Silikat 18 cm i posadowienie do obliczeń konstruktora; U orientacyjne.'};
+  s.set={overhang:1000};
+  s.designNote='R1 — osobny układ z wejściem od północy, trzema pokojami poza salonem i mniejszą bryłą. Dwie łazienki, pralnia, techniczne, spiżarnia i garderoba. Nie jest kopią ani odbiciem E2.';
+  s.storagePlan=['Kurtki i obuwie w wiatrołapie; środki porządkowe w pralni; zapasy w spiżarni.','Garderoba przy sypialni i po jednym module PAX w pokojach dodatkowych.'];
+  // R2: zaplecze od zachodu: spiżarnia, pralnia, techniczne, wiatrołap, wanna.
+  // Niezależna kopia siatki R1 z 11.11.2026; wejście x=8050, blisko środka elewacji.
+  const north=s.walls.find(w=>w.ext&&w.y1===-6&&w.y2===-6);
+  const openingX=[8050,5700,3000,1000,10350];
+  north.op.forEach((o,i)=>{o.pos=openingX[i]-north.x1;});
+  const parts=s.walls.filter(w=>!w.ext&&w.y1===-6&&w.y2===2575&&w.x1<9300);
+  parts.forEach((w,i)=>{w.x1=w.x2=[6875,4125,1875,9225][i];});
+  // Odbite wejście technicznego otwiera się do jego wnętrza.
+  const techDoor=parts[0].op[0];techDoor.side=1;
+  const strip=s.walls.find(w=>!w.ext&&w.y1===2575&&w.y2===2575);
+  [8050,3000,1000,10300].forEach((x,i)=>{strip.op[i].pos=x-strip.x1;});
+  strip.op[0].hinge=0;
+  for(const r of s.rooms){
+    if(r.name==='Wiatrołap')r.x=9350-r.x;
+    if(r.name==='Techniczne')r.x=9350-r.x;
+    if(r.name==='Pralnia')r.x-=3350;
+    if(r.name==='Spiżarnia')r.x-=7350;
+  }
+  for(const f of s.furn.filter(f=>f.y<2575)){
+    if(f.x<5225){
+      // Odbicie lokalnych części i stref wspólnym, sprawdzonym przekształceniem.
+      mirrorPlanEastWest({walls:[],rooms:[],furn:[f]},9350);
+    }else if(f.x<7475)f.x-=3350;
+    else if(f.x<9225)f.x-=7350;
+  }
+  // Odsunięcie blatu otwiera pełne dojście od holu do pralni.
+  const counter=s.furn.find(f=>f.name==='Kuchnia — ciąg 365 cm');
+  counter.x=4825;counter.w=2750;counter.name='Kuchnia — ciąg 275 cm + wyspa';
+  counter.equipment=[E('sink',0,0,800,600,'ZLEW'),E('dishwasher',800,0,600,600,'ZM'),E('cabinet',1400,0,600,600,'BLAT'),E('hob',2000,0,600,600,'PŁYTA'),E('cabinet',2600,0,150,600,'BLAT')];
+  counter.notes=['Krótszy ciąg 275 cm i wyspa 160×90. Wolne wejście do pralni; szczegóły zabudowy i AGD do projektu stolarskiego.'];
+  s.designNote='R2 — niezależny mniejszy dom. Wejście blisko środka północnej elewacji, salon od południowego zachodu. Trzy pokoje, dwie łazienki i pełne zaplecze.';
+  return s;
+}
+
+function variantR3(){
+  const {W,R,F,done}=vb();
+  // Siatka wyjściowa przed korektą zaplecza i pokoi: x=200..14200, y=200..9400; ściana 412 mm.
+  W(-6,-6,14406,-6,412,{ext:true,op:[['door',1300,1000,0,-1],['window',2850,600],['window',6350,1200],['window',8350,600],['window',10350,600]]});
+  W(14406,-6,14406,9606,412,{ext:true,op:[['window',1300,1500],['window',6500,1400]]});
+  W(14406,9606,-6,9606,412,{ext:true,op:[['slide',4000,2400],['window',8150,1500],['window',12700,1600]]});
+  W(-6,9606,-6,-6,412,{ext:true,op:[['window',5700,1800],['door',7200,1000,0,1],['window',8650,1200]]});
+  // Północny pas: wiatrołap, techniczne, pralnia, spiżarnia i duża łazienka.
+  W(2475,-6,2475,2775,150,{op:[['door',1800,800,1,-1]]});
+  W(5225,-6,5225,2775);
+  W(7475,-6,7475,2775);
+  W(9225,-6,9225,2775);
+  W(-6,2775,11475,2775,150,{op:[['door',1750,900,1,-1],['door',6350,900,1,-1],['door',8350,800,0,-1],['slide',10300,900]]});
+  // Dwa osobne pokoje wschodnie i korytarz o szerokości 125 cm.
+  W(11475,-6,11475,9606,150,{op:[['door',3650,900,1,-1],['door',8000,900,0,-1]]});
+  W(11475,4525,14406,4525);
+  // Centralny blok łazienki i garderoby; sypialnia od południa.
+  W(6275,4325,6275,9606);
+  W(6275,4325,10075,4325);
+  W(10075,4325,10075,9606,150,{op:[['slide',5250,900],['door',8850,900,1,1]]});
+  W(8075,4325,8075,6375);
+  W(6275,6375,10075,6375,150,{op:[['door',6900,900,1,-1]]});
+
+  R('Salon + kuchnia + jadalnia + hol',3800,6350);
+  R('Wiatrołap',1400,2100);
+  R('Techniczne',3850,1800);
+  R('Pralnia',6500,1800);
+  R('Spiżarnia',8350,1500);
+  R('Łazienka z wanną',10300,1550);
+  R('Pokój 2',13100,3050);
+  R('Pokój 3',13200,7500);
+  R('Sypialnia',8200,8000);
+  R('Garderoba',7450,5400);
+  R('Łazienka z prysznicem',9000,5650);
+
+  const E=(kind,x,y,w,d,label)=>({kind,x,y,w,d,label});
+  const P=(x,y,cm,rot,name,strict=false)=>{
+    const w=cm*10-2,vert=rot%180!==0;
+    return F(cm===100?'pax':cm===75?'pax75':'pax50',x,y,x+(vert?600:w),y+(vert?w:600),rot,{
+      name:'PAX '+cm+' — '+name,joinery:{nominalWidth:cm*10,bodyWidth:w,bodyDepth:580,frontDepth:20,height:2364},
+      notes:['Korpus 58 cm + ok.2 cm frontu, wysokość 236,4 cm. Rezerwy i montaż do potwierdzenia z wybranym frontem.'],
+      z:strict?zAisle:undefined});
+  };
+  F('hall180',200,600,850,2400,270,{name:'Szafa przesuwna 180 — kurtki i buty'});
+  F('bench',1850,200,2350,600,0,{name:'Siedzisko 50×40',z:z=>{z[0].d=600;}});
+  F('ref',2550,200,3150,800,0,{name:'Moduł pompy ciepła 60×60',z:zSvc('front'),
+    notes:['Rezerwacja niskiego modułu wewnętrznego pod wysokim oknem; konkretny model i serwis do doboru instalatora.']});
+  F('round',3300,200,3894,794,0,{name:'Zasobnik CWU Ø59',z:zSvc('front')});
+  F('ref',4125,200,5115,788,0,{name:'Rekuperator 99×59',z:zSvc('front')});
+  F('steel',4550,1500,5150,2400,90,{name:'Regał techniczny 90×60'});
+  F('k240',5300,200,7100,900,0,{name:'Pralnia — zlew, pralka, suszarka',
+    equipment:[E('sink',0,0,600,700,'ZLEW'),E('washer',600,0,600,700,'PRALKA'),E('dryer',1200,0,600,700,'SUSZARKA')],
+    vertical:{worktop:920},z:z=>{z[0].d=900;z[0].l='załadunek i wyjęcie urządzeń';},
+    notes:['Urządzenia pod blatem, rezerwacja 70 cm z przyłączami. Suszarka ścienna nad blatem; deska i kosze w szafie.']});
+  P(6875,1900,50,180,'chemia i kosze');
+  F('pantry',7550,200,7900,2000,270,{name:'Regały 180×35 — zapasy'});
+  F('pantry',8800,200,9150,2000,90,{name:'Regały 180×35 — słoiki',notes:['Pomiędzy regałami 90 cm przejścia.']});
+
+  F('bath',9500,200,11200,950,0,{name:'Wanna 170×75',notes:['Bateria i rewizja od dostępnego boku; wysokość montażu według modelu.']});
+  F('instwall',11200,1450,11400,2500,90,{name:'Ścianka WC 20 cm'});
+  F('wcw',10650,1900,11200,2260,90,{name:'WC podwieszane'});
+  F('sink60',9300,1700,9760,2300,270,{name:'Umywalka 60 + lustro',vertical:{basinTop:850,mirrorBottom:1100}});
+  F('shower90',8150,4400,9050,5300,0,{name:'Prysznic 90×90 — bez progu',
+    notes:['Drzwi przesuwne/składane wewnątrz kabiny; odpływ i spadki do skoordynowania z podłogą.']});
+  F('instwall',9200,4400,10000,4600,0,{name:'Ścianka WC 20 cm'});
+  F('wcw',9420,4600,9780,5150,0,{name:'WC podwieszane'});
+  F('sink60',9300,5900,9900,6300,180,{name:'Umywalka 60×40 + lustro',z:z=>{z[0].ex=100;},vertical:{basinTop:850,mirrorBottom:1100}});
+
+  // Kuchnia ma oddzielny pas słupków i blat 365 cm; wyspa służy do przygotowania.
+  F('tall',200,3000,800,4800,270,{name:'Lodówka, piekarnik i zapasy',
+    equipment:[E('fridge',0,0,600,600,'LOD'),E('oven',600,0,600,600,'PIEK'),E('cabinet',1200,0,600,600,'ZAPASY')]});
+  F('k240',2550,2850,6200,3450,0,{name:'Kuchnia — ciąg 365 cm',
+    equipment:[E('cabinet',0,0,600,600,'BLAT'),E('sink',600,0,800,600,'ZLEW'),E('dishwasher',1400,0,600,600,'ZM'),E('cabinet',2000,0,600,600,'BLAT'),E('hob',2600,0,600,600,'PŁYTA'),E('cabinet',3200,0,450,600,'BLAT')],
+    vertical:{worktop:900},notes:['Do spiżarni z holu obok kuchni. Okap nad płytą i zasilanie według projektu instalacji.']});
+  F('island',2350,4600,3950,5500,180,{name:'Wyspa robocza 160×90',z:z=>{z[1].d=750;z[1].l='przejście, bez hokerów';}});
+  const table=F('tableext',4250,6000,5150,7600,90,{name:'Stół 160→240, 4→8 osób',
+    z:z=>{z[2].d=400;z[3].d=400;},notes:['W panelu można sprawdzić stół 240 cm z ośmioma zajętymi krzesłami.']});
+  const chairs=[[0,0,1,1]];
+  for(let i=0;i<3;i++)for(const y of [-600,900])chairs.push([(175+i*800)/2400,y/900,450/2400,600/900]);
+  chairs.push([-600/2400,225/900,600/2400,450/900],[1,225/900,600/2400,450/900]);
+  table.arrangements={mode:'closed',label:'Stół 240 cm i 8 zajętych krzeseł',closed:{w:1600,d:900,parts:[[0,0,1,1]]},expanded:{w:2400,d:900,parts:chairs}};
+  F('sofa3',1600,6750,2550,8950,270,{name:'Sofa 220×95'});
+  F('armchair',300,5200,1150,6050,270,{name:'Fotel 85×85'});
+  F('coffee',3200,8100,4300,8700,0,{name:'Stolik 110×60'});
+  F('tvwall',6100,8100,6200,9330,90,{name:'TV 55" — ściana wschodnia',vertical:{screenCentre:1100}});
+  // Dwa pokoje dodatkowe: biurka 140×70, łóżka 90×200 i modułowe szafy.
+  P(11600,200,100,0,'ubrania — pokój 2');
+  F('desk',13500,600,14200,2000,90,{name:'Biurko 140×70',vertical:{worktop:740}});
+  F('bed90',13200,2300,14200,4400,0,{name:'Łóżko 90×200',z:z=>{z[0].s='left';}});
+  F('bed90',11600,5200,12600,7300,0,{name:'Łóżko 90×200'});
+  P(13600,4700,100,90,'ubrania — pokój 3');
+  F('desk',12000,8700,13400,9400,180,{name:'Biurko 140×70',vertical:{worktop:740}});
+  // Sypialnia: łóżko 180, dojścia 90 i 85 cm; osobna garderoba.
+  F('bed180',7250,6500,9150,8600,0,{name:'Łóżko 180×200 — rama 190×210',z:zBed80,notes:['Półka w wezgłowiu zamiast stojących szafek nocnych; wolne dojście do garderoby.']});
+  P(6425,4400,75,0,'ubrania wiszące',true);
+  P(7175,4400,75,0,'półki i pościel',true);
+  const s=done();
+
+  // Wschodnie pokoje poszerzone do 3 m; północne zaplecze krótsze o 20 cm.
+  // Ostateczny obrys gotowy 15,174×9,824 m (149,07 m²), bez zmniejszania przejść przy łóżku.
+  const compactY=y=>y>=2750?y-200:y,wideX=x=>x>14200?x+350:x;
+  for(const w of s.walls){
+    const dx=w.x2-w.x1,dy=w.y2-w.y1,L=Math.hypot(dx,dy);
+    const openings=w.op.map(o=>({o,x:w.x1+dx/L*o.pos,y:w.y1+dy/L*o.pos}));
+    w.x1=wideX(w.x1);w.x2=wideX(w.x2);w.y1=compactY(w.y1);w.y2=compactY(w.y2);
+    for(const {o,x,y} of openings){
+      const xx=wideX(x)+(y>9000&&x>11500&&x<14200?350:0),yy=compactY(y);
+      o.pos=Math.abs(dx?xx-w.x1:yy-w.y1);
+    }
+  }
+  for(const f of s.furn){
+    f.y=compactY(f.y);
+    if(f.x>13000||(f.key==='desk'&&f.rot===180))f.x+=350;
+  }
+  for(const r of s.rooms){r.y=compactY(r.y);if(r.name==='Pokój 2'||r.name==='Pokój 3')r.x+=175;}
+  const layers=[{name:'Tynk gipsowy',t:15},{name:'Silikat',t:180},{name:'Klej EPS',t:10},{name:'EPS grafit λ 0,031',t:200},{name:'Warstwa zbrojona',t:5},{name:'Tynk elewacyjny',t:2}];
+  for(const w of s.walls.filter(w=>w.ext)){
+    w.buildUp=layers.map(l=>({...l}));
+    const horiz=Math.abs(w.x2-w.x1)>Math.abs(w.y2-w.y1);
+    for(const o of w.op){
+      const x=w.x1+(w.x2-w.x1)/Math.hypot(w.x2-w.x1,w.y2-w.y1)*o.pos;
+      if(o.type==='window'){
+        const north=horiz&&w.y1<0,tech=north&&x<5225,laundry=north&&x>5225&&x<7475,small=o.w<=600;
+        o.sill=tech?1800:laundry?1200:small?1500:900;
+        o.height=tech||small?600:laundry?1200:1500;
+        o.opening=laundry?'dół FIX, uchylne od 180 cm':small?'uchylne':'dół FIX, uchylne od 170 cm';
+      }else{o.sill=0;o.height=o.type==='slide'?2300:2100;}
+    }
+  }
+  s.construction={wallLayers:layers,finishedInterior:true,partition:'150 mm łącznie z wykończeniem; nośność i materiał do projektu',roomHeight:2800,uIndicative:0.15,note:'Silikat 18 cm i posadowienie do obliczeń konstruktora; U orientacyjne.'};
+  s.set={overhang:1000};
+  s.designNote='R1 — osobny układ z wejściem od północy, trzema pokojami poza salonem i mniejszą bryłą. Dwie łazienki, pralnia, techniczne, spiżarnia i garderoba. Nie jest kopią ani odbiciem E2.';
+  s.storagePlan=['Kurtki i obuwie w wiatrołapie; środki porządkowe w pralni; zapasy w spiżarni.','Garderoba przy sypialni i po jednym module PAX w pokojach dodatkowych.'];
+  mirrorPlanEastWest(s,14750);
+  s.designNote='R3 — niezależne odbicie siatki R1 z 11.11.2026 wschód–zachód. Wejście przy północno-wschodnim narożniku, salon od południowego wschodu; dojazd od wschodu.';
+  return s;
+}
+
 const VARIANTS = {
   base: {name:'Rzut z PDF (zmieniony) 17,70 × 10,20', build: () => buildBase()},
   A: {name:'A — prawie kwadrat 13,85 × 13,15', build: variantA},
@@ -1557,6 +1927,8 @@ const VARIANTS = {
   E3: {name:'E3 — E + prysznic przy salonie, wanna przy sypialniach', build: () => variantE({baths:true})},
   E4: {name:'E4 — E2 + E3 + gabinet od północy', build: () => variantE({exit:true, baths:true, office:true})},
   R1: {name:'R1 — mniejszy dom, wejście od północy, 3 pokoje', build: variantR1},
+  R2: {name:'R2 — wejście blisko środka północy, salon SW', build: variantR2},
+  R3: {name:'R3 — wejście przy narożniku NE, salon SE', build: variantR3},
 };
 function freshState(v){ const s = defaults(VARIANTS[v].build()); s.variant = v; return s; }
 
@@ -1566,22 +1938,52 @@ function defaults(s){
   s.walls.forEach(w => { w.op = w.op || []; w.layer = w.layer || ''; });
   s.rooms.forEach(r => { r.layer = r.layer || ''; });
   s.hidden = s.hidden || [];
-  s.nextId = s.nextId || 1 + Math.max(0, ...s.walls.map(w=>w.id), ...s.rooms.map(r=>r.id), ...s.walls.flatMap(w=>w.op.map(o=>o.id)), ...(s.furn||[]).map(f=>f.id));
+  s.nextId = Math.max(s.nextId || 1, 1 + Math.max(0, ...s.walls.map(w=>w.id), ...s.rooms.map(r=>r.id), ...s.walls.flatMap(w=>w.op.map(o=>o.id)), ...(s.furn||[]).map(f=>f.id)));
   if (!s.furn) s.furn = drawingFurniture(s);
-  s.furn.forEach(f => { f.layer = f.layer || ''; f.z = f.z || []; f.rot = f.rot || 0; });
+  s.furn.forEach(f => {
+    f.layer = f.layer || ''; f.z = f.z || []; f.rot = f.rot || 0;
+    // Lokalne numery wyposażenia są zapisane w obiekcie, nie wynikają z kolejności listy.
+    let next=Math.max(f.nextEquipmentId||1,1+Math.max(0,...(f.equipment||[]).map(e=>Number.isInteger(e.id)?e.id:0)));
+    for(const e of f.equipment||[])if(!Number.isInteger(e.id)||e.id<1)e.id=next++;
+    if(f.equipment)f.nextEquipmentId=next;
+  });
   s.set = Object.assign({grid:50, pitch:30, overhang:600, rate:'', newT:120, newExt:false, minPass:750}, s.set||{});
-  s.ui = Object.assign({under:true, underOp:0.35, dims:false, rooms:true, roof:true, zones:true, pass:true}, s.ui||{});
+  s.ui = Object.assign({under:true, underOp:0.35, dims:false, rooms:true, roof:true, zones:true, pass:true, ids:false}, s.ui||{});
   return s;
 }
 
-// Każde uruchomienie zaczyna się od E2, z zachowaniem jego zapisanych edycji.
-let S = null, curV = DEFAULT_VARIANT;
-try { const j = localStorage.getItem(LS+':'+curV); if (j) S = defaults(JSON.parse(j)); } catch(e) {}
+// V24 zmienia tylko pięć obiektów E2; pozostałe zapisane edycje i warianty zostają.
+function loadSavedVariant(v){
+  for(const key of [LS,PREVIOUS_LS]){
+    try{
+      const raw=localStorage.getItem(key+':'+v);if(!raw)continue;
+      const s=defaults(JSON.parse(raw));s.variant=v;
+      if(key===PREVIOUS_LS&&v==='E2'){
+        const updated=new Map(freshState('E2').furn.filter(f=>[75,76,86,87,101].includes(f.id)).map(f=>[f.id,f]));
+        s.furn=s.furn.map(f=>{
+          const n=updated.get(f.id);
+          return n&&n.key===f.key?{...JSON.parse(JSON.stringify(n)),layer:f.layer}:f;
+        });
+      }
+      return s;
+    }catch(e){}
+  }
+  return null;
+}
+// Główny link zawsze otwiera E2; URL może jawnie wskazać inny wariant.
+function variantFromUrl(){
+  if(typeof location==='undefined')return DEFAULT_VARIANT;
+  const v=new URLSearchParams(location.search).get('variant');
+  return Object.hasOwn(VARIANTS,v)?v:DEFAULT_VARIANT;
+}
+let S = null, curV = variantFromUrl();
+S = loadSavedVariant(curV);
 if (!S) S = freshState(curV);
 S.variant = curV;
 
 let hist = [], redoSt = [];
 let sel = new Set();
+let focusedEquipment = null;
 let tool = 'select';
 let view = {x:0, y:0, w:30000, h:20000};
 let A = null, EXT = new Map();
@@ -1602,8 +2004,8 @@ const fmtA = mm2 => nf1(mm2/1e6) + ' m²';
 
 function snapshot(){ return JSON.stringify(S); }
 function checkpoint(){ hist.push(snapshot()); if (hist.length > 300) hist.shift(); redoSt = []; }
-function doUndo(){ if (!hist.length) return; redoSt.push(snapshot()); S = defaults(JSON.parse(hist.pop())); sel.clear(); syncInputs(); changed(); }
-function doRedo(){ if (!redoSt.length) return; hist.push(snapshot()); S = defaults(JSON.parse(redoSt.pop())); sel.clear(); syncInputs(); changed(); }
+function doUndo(){ if (!hist.length) return; redoSt.push(snapshot()); S = defaults(JSON.parse(hist.pop())); sel.clear(); focusedEquipment=null; syncInputs(); syncVariant(); updateVariantUrl(); changed(); }
+function doRedo(){ if (!redoSt.length) return; hist.push(snapshot()); S = defaults(JSON.parse(redoSt.pop())); sel.clear(); focusedEquipment=null; syncInputs(); syncVariant(); updateVariantUrl(); changed(); }
 function save(){ try { localStorage.setItem(LS+':'+S.variant, snapshot()); } catch(e) {} }
 function setArrangement(f,mode){
   const a=f.arrangements && f.arrangements[mode];
@@ -2472,11 +2874,95 @@ function status(){
 function render(){
   syncAspect();
   svg.setAttribute('viewBox', `${view.x} ${view.y} ${view.w} ${view.h}`);
-  drawGrid(); drawUnder(); drawRooms(); drawPass(); drawWalls(); drawOps(); drawFurn(); drawRoof(); drawDims(); drawHandles(); drawOver();
+  drawGrid(); drawUnder(); drawRooms(); drawPass(); drawWalls(); drawOps(); drawFurn(); drawRoof(); drawDims(); drawIds(); drawHandles(); drawOver();
   renderStats(); status();
 }
 function live(){ normalize(); A = analyse(); render(); }
 function changed(){ normalize(); A = analyse(); render(); renderPanel(); renderLayers(); save(); }
+
+/* Trwałe identyfikatory: numer obiektu nie zależy od jego geometrii ani nazwy. */
+const ID_KIND={w:'S',o:'O',f:'M',r:'P'};
+function elementId(key,v=S.variant){return v+'-'+ID_KIND[key[0]]+key.slice(1);}
+function equipmentId(f,e,v=S.variant){return v+'-M'+f.id+'-E'+e.id;}
+function elementRecords(state=S){
+  const out=[];
+  for(const w of state.walls){
+    const g=geom(w);
+    out.push({key:'w'+w.id,obj:w,x:(w.x1+w.x2)/2,y:(w.y1+w.y2)/2,b:{x1:Math.min(w.x1,w.x2),y1:Math.min(w.y1,w.y2),x2:Math.max(w.x1,w.x2),y2:Math.max(w.y1,w.y2)}});
+    for(const o of w.op){
+      const x=g.a.x+g.d.x*o.pos,y=g.a.y+g.d.y*o.pos;
+      out.push({key:'o'+o.id,obj:w,opening:o,x,y,b:{x1:x-o.w/2,y1:y-o.w/2,x2:x+o.w/2,y2:y+o.w/2}});
+    }
+  }
+  for(const f of state.furn){
+    out.push({key:'f'+f.id,obj:f,x:f.x,y:f.y,b:furnBox(f)});
+    for(const e of f.equipment||[]){const c=fT(f)(e.x+e.w/2,e.y+e.d/2);out.push({key:'f'+f.id,eq:e,obj:f,...c,b:lbox(fT(f),e.x,e.y,e.w,e.d)});}
+  }
+  for(const r of state.rooms)out.push({key:'r'+r.id,obj:r,x:r.x,y:r.y,b:{x1:r.x-1200,y1:r.y-1000,x2:r.x+1200,y2:r.y+1000}});
+  return out;
+}
+function drawIds(){
+  let h='';const occupied=[];
+  const records=elementRecords().filter(it=>vis(it.obj));
+  const focused=records.find(it=>it.eq&&equipmentId(it.obj,it.eq)===focusedEquipment&&sel.has(it.key));
+  if(focused){const b=focused.b;h+=`<rect x="${b.x1}" y="${b.y1}" width="${b.x2-b.x1}" height="${b.y2-b.y1}" fill="#1f6feb" fill-opacity=".15" stroke="#1f6feb" stroke-width="${px(3)}"/>`;}
+  // Przy oddaleniu unikamy nakładania podpisów. Przybliżenie odsłania kolejne ID.
+  const priority=it=>it===focused?0:sel.has(it.key)?1:it.eq?6:({r:2,f:3,o:4,w:5})[it.key[0]];
+  records.sort((a,b)=>priority(a)-priority(b));
+  if(S.ui.ids)for(const it of records){
+    const code=it.eq?'M'+it.obj.id+'-E'+it.eq.id:ID_KIND[it.key[0]]+it.key.slice(1);
+    const y=it.y+(it.eq?-px(7):it.key[0]==='r'?px(17):it.key[0]==='f'?-(it.b.y2-it.b.y1)/2+px(8):-px(8));
+    const full=it.eq?equipmentId(it.obj,it.eq):elementId(it.key);
+    const fs=px(it.eq?9:10),bw=(code.length*.64+1)*fs,bh=fs*1.4;
+    const bounds={x1:it.x-bw/2,y1:y-bh,x2:it.x+bw/2,y2:y+fs*.3};
+    if(priority(it)>1&&occupied.some(b=>bounds.x1<b.x2&&bounds.x2>b.x1&&bounds.y1<b.y2&&bounds.y2>b.y1))continue;
+    occupied.push(bounds);
+    h+=`<text data-element-id="${esc(full)}" x="${it.x}" y="${y}" font-family="ui-monospace,monospace" font-size="${fs}" font-weight="700" text-anchor="middle" fill="${sel.has(it.key)?'#1f6feb':'#663399'}" stroke="#fff" stroke-width="${px(3)}" paint-order="stroke"><title>${esc(full)}</title>${esc(code)}</text>`;
+  }
+  $('#gIds').innerHTML=h;
+}
+function updateVariantUrl(mode='replace'){
+  const url=new URL(location.href);url.searchParams.set('variant',S.variant);
+  if(url.href!==location.href)history[mode+'State'](null,'',url);
+}
+function switchVariant(v,mode='push'){
+  if(!Object.hasOwn(VARIANTS,v))v=DEFAULT_VARIANT;
+  save();S=loadSavedVariant(v)||freshState(v);S.variant=v;hist=[];redoSt=[];
+  sel.clear();focusedEquipment=null;syncInputs();syncVariant();changed();fit();
+  if(mode)updateVariantUrl(mode);
+}
+function findElement(query){
+  const match=query.trim().match(/^(?:([a-z][a-z0-9]*)-)?([SOMP])(\d+)(?:-E(\d+))?$/i);
+  if(!match)return 'Nieprawidłowy format ID. Przykład: E2-M75 lub M75.';
+  const [,prefix,kind,number,equipment]=match;
+  const v=prefix?Object.keys(VARIANTS).find(v=>v.toLowerCase()===prefix.toLowerCase()):S.variant;
+  if(!v)return 'Nieznany wariant w ID.';
+  if(equipment&&kind.toUpperCase()!=='M')return 'Wyposażenie należy do mebla (M).';
+  const key=({S:'w',O:'o',M:'f',P:'r'})[kind.toUpperCase()]+Number(number);
+  const candidate=elementRecords(variantStateFor(v)).find(it=>it.key===key&&(equipment?it.eq?.id===Number(equipment):!it.eq));
+  if(!candidate)return 'Nie znaleziono elementu '+query.trim()+'.';
+  if(v!==S.variant)switchVariant(v);
+  const target=elementRecords().find(it=>it.key===key&&(equipment?it.eq?.id===Number(equipment):!it.eq));
+  // Szukanie odkrywa warstwę, aby zaznaczenie było widoczne także po wczytaniu zapisu.
+  S.hidden=S.hidden.filter(layer=>layer!==(target.obj.layer||''));
+  sel=new Set([key]);focusedEquipment=equipment?equipmentId(target.obj,target.eq):null;
+  setTool('select');document.body.classList.remove('nopanel');
+  A=analyse();renderPanel();renderLayers();
+  const ratio=rect().width/Math.max(1,rect().height),b=target.b;
+  const w=Math.max(2600,(b.x2-b.x1)*1.6,(b.y2-b.y1)*1.6*ratio),h=w/ratio;
+  view={x:target.x-w/2,y:target.y-h/2,w,h};viewTouched=true;render();save();
+  return '';
+}
+async function copyElementId(value,button){
+  try{
+    if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(value);
+    else{
+      const input=document.createElement('textarea');input.value=value;input.style.position='fixed';input.style.opacity='0';document.body.append(input);input.select();
+      const ok=document.execCommand('copy');input.remove();if(!ok)throw Error('copy');
+    }
+    button.textContent='Skopiowano';
+  }catch{button.textContent='Zaznacz i skopiuj ID';}
+}
 
 /* ---------- panel właściwości ---------- */
 function on(id,ev,fn){ const el = document.getElementById(id); if (el) el.addEventListener(ev,fn); }
@@ -2484,6 +2970,14 @@ function findOp(oid){ for (const w of S.walls) for (const o of w.op) if (o.id ==
 function renderPanel(){
   const el = $('#props'); let h = '';
   const items = [...sel];
+  if(items.length===1&&ID_KIND[items[0][0]]){
+    const full=elementId(items[0]);
+    h+=`<div class="row"><span>ID elementu</span><input class="id-code" readonly aria-label="ID elementu" value="${esc(full)}"><button data-copy-id="${esc(full)}">Kopiuj ID</button></div>`;
+    const f=items[0][0]==='f'&&S.furn.find(f=>f.id===+items[0].slice(1));
+    if(f?.equipment?.length){
+      h+='<h2>Wyposażenie zabudowy</h2>'+f.equipment.map(e=>{const id=equipmentId(f,e);return `<div class="row"><span class="id-code" ${focusedEquipment===id?'style="color:#1f6feb;font-weight:700"':''}>${esc(id)}</span><span>${esc(e.label||e.kind)}</span><button data-copy-id="${esc(id)}">Kopiuj</button><button data-find-id="${esc(id)}">Pokaż</button></div>`;}).join('');
+    }
+  }
   if (tool === 'wall') {
     h += `<h2>Nowa ściana</h2>
       <div class="row"><span>Grubość</span><input type="number" id="pNewT" step="10" min="50" value="${S.set.newT}"> mm</div>
@@ -2582,6 +3076,8 @@ function renderPanel(){
     h += `<h2>Zaznaczenie</h2><div class="hint">Nic nie zaznaczono. Kliknij ścianę, otwór albo etykietę pomieszczenia. Przeciągnij po pustym polu, by zaznaczyć ramką.</div>`;
   }
   el.innerHTML = h;
+  el.querySelectorAll('[data-copy-id]').forEach(button=>button.onclick=()=>copyElementId(button.dataset.copyId,button));
+  el.querySelectorAll('[data-find-id]').forEach(button=>button.onclick=()=>findElement(button.dataset.findId));
 
   on('pNewT','change', e => { S.set.newT = Math.max(50, +e.target.value || 120); save(); });
   on('pNewExt','change', e => { S.set.newExt = e.target.checked; save(); });
@@ -2934,6 +3430,7 @@ svg.addEventListener('pointerup', e => {
 });
 
 window.addEventListener('keydown', e => {
+  if($('#idDialog').open)return;
   const tag = (e.target.tagName || '').toLowerCase();
   if (tag === 'input' || tag === 'select' || tag === 'textarea') return;
   const ctrl = e.ctrlKey || e.metaKey;
@@ -2986,8 +3483,7 @@ window.addEventListener('keyup', e => { if (e.key === ' ') spaceDown = false; })
 /* ---------- miniatury wariantów ---------- */
 function variantStateFor(v){
   if (v === S.variant) return S;
-  try { const j = localStorage.getItem(LS+':'+v); if (j) { const s = defaults(JSON.parse(j)); s.variant = v; return s; } } catch(e) {}
-  return freshState(v);
+  return loadSavedVariant(v)||freshState(v);
 }
 function thumbFor(v){
   const keepS = S, keepA = A, keepE = EXT;
@@ -3044,18 +3540,21 @@ function closeThumbs(){ $('#thumbs').classList.remove('open'); render(); }
 document.querySelectorAll('#tools button').forEach(b => b.addEventListener('click', () => setTool(b.dataset.tool)));
 function syncVariant(){ $('#sVar').value = S.variant; document.title = 'Rzut Ogrodniki — ' + VARIANTS[S.variant].name; }
 $('#sVar').innerHTML = Object.entries(VARIANTS).map(([k,v]) => `<option value="${k}">${esc(v.name)}</option>`).join('');
-$('#sVar').onchange = e => {
-  const v = e.target.value; save();
-  let n = null;
-  try { const j = localStorage.getItem(LS+':'+v); if (j) n = defaults(JSON.parse(j)); } catch(err) {}
-  S = n || freshState(v); S.variant = v; hist = []; redoSt = [];
-  sel.clear(); syncInputs(); syncVariant(); changed(); fit();
+$('#sVar').onchange = e => switchVariant(e.target.value);
+window.addEventListener('popstate',()=>switchVariant(variantFromUrl(),null));
+$('#bFindId').onclick=()=>{$('#idError').textContent='';$('#idDialog').showModal();$('#idQuery').focus();};
+$('#bCloseId').onclick=()=>$('#idDialog').close();
+$('#idForm').onsubmit=e=>{
+  e.preventDefault();const error=findElement($('#idQuery').value);$('#idError').textContent=error;
+  if(!error)$('#idDialog').close();
 };
+$('#tIds').onchange=e=>{S.ui.ids=e.target.checked;render();save();};
 $('#bThumbs').onclick = openThumbs; $('#bThumbsClose').onclick = closeThumbs;
 $('#bPanel').onclick = () => { document.body.classList.toggle('nopanel'); render(); };
 $('#bView').onclick = () => { viewOnly = !viewOnly; $('#bView').classList.toggle('on', viewOnly); };
 $('#bUndo').onclick = doUndo; $('#bRedo').onclick = doRedo; $('#bFit').onclick = fit;
 function syncInputs(){
+  $('#tIds').checked = S.ui.ids;
   $('#tUnder').checked = S.ui.under; $('#rUnder').value = S.ui.underOp;
   $('#tDims').checked = S.ui.dims; $('#tRooms').checked = S.ui.rooms; $('#tRoof').checked = S.ui.roof;
   $('#sGrid').value = String(S.set.grid);
@@ -3087,7 +3586,7 @@ $('#bImp').onclick = () => $('#fImp').click();
 $('#fImp').onchange = e => {
   const f = e.target.files[0]; if (!f) return;
   f.text().then(t => {
-    try { const o = JSON.parse(t); if (!Array.isArray(o.walls)) throw 0; checkpoint(); o.ui = S.ui; o.variant = VARIANTS[o.variant] ? o.variant : S.variant; S = defaults(o); syncVariant(); sel.clear(); syncInputs(); changed(); fit(); }
+    try { const o = JSON.parse(t); if (!Array.isArray(o.walls)) throw 0; checkpoint(); o.ui = S.ui; o.variant = VARIANTS[o.variant] ? o.variant : S.variant; S = defaults(o); syncVariant(); updateVariantUrl(); focusedEquipment=null; sel.clear(); syncInputs(); changed(); fit(); }
     catch(err) { alert('To nie jest plik rzutu z tego edytora.'); }
   });
   e.target.value = '';
@@ -3117,6 +3616,7 @@ $('#bPng').onclick = () => {
 new ResizeObserver(() => viewTouched ? render() : fit()).observe($('#stage'));
 syncInputs();
 syncVariant();
+updateVariantUrl();
 $('#bView').classList.toggle('on', viewOnly);
 if (matchMedia('(max-width: 800px)').matches) document.body.classList.add('nopanel');
 setTool('select');
