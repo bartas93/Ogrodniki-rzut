@@ -27,7 +27,23 @@ W poprzednim rzucie opisano 100 cm wysokiej szafy na zapasy, ale 60 cm jej front
 
 Między zlewem a płytą pozostaje **90 cm ciągłego blatu przygotowania**, w tym 60 cm nad zmywarką. Wcześniej było 120 cm: skrócenie jest świadomym kompromisem na rzecz krótszej drogi od lodówki i większego blatu po prawej. Wyspa **170×90 cm**, bez zlewu i płyty, daje dodatkową dużą powierzchnię przygotowania. Zmywarka nadal bezpośrednio przy zlewie; naczynia i sztućce warto trzymać w sąsiednich szufladach i wyspie.
 
-Na prawym blacie 100 cm zostawić pierwsze **40 cm przy płycie wolne** na odstawianie. Końcowe 60 cm przeznaczyć na wybrany sprzęt codzienny, np. ekspres lub Thermomix; zmieszczenie obu zależy od ich wymiarów i wymaganych odstępów. Pozostałego małego AGD nie należy stale ustawiać na blacie przygotowania. Używanie go w spiżarni jest możliwością do osobnego sprawdzenia pod kątem miejsca, wentylacji i zasilania, nie gotowym projektem instalacji.
+Na prawym blacie 100 cm zostawić pierwsze **40 cm przy płycie wolne** na odstawianie. Aktualna propozycja rozmieszczenia pięciu codziennych przedmiotów znajduje się poniżej. Pozostałego małego AGD nie należy stale ustawiać na blacie przygotowania. Używanie go w spiżarni jest możliwością do osobnego sprawdzenia pod kątem miejsca, wentylacji i zasilania, nie gotowym projektem instalacji.
+
+## Sprzęty codzienne — propozycja do wizualizacji
+
+Użytkownik wskazał pięć rzeczy stale obecnych na blacie: **ekspres, Thermomix, czajnik, dzbanek na wodę i noże**. Wszystkich nie należy upychać w końcowych 60 cm północnego blatu. Propozycja zachowuje dotychczasowe meble i przejścia, ale rezerwuje część wyspy na sprzęty:
+
+| Miejsce | Wyposażenie | Założenie |
+| --- | --- | --- |
+| Końcowe 60 cm prawego blatu | Ekspres i czajnik | Orientacyjnie 30 + 22 cm szerokości; pozostałe miejsce na odstępy, do potwierdzenia dla konkretnych modeli. Pierwsze 40 cm przy płycie pozostaje wolne. |
+| Prawy pas wyspy, około 50×90 cm | Thermomix z tyłu, dzbanek i kompaktowy blok noży przed nim | Orientacyjne obrysy: 35×40, 18×18 i 12×18 cm. Nie są to dane posiadanych urządzeń ani potwierdzone odstępy producentów. |
+| Pozostała część wyspy | Wolny blat około 120×90 cm | Rezerwa do przygotowania posiłków; dokładny wymiar zależy od modeli i wymaganych odstępów. |
+
+Blat 90 cm między zlewem a płytą oraz blat 60 cm na lewo od zlewu pozostają wolne. Thermomix wymaga stabilnego ustawienia, marginesów od krawędzi i wolnej przestrzeni dla pary według instrukcji urządzenia. Założono gniazdo przy wyspie z krótkim przewodem; nie wolno planować zasilania przewodem przez przejście. Lokalizację i wykonanie zasilania trzeba opracować elektrycznie. Noże w stabilnym bloku ustawionym w głębi blatu; sposób zabezpieczenia dobrać do domowników.
+
+![Kuchnia E2 ze sprzętami codziennymi — dwa ujęcia](wizualizacje/kuchnia-E2-sprzety.png)
+
+Wizualizacja przedstawia propozycję materiałów i ustawienia sprzętów. Wygenerowany obraz nie jest modelem CAD ani podstawą do mierzenia prześwitów. Rzut 2D i jego zapis v30 nie zostały w tym etapie zmienione; sprzęty przenośne nie mają jeszcze osobnych obiektów w edytorze.
 
 ## Prześwity i ograniczenia
 

@@ -43,7 +43,7 @@ Oznaczenia: **[DECYZJA]** — uzgodnione; **[PREFERENCJA]** — oczekiwanie do p
 |---|---|
 | **Wiatrołap** | duża zabudowa na kurtki, buty, torby, plecaki; wieszaki na mokre rzeczy; siedzisko do zakładania butów |
 | **Salon + jadalnia** | duża strefa wspólna połączona z kuchnią; miejsce na filtr powietrza, dekoracje, choinkę; ochrona przed przegrzewaniem |
-| **Kuchnia** | miejsce na Thermomix, ekspres, airfryer, toster/grill, ewentualnie mikrofalę |
+| **Kuchnia** | stale na blacie: ekspres, Thermomix, czajnik, dzbanek na wodę i noże; ponadto miejsce na airfryer, toster/grill, ewentualnie mikrofalę |
 | **Spiżarnia** | bezpośrednio przy kuchni; zapasy, słoiki, małe AGD |
 | **Sypialnia rodziców** | łóżko **180 × 200**, dwie szafki nocne, TV naprzeciw łóżka (ok. 55″), wygodne przejścia, okno na wschód |
 | **Garderoba** | regularny prostokąt; szafy po obu stronach **60–65 cm**; lustro, miejsce na sejf; przejście ok. **100 cm** (starszy szkic: 80 cm) |
