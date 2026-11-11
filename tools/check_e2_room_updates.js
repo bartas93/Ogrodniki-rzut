@@ -59,6 +59,6 @@ assert.equal(saved.get('ogrodniki-rzut-v25:E2'),JSON.stringify(old),'Stary zapis
 const v26=clone(m);v26.walls.find(w=>w.id===42).x2=14025;v26.furn.find(f=>f.id===74).x+=100;v26.furn.find(f=>f.id===101).y+=50;
 saved.set('ogrodniki-rzut-v26:E2',JSON.stringify(v26));const expected27=clone(v26);expected27.walls.find(w=>w.id===42).x2=expected27.walls.find(w=>w.id===54).x1;
 assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(expected27),'Tylko x2 S42 może się zmienić');assert.equal(saved.get('ogrodniki-rzut-v26:E2'),JSON.stringify(v26),'Kopia v26 pozostaje');
-const v27=clone(expected27);v27.walls.find(w=>w.id===42).x2-=100;saved.set('ogrodniki-rzut-v27:E2',JSON.stringify(v27));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(v27),'V27 ma pierwszeństwo i nie jest ponownie migrowane');
+const v28=clone(expected27);v28.walls.find(w=>w.id===42).x2-=100;saved.set('ogrodniki-rzut-v28:E2',JSON.stringify(v28));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(v28),'V28 ma pierwszeństwo i nie jest ponownie migrowane');
 for(const v of ['E2S','R1','R2','R3']){const state=clone(api.fresh(v));state.furn[0].name='Własny '+v;saved.set('ogrodniki-rzut-v25:'+v,JSON.stringify(state));assert.equal(JSON.stringify(launch(saved).load(v)),JSON.stringify(state),v+' bez synchronizacji');}
 console.log('E2_ROOM_UPDATES_OK: O3, M101, M143, O52, M117/M116, M74; rozłożenie pięciu mebli i stołu, S42 zlicowana z S54, trwałe ID i migracja bez utraty edycji');

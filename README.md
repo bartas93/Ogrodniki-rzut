@@ -42,3 +42,5 @@ Test miarki dotykowej: `timeout 60s node tools/check_mobile_measure.js` — dwa 
 E2 — najnowsze ustawienie salonu: **M75 obrócona poprzecznie nad narożnikiem M76**, tworząc U otwarte na TV na wschodzie. Pozostają rozłączne pola spania, dojście do sofy od wschodu oraz HST. Zapis v25 przenosi v24, zmieniając tylko ustawienie/strefy/opis M75; pozostałe edycje i warianty zostają. [Aktualny opis i odstępy](e2-wykonczenie.md#aktualizacja-e2-m75--u-w-salonie-11112026).
 
 E2 — kolejna aktualizacja według ID: usunięte O3, przesunięta w górę M101, narożne ustawienia M143 oraz M117/M116, odwrócone O52 i obrócony M74. Stół dla 10 osób ma teraz ciasny układ 5+5 przy długich bokach. [Położenia i ograniczenia](wymagania-projektowe.md#15-e2--korekty-według-id-11112026). Zapis v26 zachowuje wcześniejsze edycje poza wskazanymi elementami i kopie starych zapisów. Test: `timeout 30s node tools/check_e2_room_updates.js`.
+
+E2 — wyspa **M73: 170×90 cm**, odstęp od zabudowy na północy i zachodzie **130 cm**; od wschodu 90 cm, przy rozłożonym stole 75 cm. V28 przenosi pozostałe edycje bez zmian. Test: `timeout 30s node tools/check_e2_island.js`.

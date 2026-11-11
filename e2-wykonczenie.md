@@ -111,3 +111,10 @@ V26 przenosi v25, aktualizując tylko wskazane otwory i meble. Nie kasuje starsz
 ## Zlicowanie S42 z S54
 
 Prawy koniec osi S42 skrócony z x=14025 do x=13725 mm, do osi pionowej S54. Automatyczne połączenie ścian grubości 150 mm wyrównuje gotowe prawe lica na x=13800 mm. Położenia otworów i ich numery zachowane. Zapis v27 przenosi v26 bez ponawiania wcześniejszych korekt mebli, aktualizując tylko x2 S42; kopia v26 pozostaje.
+
+
+## Wyspa M73 — 170×90 cm
+
+Wyspa wydłużona o 30 cm; północna i zachodnia krawędź odsunięte od zabudowy o dalsze 30 cm. Środek (2950,2550) mm, korpus x=2100–3800, y=2100–3000 mm. Prześwity: północ/zachód 130 cm, wschód 90 cm, do złożonego stołu 135 cm; przy 10 zajętych krzesłach za wyspą pozostaje 75 cm. Wymiary odnoszą się do modelu korpusów, bez doboru wystających uchwytów. Wyspa nadal wyłącznie robocza, bez hokerów i instalacji wodnej.
+
+Brak nowych problemów oraz niedostępnych pomieszczeń. Zachowane wcześniejsze ostrzeżenia: M101 12%, trzy PAX 25%; po rozłożeniu M117 także strefa krzesła M116 17%. Zapis v28 aktualizuje z v27 wyłącznie M73 i zachowuje pozostałe edycje, także ręczne zmiany S42 i mebli. Test: `timeout 30s node tools/check_e2_island.js`.

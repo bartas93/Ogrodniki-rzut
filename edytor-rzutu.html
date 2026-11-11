@@ -218,7 +218,8 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 'use strict';
 const $ = s => document.querySelector(s);
 const svg = $('#cv');
-const LS = 'ogrodniki-rzut-v27';
+const LS = 'ogrodniki-rzut-v28';
+const WALL_LS = 'ogrodniki-rzut-v27';
 const RECENT_LS = 'ogrodniki-rzut-v26';
 const SOFA_LS = 'ogrodniki-rzut-v25';
 const PREVIOUS_LS = 'ogrodniki-rzut-v24';
@@ -1191,7 +1192,18 @@ function variantE2(){
   s.set = {overhang:1000};
   applyE2NovemberRoomEdits(s);
   alignE2Wall42(s);
+  enlargeE2Island(s);
   return s;
+}
+
+// Wyspa M73: +30 cm długości, +30 cm prześwitu od północnej i zachodniej zabudowy.
+function enlargeE2Island(s){
+  const island=s.furn.find(f=>f.id===73);
+  if(island?.key!=='island')return;
+  island.w=1700;island.x=2100+island.w/2;island.y=2100+island.d/2;
+  if(island.name==='Wyspa 140×90 — blat roboczy')island.name='Wyspa 170×90 — blat roboczy';
+  island.notes=[...(island.notes||[]).filter(n=>!n.startsWith('Wyspa E2 — ')&&n!=='Przy 10 osobach końcowe krzesło stołu wykorzystuje część strefy wyspy — praca i biesiada to różne stany.'),
+    'Wyspa E2 — blat 170×90 cm, bez hokerów. Prześwit 130 cm do zabudowy północnej i zachodnich słupków; od wschodu 90 cm do ściany / regału. Przy stole rozłożonym do 280 cm pozostaje 75 cm do obrysu zajętych krzeseł.'];
 }
 
 // Prawy koniec S42 łączy się z osią S54; computeExt wyrównuje gotowe lica narożnika.
@@ -2029,9 +2041,9 @@ function defaults(s){
   return s;
 }
 
-// V27 wyrównuje tylko S42; starsze migracje są stosowane wyłącznie do odpowiednich zapisów.
+// V28 aktualizuje tylko M73; wcześniejsze migracje zależą od źródłowej wersji zapisu.
 function loadSavedVariant(v){
-  for(const key of [LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
+  for(const key of [LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
     try{
       const raw=localStorage.getItem(key+':'+v);if(!raw)continue;
       const s=defaults(JSON.parse(raw));s.variant=v;
@@ -2050,8 +2062,9 @@ function loadSavedVariant(v){
           notes:[...n.notes],
         }:f);
       }
-      if(key!==LS&&key!==RECENT_LS&&v==='E2')applyE2NovemberRoomEdits(s);
-      if(key!==LS&&v==='E2')alignE2Wall42(s);
+      if([SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')applyE2NovemberRoomEdits(s);
+      if([RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')alignE2Wall42(s);
+      if(key!==LS&&v==='E2')enlargeE2Island(s);
       return s;
     }catch(e){}
   }

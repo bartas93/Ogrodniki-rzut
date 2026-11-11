@@ -256,3 +256,10 @@ Aktualny `LS` to **v26**, odczyt starszych: v25, v24, v23. Z v25 migrowane są t
 ### Zlicowanie S42 — zapis v27
 
 Najnowszy §16: S42 kończy się na osi S54 (x=13725, y=5650), zamiast x=14025. `alignE2Wall42` działa po konstruktorze E2 i przy odczycie starszych zapisów. `computeExt` wyrównuje zewnętrzne lico połączenia na x=13800. Otwory/ID bez zmian. Aktualny zapis v27, starsze klucze v26/v25/v24/v23. Migracja z v26 dotyka wyłącznie x2 S42 — nie wywołuj ponownie `applyE2NovemberRoomEdits` dla v26. Test zakresu migracji i lic narożnika jest w `tools/check_e2_room_updates.js`. Wyspy nie przesuwano; pytanie o ergonomię było prośbą o poradę.
+
+
+### Wyspa M73 — zapis v28
+
+Najnowszy §17: wyspa 170×90 (+30 cm), x=2100–3800, y=2100–3000 mm. `enlargeE2Island` działa tylko dla M73 typu island w E2. Północ/zachód: 130 cm do zabudowy; wschód: 90 cm; stół zamknięty: 135 cm, rozłożony z 10 krzesłami: 75 cm. Nie zmieniaj stref ani progów kontroli.
+
+Aktualny zapis **v28**; odczyt v27/v26/v25/v24/v23. Z v27 migruje tylko M73: szerokość, x/y i aktualny opis (własna nazwa i notatki zachowane). Nie powtarzaj z v27 ani wcześniejszego skrócenia S42, ani sześciu korekt mebli. Starsze wersje otrzymują tylko należne migracje. Test `tools/check_e2_island.js` sprawdza prześwity, zakres migracji, priorytet v28 i niezależność wariantów.

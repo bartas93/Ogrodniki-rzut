@@ -180,3 +180,11 @@ V26 migruje zapisy v25/v24/v23 bez resetowania pozostałych edycji. Z v25 zmieni
 - **[DECYZJA]** Skrócić S42 od prawej do połączenia z pionową S54: oś kończy się na x=13725 zamiast 14025 mm, przy niezmienionym y=5650 mm. Długość osi mniejsza o 30 cm; gotowe prawe lico narożnika x=13800 mm. Otwory i ich ID pozostają.
 - V27 przenosi zapis v26, zmieniając wyłącznie współrzędną x2 S42, z zachowaniem pozostałych edycji. Starsze zapisy nadal przechodzą odpowiednie wcześniejsze migracje; kopie pozostają. Inne warianty bez zmian.
 - Pytanie o ergonomię wyspy nie jest zleceniem przesunięcia mebli. Zalecenie do rozważenia: 120–130 cm pomiędzy wystającymi frontami; 100 cm zwykle wystarcza jednej osobie, 130–140 cm daje więcej miejsca przy mijaniu i otwartych urządzeniach. W tej aktualizacji wyspa pozostaje bez zmian.
+
+
+## 17. E2 — większa wyspa M73 i prześwity 130 cm
+
+- **[DECYZJA]** Powiększyć długość M73 o 20–30 cm i odsunąć od zabudowy o 30 cm. Przyjęto **170×90 cm** (+30 cm długości), obrót bez zmian. Blat roboczy bez hokerów; korpus x=2100–3800, y=2100–3000 mm.
+- Prześwity od korpusów zabudowy północnej i zachodnich słupków zwiększone z 100 do **130 cm**. Od wschodu pozostaje **90 cm** do lica ściany / regału. Do złożonego stołu 135 cm; do obrysu zajętych krzeseł przy stole 280 cm — **75 cm**. Są to odległości w modelu; wystające uchwyty i konkretne mechanizmy wymagają uwzględnienia w projekcie wyposażenia.
+- Zero nowych problemów i niedostępnych pomieszczeń, również przy rozłożonym stole i sofach. Cztery wcześniejsze ostrzeżenia pozostają (M101 i trzy PAX).
+- V28 przenosi v27, aktualizując wyłącznie wymiary/położenie/opis M73; ID, głębokość, obrót, warstwa i własna nazwa/notatki zachowane. Pozostałe edycje i warianty bez zmian; wcześniejsze zapisy nie są kasowane.
