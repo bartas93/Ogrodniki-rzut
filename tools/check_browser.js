@@ -14,7 +14,7 @@ const {chromium}=require('playwright'),http=require('node:http'),fs=require('nod
   const page=await context.newPage();page.setDefaultTimeout(5000);page.on('pageerror',e=>errors.push(e.message));
   const variant=async v=>assert.equal(await page.locator('#sVar').inputValue(),v);
   const find=async id=>{await page.locator('#bFindId').click();await page.locator('#idQuery').fill(id);await page.locator('#idForm button[type=submit]').click();assert.equal(await page.locator('#idDialog').evaluate(d=>d.open),false,id);};
-  const state=async v=>JSON.parse(await page.evaluate(v=>localStorage.getItem('ogrodniki-rzut-v30:'+v),v));
+  const state=async v=>JSON.parse(await page.evaluate(v=>localStorage.getItem('ogrodniki-rzut-v31:'+v),v));
   await page.goto(base+'/?variant=R2&source=test#plan');await variant('R2');assert.ok(page.url().includes('source=test#plan'));
   await page.locator('#sVar').selectOption('R3');await variant('R3');assert.equal(new URL(page.url()).searchParams.get('variant'),'R3');
   await page.goBack();await variant('R2');await page.goForward();await variant('R3');
@@ -43,13 +43,18 @@ const {chromium}=require('playwright'),http=require('node:http'),fs=require('nod
   const exported=JSON.parse(fs.readFileSync('/tmp/ogrodniki-export.json'));assert.equal(exported.furn.find(f=>f.id===r2Furniture).name,'Własny R2');
   await page.locator('#fImp').setInputFiles('/tmp/ogrodniki-export.json');await find('M'+r2Furniture);assert.equal(await page.locator('#pFName').inputValue(),'Własny R2');
   // Migracja starego zapisu zachowuje własne zmiany poza pięcioma meblami E2.
-  await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('ogrodniki-rzut-v30:E2'));s.furn.find(f=>f.id===75).x+=123;s.furn.find(f=>f.id!==75&&f.key==='k240').name='Własna kuchnia v23';localStorage.setItem('ogrodniki-rzut-v23:E2',JSON.stringify(s));localStorage.removeItem('ogrodniki-rzut-v30:E2');});
+  await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('ogrodniki-rzut-v31:E2'));s.furn.find(f=>f.id===75).x+=123;s.furn.find(f=>f.id!==75&&f.key==='k240').name='Własna kuchnia v23';localStorage.setItem('ogrodniki-rzut-v23:E2',JSON.stringify(s));localStorage.removeItem('ogrodniki-rzut-v31:E2');});
   await page.goto(base+'/');await variant('E2');assert.ok((await state('E2')).furn.some(f=>f.name==='Własna kuchnia v23'));assert.ok(await page.evaluate(()=>localStorage.getItem('ogrodniki-rzut-v23:E2')));
   // V24 -> v25: na istniejącym rzucie obraca się wyłącznie wskazana sofa.
-  await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('ogrodniki-rzut-v30:E2'));const f=s.furn.find(f=>f.id===75);f.x=685;f.y=6650;f.rot=270;f.name='Moja sofa v24';s.rooms[0].name='Mój salon v24';localStorage.setItem('ogrodniki-rzut-v24:E2',JSON.stringify(s));localStorage.removeItem('ogrodniki-rzut-v30:E2');});
+  await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('ogrodniki-rzut-v31:E2'));const f=s.furn.find(f=>f.id===75);f.x=685;f.y=6650;f.rot=270;f.name='Moja sofa v24';s.rooms[0].name='Mój salon v24';localStorage.setItem('ogrodniki-rzut-v24:E2',JSON.stringify(s));localStorage.removeItem('ogrodniki-rzut-v31:E2');});
   await page.reload();await find('M75');assert.equal((await state('E2')).furn.find(f=>f.id===75).rot,0);assert.equal(await page.locator('#pFName').inputValue(),'Moja sofa v24');assert.equal((await state('E2')).rooms[0].name,'Mój salon v24');assert.ok(await page.evaluate(()=>localStorage.getItem('ogrodniki-rzut-v24:E2')));
   await find('O5');assert.equal(await page.locator('#pOW').inputValue(),'1200');
   await find('M73');assert.equal(await page.locator('#pFW').inputValue(),'1700');assert.equal(await page.locator('#pFD').inputValue(),'900');
+  // Rzeczywisty poprzedni zapis v30: tylko M76 i kolidująca M75, bez ponawiania kuchni.
+  await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('ogrodniki-rzut-v31:E2'));Object.assign(s.furn.find(f=>f.id===76),{w:2300,d:1510,x:955,y:8850,parts:[[0,610/1510,1,900/1510],[1300/2300,0,1000/2300,610/1510]]});Object.assign(s.furn.find(f=>f.id===75),{x:1200,y:6755});s.furn.find(f=>f.id===72).equipment.find(e=>e.kind==='hob').x=2350;localStorage.setItem('ogrodniki-rzut-v30:E2',JSON.stringify(s));localStorage.removeItem('ogrodniki-rzut-v31:E2');});
+  await page.reload();await find('M76');assert.equal(await page.locator('#pFW').inputValue(),'3050');assert.equal(await page.locator('#pFD').inputValue(),'2200');assert.equal(await page.locator('[data-zd="1"]').inputValue(),'1300');
+  const afterCorner=await state('E2');assert.equal(afterCorner.furn.find(f=>f.id===75).x,2100);assert.equal(afterCorner.furn.find(f=>f.id===75).y,6435);assert.equal(afterCorner.furn.find(f=>f.id===72).equipment.find(e=>e.kind==='hob').x,2350);
+  await page.locator('#bFit').click();await page.screenshot({path:'/tmp/e2-corner-desktop.png'});
   await find('E2-M71-E1');assert.equal(await page.locator('[data-copy-id="E2-M71-E1"]').count(),1);
   await find('E2-M72-E5');assert.equal(await page.locator('[data-copy-id="E2-M72-E5"]').count(),1);
   await page.screenshot({path:'/tmp/e2-kitchen-desktop.png'});
@@ -68,6 +73,7 @@ const {chromium}=require('playwright'),http=require('node:http'),fs=require('nod
   await phone.locator('#tIds').check();await phone.screenshot({path:'/tmp/ogrodniki-phone-selected.png'});
   await phone.locator('#bFindId').click();await phone.locator('#idQuery').fill('E2-M72-E5');await phone.locator('#idForm button[type=submit]').click();assert.equal(await phone.locator('[data-copy-id="E2-M72-E5"]').count(),1);
   await phone.screenshot({path:'/tmp/e2-kitchen-phone.png'});
+  await phone.locator('#bFindId').click();await phone.locator('#idQuery').fill('E2-M76');await phone.locator('#idForm button[type=submit]').click();assert.equal(await phone.locator('#pFW').inputValue(),'3050');assert.equal(await phone.locator('#pFD').inputValue(),'2200');await phone.screenshot({path:'/tmp/e2-corner-phone.png'});
   const mobilePngEvent=phone.waitForEvent('download');await phone.locator('#bPng').click();await (await mobilePngEvent).saveAs('/tmp/ogrodniki-phone-export.png');
   await mobile.close();assert.deepEqual(errors,[]);
   console.log('BROWSER_OK: linki, historia, wszystkie warianty i ID, wyszukiwanie, schowek, zapis/import/migracja, eksport PNG, telefon 412 px i dotyk');

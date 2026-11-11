@@ -13,7 +13,7 @@ const {chromium}=require('playwright'),http=require('node:http'),fs=require('nod
   const context=await browser.newContext({viewport:{width:412,height:915},isMobile:true,hasTouch:true});
   const page=await context.newPage();page.setDefaultTimeout(5000);page.on('pageerror',e=>errors.push(e.message));
   await page.goto('http://127.0.0.1:'+server.address().port+'/');
-  const original=await page.evaluate(()=>localStorage.getItem('ogrodniki-rzut-v30:E2'));
+  const original=await page.evaluate(()=>localStorage.getItem('ogrodniki-rzut-v31:E2'));
   // Powiększ sofę przez wyszukiwarkę. Jej krawędź ma znaną długość 970 mm.
   await page.locator('#bFindId').click();await page.locator('#idQuery').fill('E2-M75');await page.locator('#idForm button[type=submit]').click();
   await page.locator('#bPanel').click();await page.locator('[data-tool="measure"]').click();
@@ -60,7 +60,7 @@ const {chromium}=require('playwright'),http=require('node:http'),fs=require('nod
   assert.equal(await page.locator('#mCancel').isEnabled(),false);
   // Miarka działa również po wyłączeniu Podglądu, bez ruszania mebla.
   await page.locator('#bView').click();p=await points();await tap(p.a);await tap(p.b);assert.equal(await page.locator('[data-mdel]').count(),1);assert.ok((await page.locator('#mStatus').innerText()).includes('970 mm'));
-  assert.equal(await page.evaluate(()=>localStorage.getItem('ogrodniki-rzut-v30:E2')),original);
+  assert.equal(await page.evaluate(()=>localStorage.getItem('ogrodniki-rzut-v31:E2')),original);
   await page.screenshot({path:'/tmp/ogrodniki-mobile-measure.png'});
   // Wyczyść działa bez klawiatury; wyjście z miarki chowa jej pasek.
   await page.locator('#mClear').click();assert.equal(await page.locator('[data-mdel]').count(),0);

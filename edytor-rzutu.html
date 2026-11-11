@@ -218,7 +218,8 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 'use strict';
 const $ = s => document.querySelector(s);
 const svg = $('#cv');
-const LS = 'ogrodniki-rzut-v30';
+const LS = 'ogrodniki-rzut-v31';
+const KITCHEN_LS = 'ogrodniki-rzut-v30';
 const WINDOW_LS = 'ogrodniki-rzut-v29';
 const ISLAND_LS = 'ogrodniki-rzut-v28';
 const WALL_LS = 'ogrodniki-rzut-v27';
@@ -1197,7 +1198,40 @@ function variantE2(){
   enlargeE2Island(s);
   enlargeE2Window5(s);
   optimizeE2Kitchen(s);
+  resizeE2Corner(s);
   return s;
+}
+
+// Gabaryt od użytkownika. Zachowaj narożnik SW; głębokości ramion nadal poglądowe.
+function resizeE2Corner(s){
+  const corner=s.furn.find(f=>f.id===76);
+  if(corner?.key!=='corner')return;
+  const old=furnBox(corner);
+  Object.assign(corner,{w:3050,d:2200,rot:90,x:old.x1+1100,y:old.y2-1525,
+    parts:[[0,1300/2200,1,900/2200],[2050/3050,0,1000/3050,1300/2200]],sleepingUnverified:true});
+  corner.z=corner.z||[];
+  corner.z[0]={...(corner.z[0]||Z('front',600,'dojście po rozłożeniu')),rect:[0,-600,3050,600]};
+  // Konserwatywna rezerwa całego prostokąta, nie deklaracja mechanizmu nowego modelu.
+  corner.z[1]={...(corner.z[1]||Z('front',1300,'po rozłożeniu',{k:'unfold'})),d:1300,rect:[0,0,2050,1300]};
+  if(corner.name==='Narożnik 230×151 — dłuższy bok przy ścianie zachodniej')corner.name='Narożnik 305×220 — dłuższy bok przy ścianie zachodniej';
+  const obsolete=['Dłuższy bok 230 cm przy ścianie zachodniej, krótszy 151 cm przy południowej; siedziska skierowane na wschód i północ.',
+    'Gabaryt odniesienia IKEA FRIHETEN, otomana od południa. Spanie 140×204 cm; pełny obrys narożnika rezerwuje miejsce rozłożenia.',
+    'Prawa krawędź narożnika kończy się 84 cm przed początkiem otworu HST.'];
+  corner.notes=[...(corner.notes||[]).filter(n=>!obsolete.includes(n)&&!n.startsWith('Gabaryt E2-M76 — ')),
+    'Gabaryt E2-M76 — 305×220 cm: dłuższy bok przy zachodniej ścianie, krótszy przy południowej. Głębokości ramion 90/100 cm poglądowe. Model i funkcja spania niepotwierdzone; strefa rozłożenia zachowawczo rezerwuje cały obrys 220×305 cm, nie oznacza rzeczywistego łóżka. W ustawieniu domyślnym do początku HST 15 cm wzdłuż ściany, otwór dostępny od północy.'];
+  const sofa=s.furn.find(f=>f.id===75);
+  if(sofa?.key!=='sofabed'||sofa.rot!==0)return;
+  const bodies=furnBodies(corner),sofaBody=furnBox(sofa),reserve=furnZones(corner)[1];
+  const overlaps=(a,b)=>Math.min(a.x2,b.x2)-Math.max(a.x1,b.x1)>20&&Math.min(a.y2,b.y2)-Math.max(a.y1,b.y1)>20;
+  const conflict=bodies.some(b=>overlaps(b,sofaBody)||furnZones(sofa).some((q,i)=>sofa.z[i].k==='unfold'&&overlaps(b,q)))||overlaps(reserve,sofaBody);
+  if(conflict){
+    // Minimalne przesunięcie w prawo i w górę: bez kolizji obu mebli zamkniętych
+    // i każdego rozłożonego osobno w konserwatywnej rezerwie narożnika.
+    sofa.x+=Math.max(0,old.x1+900-sofaBody.x1);
+    sofa.y-=Math.max(0,sofaBody.y2-(old.y2-3050-30));
+  }
+  sofa.notes=[...(sofa.notes||[]).filter(n=>n!=='Do narożnika 46 cm między korpusami (to nie przejście); po rozłożeniu sofy 3 cm odstępu. Oba pola spania rozłączne, dostęp od wschodu.'&&!n.startsWith('M75 przy większym narożniku — ')),
+    'M75 przy większym narożniku — górne ramię U pozostaje skierowane na południe. W ustawieniu domyślnym sofa przesunięta 90 cm w prawo i 32 cm w górę; 3 cm między zamkniętymi obrysami to nie przejście. Rozkładanie obu mebli jednocześnie niepotwierdzone: konserwatywna rezerwa M76 nachodzi na pole spania M75 na 40 cm.'];
 }
 
 // Ergonomia L: lodówka bliżej zlewu, płyta 30 cm na zachód; ID wyposażenia zostają.
@@ -2084,9 +2118,9 @@ function defaults(s){
   return s;
 }
 
-// V30 aktualizuje wyposażenie M71/M72; wcześniejsze migracje zależą od źródłowej wersji zapisu.
+// V31 powiększa M76 i usuwa wynikającą kolizję M75; stare migracje zależą od wersji.
 function loadSavedVariant(v){
-  for(const key of [LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
+  for(const key of [LS,KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
     try{
       const raw=localStorage.getItem(key+':'+v);if(!raw)continue;
       const s=defaults(JSON.parse(raw));s.variant=v;
@@ -2109,7 +2143,8 @@ function loadSavedVariant(v){
       if([RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')alignE2Wall42(s);
       if([WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')enlargeE2Island(s);
       if([ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')enlargeE2Window5(s);
-      if(key!==LS&&v==='E2')optimizeE2Kitchen(s);
+      if([WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')optimizeE2Kitchen(s);
+      if(key!==LS&&v==='E2')resizeE2Corner(s);
       return s;
     }catch(e){}
   }

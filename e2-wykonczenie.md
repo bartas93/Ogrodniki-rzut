@@ -130,3 +130,12 @@ Poszerzone z 90 do 120 cm, środek bez zmian (x=8600), otwór x=8000–9200 mm. 
 Aktualizacja M71/M72: lodówka bliżej zlewu, piekarnik na południowym końcu słupków, płyta 30 cm w lewo. Trójkąt między środkami frontów skrócony z 6,72 do 5,51 m (boki 1,22/1,60/2,69 m). Blat między zlewem a płytą 90 cm, dodatkowo wyspa 170×90 i prawy blat 100 cm z pierwszymi 40 cm wolnymi przy płycie. Zamiast deklarowanej szafy zapasów 100 cm: realnie dostępny słupek 40 cm oraz niski ślepy narożnik 60 cm za północnym blatem.
 
 Przejścia przy zamkniętych urządzeniach pozostają 130/130/90 cm. Otwarta zmywarka ogranicza przejście do około 70 cm; odkładanie z piekarnika wymaga przeniesienia na wyspę przez 130 cm. To kompromisy opisane w [analizie ze schematem](kuchnia-E2-ergonomia.md), razem z ograniczeniami doboru AGD i okapu. V30 migruje z v29 tylko wyposażenie/opisy M71/M72, zachowuje istniejące ID i pozostałe edycje. Testy: `tools/check_e2_kitchen.js` oraz wcześniejsze kontrole geometrii i przeglądarki.
+
+
+## M76 — gabaryt użytkownika 305×220 cm
+
+Najnowszy [§20 wymagań](wymagania-projektowe.md#20-e2--rzeczywisty-gabaryt-narożnika-m76) zastępuje wcześniejsze wymiary 230×151, odniesienie do FRIHETEN i zapewnienie o jednoczesnym rozłożeniu obu mebli salonu. Narożnik stoi przy ścianach zachodniej i południowej, x=200–2400 i y=6950–10000 mm. Rysunek ramion 90/100 cm jest poglądowy; model i ewentualna funkcja spania niepotwierdzone.
+
+M75 przesunięta 90 cm w prawo i 32 cm w górę, front bez zmian na południe. Zamknięte meble są rozłączne; HST dostępne od północy. Są nowe ostrzeżenia stref krzeseł stołu (19%, po rozłożeniu 16%) i dojścia narożnika (10% zajęte przez stolik), obok wcześniejszych M101 i trzech PAX. Nie zmieniano progów ani nie wyłączano stref.
+
+Konserwatywna rezerwa rozłożenia M76 obejmuje cały obrys; nachodzi na spanie M75 na 40 cm. Nie oznacza to ustalonego rozkładania konkretnego narożnika — potrzebny model. Kontrola wykrywa kolizję obu rezerw jednocześnie; wcześniejszy wynik dla mniejszego mebla jej nie rozstrzyga. V31 przenosi v30, aktualizując tylko wskazane meble i zachowując resztę edycji oraz stare kopie. Testy: `check_e2_corner.js`, `check_e2_november.js`, `check_e2_room_updates.js`.
