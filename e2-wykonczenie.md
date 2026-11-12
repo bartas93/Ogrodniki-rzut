@@ -139,3 +139,16 @@ Najnowszy [§20 wymagań](wymagania-projektowe.md#20-e2--rzeczywisty-gabaryt-nar
 M75 przesunięta 90 cm w prawo i 32 cm w górę, front bez zmian na południe. Zamknięte meble są rozłączne; HST dostępne od północy. Są nowe ostrzeżenia stref krzeseł stołu (19%, po rozłożeniu 16%) i dojścia narożnika (10% zajęte przez stolik), obok wcześniejszych M101 i trzech PAX. Nie zmieniano progów ani nie wyłączano stref.
 
 Konserwatywna rezerwa rozłożenia M76 obejmuje cały obrys; nachodzi na spanie M75 na 40 cm. Nie oznacza to ustalonego rozkładania konkretnego narożnika — potrzebny model. Kontrola wykrywa kolizję obu rezerw jednocześnie; wcześniejszy wynik dla mniejszego mebla jej nie rozstrzyga. V31 przenosi v30, aktualizując tylko wskazane meble i zachowując resztę edycji oraz stare kopie. Testy: `check_e2_corner.js`, `check_e2_november.js`, `check_e2_room_updates.js`.
+
+
+## Projekt Główny — pomieszczenia pomocnicze i kuchnia 3D (12.11.2026)
+
+Najnowszy zakres: [§21 wymagań](wymagania-projektowe.md#21-projekt-główny--walk-in-pralnia-i-wc-12112026). Nazwa E2 na ekranie zmieniona na **Projekt Główny — domyślny**, techniczne ID/URL pozostają E2.
+
+Walk-in ma 310×167,5 cm zamiast 350×167,5: z 40 cm redukcji 5 cm trafia do wnęki M79 (głębokość 40), pozostałe 35 do pralni. Prysznic i umywalka zachowują wymiary, WC nadal obok umywalki na północy. Pralnia z dwoma BILLY 80×28×202 przy zachodniej ścianie, mocowanymi do niej jako regały stojące; suche przechowywanie i mocowanie do sprawdzenia z instrukcją IKEA.
+
+W łazience z wanną umywalka 60 cm zamiast 80 uwalnia WC: wydzielona szerokość 90 cm, rzeczywisty odstęp umywalka–wanna 92,5 cm. Garderoba nie zmniejszona, jej przejście 100 cm i meble zachowane. Zero problemów i brak niedostępnych pomieszczeń w stanie codziennym i stołu; pozostaje siedem jawnych ostrzeżeń, w tym nowe 6% strefy umywalki przy ścianie w rastrze. Nie zmieniano progów kontroli. Niepotwierdzone jednoczesne spanie M75/M76 pozostaje ograniczeniem.
+
+V32 przenosi v31, aktualizując wyłącznie wskazane ściany, wyposażenie dwóch łazienek, wnękę i dwa nowe regały, z zachowaniem nazw, notatek, pozostałych edycji oraz wariantów. Bieżące v32 nie jest ponownie migrowane, kopie pozostają. Test `tools/check_main_project.js` oraz testy przeglądarkowe.
+
+[Osobna kuchnia 3D](https://bartas93.github.io/Ogrodniki-rzut/kuchnia3d.html) jest funkcjonalnym planerem zawartości i mechanizmów opartym na **Castoramie**. Ma własny zapis, interaktywne fronty i szuflady, inwentarz, notatki, kontrolę gabarytu pojedynczej sztuki oraz JSON/CSV/PNG/wydruk. [Pełny zakres i źródła](kuchnia3d-plan.md), w tym wyjątki wymagające doboru lub wykonania na wymiar, zachowana geometria i ograniczenia komunikacji przy otwartych frontach. Brak synchronizacji z 2D i zapisu w chmurze.

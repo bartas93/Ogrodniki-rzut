@@ -24,8 +24,8 @@ for(const name of ['Wyspa 140×90 — blat roboczy','Moja własna wyspa']){
  assert.equal(JSON.stringify(m.furn.filter(f=>f.id!==73)),JSON.stringify(old.furn.filter(f=>f.id!==73)),'Inne meble bez zmian');
  for(const key of Object.keys(old).filter(k=>k!=='furn'))assert.equal(JSON.stringify(m[key]),JSON.stringify(old[key]),'Zachowaj '+key);
  assert.equal(saved.get('ogrodniki-rzut-v27:E2'),JSON.stringify(old),'Stara kopia pozostaje');
- const current=clone(m);current.furn.find(f=>f.id===73).w=1600;saved.set('ogrodniki-rzut-v31:E2',JSON.stringify(current));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(current),'Nie nadpisuj edycji v31');
+ const current=clone(m);current.furn.find(f=>f.id===73).w=1600;saved.set('ogrodniki-rzut-v32:E2',JSON.stringify(current));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(current),'Nie nadpisuj edycji v32');
  for(const v of ['E2S','R1','R2','R3']){const state=clone(api.fresh(v));state.furn[0].name='Własny '+v;saved.set('ogrodniki-rzut-v27:'+v,JSON.stringify(state));assert.equal(JSON.stringify(launch(saved).load(v)),JSON.stringify(state),v+' bez synchronizacji');}
- old.furn=old.furn.filter(f=>f.id!==73);saved.delete('ogrodniki-rzut-v31:E2');saved.set('ogrodniki-rzut-v27:E2',JSON.stringify(old));assert.ok(!launch(saved).state().furn.some(f=>f.id===73),'Nie odtwarzaj usuniętej wyspy');
+ old.furn=old.furn.filter(f=>f.id!==73);saved.delete('ogrodniki-rzut-v32:E2');saved.set('ogrodniki-rzut-v27:E2',JSON.stringify(old));assert.ok(!launch(saved).state().furn.some(f=>f.id===73),'Nie odtwarzaj usuniętej wyspy');
 }
 console.log('E2_ISLAND_OK: 170×90 cm, 130 cm od północy i zachodu, 90 cm od wschodu, 75 cm przy 10 krzesłach; migracja wyłącznie M73');

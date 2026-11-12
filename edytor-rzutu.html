@@ -124,6 +124,7 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
     <button id="bExp" title="Zapisz wariant do pliku">Zapisz JSON</button>
     <button id="bImp" title="Wczytaj wariant z pliku">Wczytaj JSON</button>
     <button id="bPng">Eksport PNG</button>
+    <a href="kuchnia3d.html" title="Projekt Główny — planowanie kuchni, szafek i przechowywania" style="color:#625039;padding:6px 8px">Kuchnia 3D ↗</a>
     <button id="bReset" title="Wróć do rzutu z PDF">Reset</button>
     <input type="file" id="fImp" accept=".json,application/json" hidden>
   </div>
@@ -218,7 +219,8 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 'use strict';
 const $ = s => document.querySelector(s);
 const svg = $('#cv');
-const LS = 'ogrodniki-rzut-v31';
+const LS = 'ogrodniki-rzut-v32';
+const CORNER_LS = 'ogrodniki-rzut-v31';
 const KITCHEN_LS = 'ogrodniki-rzut-v30';
 const WINDOW_LS = 'ogrodniki-rzut-v29';
 const ISLAND_LS = 'ogrodniki-rzut-v28';
@@ -1199,7 +1201,50 @@ function variantE2(){
   enlargeE2Window5(s);
   optimizeE2Kitchen(s);
   resizeE2Corner(s);
+  reviseE2UtilityRooms(s);
   return s;
+}
+
+// Projekt Główny: 40 cm z szerokości walk-in = 5 cm wnęki i 35 cm pralni.
+function reviseE2UtilityRooms(s){
+  const wall=id=>s.walls.find(w=>w.id===id),f=id=>s.furn.find(f=>f.id===id);
+  const note=(it,text)=>{if(it)it.notes=[...(it.notes||[]).filter(n=>!n.startsWith('Projekt Główny 12.11 — ')),'Projekt Główny 12.11 — '+text];};
+  const left=wall(24),right=wall(33),north=wall(31);
+  if(left)left.x1=left.x2=5175;
+  if(right)right.x1=right.x2=8425;
+  if(north)north.x2=8425;
+  const niche=f(79);
+  if(niche?.key==='shelf'){
+    niche.d=400;niche.x=4900;
+    if(niche.name==='Wnęka 167,5×35 — książki i dokumenty')niche.name='Wnęka 167,5×40 — książki i dokumenty';
+    note(niche,'głębokość 40 cm (+5 cm), kosztem szerokości łazienki walk-in; front od salonu bez przesunięcia.');
+  }
+  for(const [id,key,x] of [[83,'walkin120',5250],[84,'instwall',6600],[85,'sink80',6600]]){
+    const it=f(id);if(it?.key===key)it.x=x+it.w/2;
+  }
+  const installation=f(86),wc=f(87);
+  if(installation?.key==='instwall'){installation.w=900;installation.x=7900;}
+  if(wc?.key==='wcw'){wc.x=7900;note(wc,'przy północnej ścianie obok umywalki; strefa stelaża 90 cm, po zwężeniu pomieszczenia do 310 cm.');}
+  // Nowe obiekty dostają wolne numery; nie przeliczaj istniejących ID w zapisach użytkownika.
+  s.nextId=Math.max(s.nextId||1,1+Math.max(0,...s.furn.map(it=>it.id),...s.walls.map(w=>w.id),...s.walls.flatMap(w=>w.op.map(o=>o.id)),...s.rooms.map(r=>r.id)));
+  if(right)for(const [i,y] of [2950,3770].entries()){
+    const tag='nov12-billy-'+i;if(s.furn.some(it=>it.presetTag===tag))continue;
+    const book=makeFurn(s.nextId++,'shelf',8640,y,270);
+    Object.assign(book,{w:800,d:280,presetTag:tag,name:'BILLY 80×28×202 — '+(i?'ręczniki i zapasy':'kosze i akcesoria'),joinery:{height:2020,nominalWidth:800,bodyDepth:280},
+      notes:['IKEA BILLY 80×28×202 cm; regał stojący przymocowany do ściany, nie szafka wisząca.','W suchej części pralni, poza rozbryzgiem zlewu; warunki wilgotności i mocowanie zgodnie z instrukcją producenta.']});
+    s.furn.push(book);
+  }
+  const basin=f(127),toilet=f(128);
+  if(basin&&['sink80','sink60'].includes(basin.key)){
+    Object.assign(basin,{key:'sink60',w:600,y:6125});
+    if(basin.name==='Umywalka 80 + lustro')basin.name='Umywalka 60 + lustro';
+    note(basin,'umywalka zmniejszona do 60 cm; między jej krawędzią a wanną 92,5 cm, bez zmniejszania garderoby.');
+  }
+  if(toilet?.key==='wcw'){
+    toilet.y=6875;
+    if(toilet.z[0])Object.assign(toilet.z[0],{ex:(900-toilet.w)/2,c0:0,c1:0,rect:null,strict:true});
+    note(toilet,'wydzielona strefa szerokości 90 cm (po 45 cm od osi); między umywalką a wanną 92,5 cm. Garderoba i jej przejście 100 cm bez zmian.');
+  }
 }
 
 // Gabaryt od użytkownika. Zachowaj narożnik SW; głębokości ramion nadal poglądowe.
@@ -2088,7 +2133,7 @@ const VARIANTS = {
   D: {name:'D — wejście od wschodu 16,60 × 10,20', build: variantD},
   E: {name:'E — D z poprawkami 17,40 × 10,20', build: () => variantE()},
   E1: {name:'E1 — E kompakt 16,95 × 10,20', build: variantE1},
-  E2: {name:'E2 — poprawiony układ, wyjście z pralni, okap 1 m', build: variantE2},
+  E2: {name:'Projekt Główny — domyślny', build: variantE2},
   E2S: {name:'E2S — kopia E2, kuchnia na południu', build: variantE2South},
   E3: {name:'E3 — E + prysznic przy salonie, wanna przy sypialniach', build: () => variantE({baths:true})},
   E4: {name:'E4 — E2 + E3 + gabinet od północy', build: () => variantE({exit:true, baths:true, office:true})},
@@ -2118,9 +2163,9 @@ function defaults(s){
   return s;
 }
 
-// V31 powiększa M76 i usuwa wynikającą kolizję M75; stare migracje zależą od wersji.
+// V32: walk-in, wnęka, pralnia/BILLY i szerokość przy WC. Stare edycje zachowane.
 function loadSavedVariant(v){
-  for(const key of [LS,KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
+  for(const key of [LS,CORNER_LS,KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
     try{
       const raw=localStorage.getItem(key+':'+v);if(!raw)continue;
       const s=defaults(JSON.parse(raw));s.variant=v;
@@ -2144,7 +2189,8 @@ function loadSavedVariant(v){
       if([WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')enlargeE2Island(s);
       if([ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')enlargeE2Window5(s);
       if([WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')optimizeE2Kitchen(s);
-      if(key!==LS&&v==='E2')resizeE2Corner(s);
+      if([KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')resizeE2Corner(s);
+      if(key!==LS&&v==='E2')reviseE2UtilityRooms(s);
       return s;
     }catch(e){}
   }

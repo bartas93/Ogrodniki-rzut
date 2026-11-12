@@ -30,6 +30,6 @@ for(const key of Object.keys(old).filter(k=>k!=='furn'))assert.equal(JSON.string
 for(const id of [71,72]){const changed=get(m,id),previous=get(old,id);for(const key of Object.keys(previous).filter(k=>!['equipment','nextEquipmentId','notes'].includes(k)))assert.equal(JSON.stringify(changed[key]),JSON.stringify(previous[key]),'M'+id+' '+key);assert.ok(changed.notes.includes('Moja uwaga '+id));}
 assert.equal(get(m,71).equipment.find(e=>e.kind==='fridge').id,1);assert.equal(get(m,72).equipment.find(e=>e.kind==='hob').id,5);
 assert.equal(saved.get('ogrodniki-rzut-v29:E2'),JSON.stringify(old));
-const custom=clone(m);get(custom,72).equipment.find(e=>e.id===5).x+=20;saved.set('ogrodniki-rzut-v31:E2',JSON.stringify(custom));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(custom),'Nie powtarzaj migracji v31');
+const custom=clone(m);get(custom,72).equipment.find(e=>e.id===5).x+=20;saved.set('ogrodniki-rzut-v32:E2',JSON.stringify(custom));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(custom),'Nie powtarzaj migracji v32');
 for(const v of ['E2S','R1','R2','R3']){const state=clone(api.fresh(v));saved.set('ogrodniki-rzut-v29:'+v,JSON.stringify(state));assert.equal(JSON.stringify(launch(saved).load(v)),JSON.stringify(state),v);}
 console.log('E2_KITCHEN_OK: trójkąt '+lengths.map(l=>(l/1000).toFixed(2)).join(' / ')+' m, blat 90 cm, dostępne zapasy 40 cm + niski narożnik, trwałe ID i migracja tylko M71/M72');

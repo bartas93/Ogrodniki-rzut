@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f4f1e9">
+<link rel="icon" href="data:,">
+<title>Kuchnia 3D — Projekt Główny</title>
+<link rel="stylesheet" href="kuchnia3d.css">
+</head>
+<body>
+<header class="app-header">
+  <a class="back" href="edytor-rzutu.html?variant=E2" aria-label="Wróć do rzutu domu">← <span>Rzut domu</span></a>
+  <div class="identity"><span class="eyebrow">PROJEKT GŁÓWNY</span><h1>Kuchnia <span>do zaplanowania.</span></h1></div>
+  <div class="file-actions"><button id="undo" title="Cofnij zmianę" disabled>↶ <span>Cofnij</span></button><button id="redo" title="Ponów zmianę" disabled>↷</button><button id="export">Zapisz JSON</button><button id="import">Wczytaj</button><button id="print">Wydruk</button><button id="help" class="circle" aria-label="Jak korzystać z planera">?</button></div>
+  <input type="file" id="importFile" accept=".json,application/json" hidden>
+</header>
+<main class="workspace">
+  <aside class="catalog" id="catalog" aria-label="Lista szafek">
+    <div class="section-head"><div><span class="eyebrow">01 / UKŁAD</span><h2>Twoje szafki</h2></div><span class="pill">17 modułów</span></div>
+    <p class="muted intro">Baza: <strong>Castorama · GoodHome Caraway</strong>. Wybierz szafkę, zajrzyj do środka i przypisz jej zawartość.</p>
+    <label class="search"><span class="sr-only">Szukaj szafki lub jej zawartości</span><input id="moduleSearch" type="search" placeholder="Szukaj: garnki, I2…"></label>
+    <div id="moduleList"></div>
+    <button class="inventory-link" id="inventoryButton"><span>Lista całego wyposażenia</span><span aria-hidden="true">↗</span></button>
+    <p class="micro">Kody N, W, I i R opisują moduły tego planera. W szczegółach znajdziesz powiązanie z ID rzutu.</p>
+  </aside>
+  <section class="stage" aria-label="Interaktywny model kuchni">
+    <div class="scene-toolbar">
+      <div class="view-tabs" role="group" aria-label="Ujęcie kuchni"><button data-view="perspective" class="active">Perspektywa</button><button data-view="top">Z góry</button><button data-view="north">Pod oknem</button><button data-view="west">Słupki</button></div>
+      <div class="scene-tools"><button id="zoomOut" aria-label="Oddal model">−</button><button id="zoomIn" aria-label="Przybliż model">+</button><button id="screenshot" title="Pobierz widok jako PNG" aria-label="Zapisz obraz 3D">▧ PNG</button></div>
+    </div>
+    <div id="viewer" tabindex="0" aria-label="Model 3D. Przeciągnij, aby obrócić. Kółko myszy lub dwa palce przybliżają. Szafkę można wybrać także z listy.">
+      <div id="loading" role="status">Przygotowuję kuchnię…</div>
+      <div id="sceneLabels"></div>
+      <div id="noWebGL" hidden>Ta przeglądarka nie uruchomiła widoku 3D. Planowanie szafek, lista wyposażenia i zapis nadal działają. Spróbuj włączyć akcelerację grafiki lub otworzyć stronę w Chrome / Safari.</div>
+    </div>
+    <div class="view-options"><label><input type="checkbox" id="labels" checked> Oznaczenia</label><label><input type="checkbox" id="dimensions" checked> Wymiary</label><label><input type="checkbox" id="appliances" checked> Sprzęty na blacie</label><button id="openAll">Otwórz wszystkie</button></div>
+    <div class="scene-footer"><span id="sceneHint">Przeciągnij, żeby obrócić · stuknij szafkę · dwa palce = zoom</span><span class="measure-chip">Wyspa 170 × 90 cm</span></div>
+    <div id="clearance" class="clearance" hidden></div>
+    <nav class="mobile-tabs" aria-label="Panel planowania"><button id="showCatalog">Lista szafek</button><button id="showDetails" class="active">Wybrana szafka</button><button id="mobileInventory">Wyposażenie</button></nav>
+  </section>
+  <aside class="details" id="details" aria-label="Właściwości wybranej szafki"><div id="detailContent"></div></aside>
+</main>
+<footer class="summary-bar"><button id="coverageButton"><span class="status-dot"></span><span id="coverage">Przeliczam wyposażenie…</span><span aria-hidden="true">→</span></button><span id="saveStatus" role="status">Zapis w tej przeglądarce</span><button id="csv">Zestawienie CSV ↓</button></footer>
+<dialog id="inventoryDialog" class="wide-dialog">
+ <div class="dialog-top"><div><span class="eyebrow">02 / PRZECHOWYWANIE</span><h2>Co ma się zmieścić?</h2></div><button data-close class="circle" aria-label="Zamknij listę wyposażenia">×</button></div>
+ <p class="muted">Ilości i gabaryty na start są propozycją. Dopasuj je do swoich naczyń. Kontrola gabarytu dotyczy jednej sztuki; nie potwierdza pojemności stosów ani nośności prowadnic.</p>
+ <div class="inventory-filters"><input id="inventorySearch" type="search" placeholder="Szukaj wyposażenia" aria-label="Szukaj wyposażenia"><label><input id="missingOnly" type="checkbox"> Tylko brakujące / do sprawdzenia</label></div>
+ <div id="inventoryRows"></div>
+ <form id="newItem"><h3>Dodaj własną pozycję</h3><div class="add-item"><input id="newName" required maxlength="120" placeholder="Np. duża brytfanna" aria-label="Nazwa nowej pozycji"><input id="newQty" type="number" value="1" min="0" max="999" required aria-label="Liczba sztuk nowej pozycji"><button class="primary">Dodaj</button></div></form>
+ <label class="field"><span>Uwagi do całego planu</span><textarea id="planNotes" maxlength="4000" placeholder="Np. liczbę kompletów zastawy lub wybrany system szuflad…"></textarea></label>
+ <div class="dialog-bottom"><button id="inventoryCsv">Zapisz zestawienie CSV</button><button data-close class="primary">Gotowe</button></div>
+</dialog>
+<dialog id="helpDialog">
+ <div class="dialog-top"><h2>Od szafki do gotowego planu</h2><button data-close class="circle" aria-label="Zamknij pomoc">×</button></div>
+ <ol><li>Wybierz szafkę. Przyciskiem „Otwórz” zobaczysz front i wnętrze.</li><li>Wybierz mechanizm: szuflady, cargo, półki lub pionowe przegrody. Dobierz liczbę poziomów.</li><li>Przypisz przedmioty do przegród. Na liście wyposażenia zmień ich ilości i gabaryty.</li><li>Po zmianie mechanizmu stare przypisania pozostają. Niepasujące przegrody trzeba wskazać ponownie.</li><li>Zapis działa w tej przeglądarce. JSON służy do kopii i przenoszenia planu, CSV i wydruk do rozmowy ze stolarzem.</li></ol>
+ <p>Układ odpowiada kuchni Projektu Głównego: ciąg 390 cm, słupki 160 cm + ślepy narożnik 60 cm, wyspa 170×90 cm i przejścia 130 cm. Prawy odcinek 100 cm roboczo podzielono na 2×50 cm. Wyspa: korpusy 60 cm od kuchni i 30 cm od jadalni.</p>
+ <p><strong>To plan koncepcyjny oparty na Castoramie.</strong> Korpusy Caraway mają płytę 18 mm, wysokość 72 cm i głębokość 57 cm. Z nogami 15 cm i blatem 3 cm dają wysokość 90 cm. Słupki AGD przyjęto z paneli 219 cm + nogi 15 cm: 234 cm, do kompletacji z półkami i frontami. Każdy moduł pokazuje kartę produktu albo informację o konieczności dopasowania.</p>
+ <p>Tył wyspy 30 cm oraz słupek 40 cm oznaczono jako elementy do dopasowania / na wymiar. Nie potwierdzono dla nich gotowego kompletnego korpusu Caraway. Dwa standardowe rzędy z frontami przekraczają 90 cm głębokości wyspy. Karty produktów sprawdzono 12.11.2026; stany magazynowe i kompletację trzeba potwierdzić w sklepie.</p>
+ <p>Wymiary przegród są szacunkowymi rezerwami na wyposażenie, po uwzględnieniu przybliżonego miejsca prowadnic. Zawiasy, syfon, rezerwę płyty, wentylację AGD, udźwig i pełne otwarcie sprawdź z wykonawcą i instrukcjami wybranych produktów. Nie wszystkie pokazane warianty mechanizmów mają potwierdzony komplet katalogowy.</p>
+ <p>Kolory i podziały frontów są poglądowe. Zmiany wyposażenia zapisują się osobno od rzutu domu. Wczytanie JSON z edytora rzutu nie zastępuje pliku tego planera. Biblioteka 3D jest dołączona do strony; model nie potrzebuje zewnętrznego CDN.</p>
+ <p><a href="kuchnia3d-plan.md">Plan modułów i źródła Castoramy</a> · <a href="kuchnia-E2-ergonomia.md">Analiza układu i ograniczenia</a> · <a href="vendor/three/LICENSE">Three.js — licencja MIT</a></p>
+</dialog>
+<dialog id="confirmDialog"><h2>Przywrócić propozycję wyposażenia?</h2><p>Aktualny plan zostanie zastąpiony. Najpierw możesz zapisać kopię JSON. Rzut domu pozostaje osobno.</p><div class="dialog-bottom"><button id="cancelReset">Anuluj</button><button id="confirmReset" class="primary">Przywróć propozycję</button></div></dialog>
+<div id="toast" role="status" hidden></div>
+<section id="printReport" aria-label="Zestawienie do wydruku"></section>
+<noscript><p>Planer wymaga włączonego JavaScript. <a href="kuchnia-E2-ergonomia.md">Opis kuchni</a>.</p></noscript>
+<script type="module" src="kuchnia3d.mjs"></script>
+</body>
+</html>

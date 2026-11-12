@@ -216,3 +216,24 @@ Przemyślany układ L z wyspą roboczą; bez zmian pozostałych wariantów. Szcz
 - HST nie zasłonięte; do początku otworu 15 cm wzdłuż ściany (nie szerokość drogi), dojście od północy sprawdzone rastrem. Stan codzienny i stół 280 cm: zero problemów i wszystkie pomieszczenia dostępne. Nowe uwagi: sofa częściowo zajmuje strefę krzeseł stołu (19%, przy stanie 10 osób 16%); stolik zajmuje 10% strefy dojścia do narożnika. Pozostają wcześniejsze M101 i trzy PAX.
 - **Jednoczesne spanie na M75 i M76 niepotwierdzone.** Funkcja spania nowego modelu nieznana. Kontrola zachowawczo rezerwuje cały prostokąt narożnika; ta rezerwa nachodzi na pole spania M75 na 40 cm. Nie wyłączać tej kontroli ani nie zmniejszać strefy, aby uzyskać pozornie poprawny wynik. Pozostałe miejsca spania sprawdzone z M75 lub alternatywnie rezerwą M76; rozłożona rezerwa M76 uniemożliwia wtedy rozłożenie M75. Wcześniejsze zapewnienie o jednoczesnym rozłożeniu obu mebli jest nieaktualne.
 - Zapis v31 migruje z v30 wyłącznie M76 i M75: nowe wymiary/kształt narożnika z zachowaniem jego narożnika SW oraz przesunięcie sofy tylko przy konflikcie. Zachowuje własne nazwy, warstwy, notatki, pozostałe edycje i warianty. Nie odtwarza usuniętego M76. V31 ma pierwszeństwo; stare kopie pozostają. Test `tools/check_e2_corner.js`.
+
+
+## 21. Projekt Główny — walk-in, pralnia i WC (12.11.2026)
+
+- **[DECYZJA]** Nazwa widoczna E2 to **Projekt Główny — domyślny**. Zwykły link nadal zawsze otwiera ten projekt. Techniczny kod E2, ID, URL `?variant=E2` i niezależne zapisy pozostają.
+- Walk-in zwężony **o 40 cm**: 5 cm od zachodu na głębokość wnęki M79 (35→40 cm, front bez przesunięcia), 35 cm od wschodu na pralnię. Oś S24 x=5175, S33 x=8425; S31 kończy się na S33. Wnętrze łazienki 310×167,5 cm, x=5250–8350. Prysznic 130×90 i umywalka 80 zachowane; WC obok umywalki przy północnej ścianie, stelaż 90 cm. Instalacje do koordynacji.
+- Przy odzyskanej zachodniej ścianie pralni dwa stojące **IKEA BILLY 80×28×202 cm**, frontem na wschód: x=8500–8780, y=2550–3350 i 3370–4170. Ściana jest miejscem mocowania regałów, nie wieszania ich jako szafek. Tylko sucha część pralni, poza rozbryzgiem; sprawdzić mocowanie i warunki wilgotności według producenta. [Karta IKEA](https://www.ikea.com/pl/pl/p/billy-regal-bialy-00263850/). Domyślne nowe ID M145/M146; przy migracji numery dobierane spośród wolnych, bez nadpisywania dodanych obiektów.
+- Łazienka z wanną: M127 umywalka zmniejszona **80→60 cm**, y=6125; M128 oś WC y=6875. Pełna strefa WC ma **90 cm szerokości**, po 45 cm od osi, między y6425–7325. Między rzeczywistą krawędzią umywalki i wanną **92,5 cm**. Garderoba, jej wyposażenie i przejście 100 cm bez zmian.
+- Kontrola codzienna i stołu: zero problemów, dostęp do wszystkich pomieszczeń. Siedem ostrzeżeń: wcześniejsze M101 12%, trzy PAX 25%, stół 19%/16%, dojście do M76 10%; dodatkowo 6% strefy umywalki 60 przy ścianie w rastrze 50 mm. Jej nominalna strefa kończy się na gotowym licu; nie obniżano progów ani nie zmniejszano stref w celu usunięcia ostrzeżenia. Ograniczenie jednoczesnego spania M75/M76 z §20 pozostaje.
+- Zapis **v32** migruje v31, zmieniając tylko S24/S31/S33, M79/M83–M87/M127/M128 i dodając BILLY. Własne nazwy i notatki, pozostałe obiekty, garderoba, kuchnia, M75/M76 i pozostałe warianty zachowane. V31 nie przechodzi ponownie korekty narożnika ani kuchni. Bieżący v32 ma pierwszeństwo; stare kopie pozostają. Import JSON odtwarza plik.
+
+Test: `timeout 30s node tools/check_main_project.js`; widok komputerowy i telefoniczny: `timeout 60s node tools/check_browser.js`.
+
+
+## 22. Osobny planer kuchni 3D — Castorama (12.11.2026)
+
+**[DECYZJA]** Użyć oferty Castoramy jako podstawy korpusów i wyposażenia kuchni. [Planer](https://bartas93.github.io/Ogrodniki-rzut/kuchnia3d.html) umożliwia planowanie mechanizmów, przegród i zawartości. [Moduły, zweryfikowane karty produktów, proponowane rozmieszczenie i ograniczenia](kuchnia3d-plan.md).
+
+Zachowuje domyślną geometrię kuchni Projektu Głównego i własny zapis, niezależny od edytora. Baza GoodHome Caraway 72×57 cm, nogi 15 i blat 3 cm; dziewięć standardowych dolnych korpusów 30/50/60/80 cm. Słupki AGD do kompletacji z paneli 219 cm, W3 40 cm do dopasowania, płytki tył wyspy R1–R3 30 cm na wymiar. Wyjątków nie przedstawiać jako gotowych dostępnych produktów. Podziały frontów i mechanizmy są propozycjami, nie potwierdzonym kompletem zakupowym.
+
+Lista 28 kategorii uwzględnia zastawę, sztućce, garnki, patelnie, pokrywki, szkło, naczynia żaroodporne, blachy, pojemniki, zapasy, tekstylia, środki czystości i dodatkowe małe AGD. Ekspres, Thermomix, czajnik, dzbanek i noże są widoczne na blatach; położenia i gabaryty edytowalne. Otwarcia, pojedyncze szuflady, zawartość, przydziały, notatki, cofanie, JSON/CSV/wydruk/PNG i dotyk sprawdzone. Kontrola gabarytu jednej sztuki nie potwierdza pojemności stosów ani nośności. Nie wdrożono chmury ani automatycznego przenoszenia zmian do rzutu 2D.

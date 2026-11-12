@@ -68,7 +68,7 @@ assert.equal(saved.get('ogrodniki-rzut-v25:E2'),JSON.stringify(old),'Stary zapis
 const v26=clone(m);v26.walls.find(w=>w.id===42).x2=14025;v26.furn.find(f=>f.id===74).x+=100;v26.furn.find(f=>f.id===101).y+=50;
 saved.set('ogrodniki-rzut-v26:E2',JSON.stringify(v26));const expected27=clone(v26);expected27.walls.find(w=>w.id===42).x2=expected27.walls.find(w=>w.id===54).x1;
 assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(expected27),'Tylko x2 S42 może się zmienić');assert.equal(saved.get('ogrodniki-rzut-v26:E2'),JSON.stringify(v26),'Kopia v26 pozostaje');
-const v31=clone(expected27);v31.walls.find(w=>w.id===42).x2-=100;saved.set('ogrodniki-rzut-v31:E2',JSON.stringify(v31));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(v31),'V31 ma pierwszeństwo i nie jest ponownie migrowane');
+const v32=clone(expected27);v32.walls.find(w=>w.id===42).x2-=100;saved.set('ogrodniki-rzut-v32:E2',JSON.stringify(v32));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(v32),'V32 ma pierwszeństwo i nie jest ponownie migrowane');
 for(const v of ['E2S','R1','R2','R3']){const state=clone(api.fresh(v));state.furn[0].name='Własny '+v;saved.set('ogrodniki-rzut-v25:'+v,JSON.stringify(state));assert.equal(JSON.stringify(launch(saved).load(v)),JSON.stringify(state),v+' bez synchronizacji');}
 // V28 -> v29: tylko szerokość O5, również przy ręcznych wymiarach wysokości i własnych meblach.
 const v28=clone(s),oldWindow=v28.walls.flatMap(w=>w.op).find(o=>o.id===5);
@@ -76,6 +76,6 @@ oldWindow.w=900;oldWindow.height=1100;oldWindow.sill=1300;oldWindow.opening='Moj
 v28.furn.find(f=>f.id===73).w=1600;v28.furn.find(f=>f.id===73).x+=100;v28.walls.find(w=>w.id===42).x2-=100;
 const saved28=new Map([['ogrodniki-rzut-v28:E2',JSON.stringify(v28)]]),expected29=clone(v28);expected29.walls.flatMap(w=>w.op).find(o=>o.id===5).w=1200;
 assert.equal(JSON.stringify(launch(saved28).state()),JSON.stringify(expected29),'Z v28 migruje tylko szerokość O5');assert.equal(saved28.get('ogrodniki-rzut-v28:E2'),JSON.stringify(v28),'Kopia v28 zachowana');
-const custom31=clone(expected29);custom31.walls.flatMap(w=>w.op).find(o=>o.id===5).w=1400;saved28.set('ogrodniki-rzut-v31:E2',JSON.stringify(custom31));assert.equal(JSON.stringify(launch(saved28).state()),JSON.stringify(custom31),'Własna szerokość v31 ma pierwszeństwo');
-saved28.delete('ogrodniki-rzut-v31:E2');for(const w of v28.walls)w.op=w.op.filter(o=>o.id!==5);saved28.set('ogrodniki-rzut-v28:E2',JSON.stringify(v28));assert.ok(!launch(saved28).state().walls.flatMap(w=>w.op).some(o=>o.id===5),'Nie odtwarzaj usuniętego O5');
+const custom31=clone(expected29);custom31.walls.flatMap(w=>w.op).find(o=>o.id===5).w=1400;saved28.set('ogrodniki-rzut-v32:E2',JSON.stringify(custom31));assert.equal(JSON.stringify(launch(saved28).state()),JSON.stringify(custom31),'Własna szerokość v32 ma pierwszeństwo');
+saved28.delete('ogrodniki-rzut-v32:E2');for(const w of v28.walls)w.op=w.op.filter(o=>o.id!==5);saved28.set('ogrodniki-rzut-v28:E2',JSON.stringify(v28));assert.ok(!launch(saved28).state().walls.flatMap(w=>w.op).some(o=>o.id===5),'Nie odtwarzaj usuniętego O5');
 console.log('E2_ROOM_UPDATES_OK: O3, M101, M143, O52, M117/M116, M74; stół i spanie z alternatywnym M75/M76, S42 zlicowana z S54, O5 120 cm, trwałe ID i migracja bez utraty edycji');
