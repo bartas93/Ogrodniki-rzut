@@ -11,7 +11,7 @@ assert.equal(wall(s,33).x1-wall(s,24).x1-150,3100);assert.equal(get(s,79).d,400)
 const books=s.furn.filter(f=>f.presetTag?.startsWith('nov12-billy-'));assert.equal(books.length,2);
 for(const f of books){assert.equal(f.w,800);assert.equal(f.d,280);assert.equal(f.joinery.height,2020);assert.equal(f.rot,270);assert.equal(app.body(f)[0].x1,8500);assert.equal(app.body(f)[0].x2,8780);}
 const basin=app.body(get(s,127))[0],bath=app.body(get(s,129))[0],wcZone=app.zones(get(s,128))[0];
-assert.equal(get(s,127).w,600);assert.equal(bath.y1-basin.y2,925);assert.equal(wcZone.y2-wcZone.y1,900);assert.ok(wcZone.y1>=basin.y2&&wcZone.y2<=bath.y1);assert.equal(get(s,128).z[0].strict,true);
+assert.equal(get(s,127).w,600);assert.equal(bath.y1-basin.y2,1025);assert.equal(wcZone.y2-wcZone.y1,900);assert.ok(wcZone.y1>=basin.y2&&wcZone.y2<=bath.y1);assert.equal(get(s,128).z[0].strict,true);
 const a=app.analyse();for(const f of s.furn)assert.equal(a.fs.get(f.id)?.msgs.length||0,0,f.name);for(const r of s.rooms)assert.ok(a.roomReach.has(a.rooms.get(r.id)?.reg?.k),r.name);
 const old=clone(s);old.furn=old.furn.filter(f=>!f.presetTag?.startsWith('nov12-billy-'));
 wall(old,24).x1=wall(old,24).x2=5125;wall(old,33).x1=wall(old,33).x2=8775;wall(old,31).x2=8775;
@@ -26,6 +26,6 @@ for(const id of changed){assert.equal(get(m,id).name,'Moje M'+id);assert.ok(get(
 for(const key of Object.keys(old).filter(k=>!['furn','walls','nextId'].includes(k)))assert.equal(JSON.stringify(m[key]),JSON.stringify(old[key]),key);
 const unchangedWalls=s=>s.walls.filter(w=>![24,31,33].includes(w.id));assert.equal(JSON.stringify(unchangedWalls(m)),JSON.stringify(unchangedWalls(old)));
 assert.equal(new Set(m.furn.map(f=>f.id)).size,m.furn.length);assert.equal(saved.get('ogrodniki-rzut-v31:E2'),JSON.stringify(old));
-const own=clone(m);get(own,79).d=420;saved.set('ogrodniki-rzut-v32:E2',JSON.stringify(own));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(own),'Nie powtarzaj migracji v32');
+const own=clone(m);get(own,79).d=420;saved.set('ogrodniki-rzut-v33:E2',JSON.stringify(own));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(own),'Nie powtarzaj migracji v32');
 for(const v of ['E2S','R1','R2','R3']){const own=clone(app.fresh(v));saved.set('ogrodniki-rzut-v31:'+v,JSON.stringify(own));assert.equal(JSON.stringify(launch(saved).load(v)),JSON.stringify(own),v);}
 console.log('MAIN_PROJECT_OK: nazwa i domyślność, 40 cm = 5+35, dwa BILLY, WC 90 cm przy 60 cm umywalce, garderoba zachowana, niezależna migracja i ID');

@@ -223,7 +223,8 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 'use strict';
 const $ = s => document.querySelector(s);
 const svg = $('#cv');
-const LS = 'ogrodniki-rzut-v32';
+const LS = 'ogrodniki-rzut-v33';
+const UTILITY_LS = 'ogrodniki-rzut-v32';
 const CORNER_LS = 'ogrodniki-rzut-v31';
 const KITCHEN_LS = 'ogrodniki-rzut-v30';
 const WINDOW_LS = 'ogrodniki-rzut-v29';
@@ -373,6 +374,7 @@ const LIB = [
     {key:'washer', name:'Pralka', w:600, d:600, deco:'washer', z:[Z('front',900,'załadunek')]},
   ]},
   {cat:'Gospodarcze', items:[
+    {key:'robotdock', name:'Robot ze stacją — rezerwa 40×45', w:400, d:450, deco:'box', z:[Z('front',1000,'wyjazd i obsługa robota')]},
     {key:'steel', name:'Regał stalowy 90×60', w:900, d:600, deco:'shelves', z:[Z('front',750,'dostęp')]},
     {key:'dogbath', name:'Brodzik do mycia psa 100×80', w:1000, d:800, deco:'shower', z:[Z('front',800,'obsługa')]},
   ]},
@@ -1206,7 +1208,96 @@ function variantE2(){
   optimizeE2Kitchen(s);
   resizeE2Corner(s);
   reviseE2UtilityRooms(s);
+  reviseE2KitchenAndDoors(s);
   return s;
+}
+
+// Projekt Główny: kuchnia ze słupkami, otwory z rezerwą ościeżnic i wariant hokerów.
+function reviseE2KitchenAndDoors(s){
+  if(s.projectRevision>=33)return;
+  defaults(s); // Nadaj istniejące ID wyposażenia przed dodaniem nowych modułów.
+  s.projectRevision=33;
+  const f=id=>s.furn.find(it=>it.id===id),w=id=>s.walls.find(it=>it.id===id),op=id=>s.walls.flatMap(it=>it.op).find(it=>it.id===id);
+  const note=(it,text)=>{if(it)it.notes=[...(it.notes||[]).filter(n=>!n.startsWith('Aktualizacja 12.11 — ')),'Aktualizacja 12.11 — '+text];};
+  const rename=(it,old,text)=>{if(it&&(old.includes(it.name)))it.name=text;};
+  const west=f(71);
+  if(west?.key==='tall'){
+    west.notes=(west.notes||[]).filter(n=>!n.startsWith('Kuchnia E2 — '));
+    const oldBottom=west.y+west.w/2;
+    west.w+=600;west.y+=300;
+    for(const e of west.equipment||[])e.x+=600;
+    west.equipment=west.equipment||[];
+    const e3=west.equipment.find(e=>e.id===3);if(e3)Object.assign(e3,{kind:'cabinet',label:'BLAT 40',height:900});
+    const id=Math.max(west.nextEquipmentId||1,1+Math.max(0,...west.equipment.map(e=>e.id||0)));
+    west.equipment.push({id,kind:'cabinet',x:0,y:0,w:600,d:600,label:'SŁUPEK',height:2340});west.nextEquipmentId=id+1;
+    rename(west,['Piekarnik, lodówka, zapasy 40 i niski narożnik'],'Słupek, piekarnik, lodówka, blat 40 i narożnik');
+    note(west,'Dodatkowy słupek 60 cm po południowej stronie piekarnika. E3 pozostaje pod tym samym ID jako dolna szafka z blatem 40 cm. Nowy dolny koniec ciągu y='+Math.round(oldBottom+600)+' mm.');
+  }
+  const north=f(72);
+  if(north?.equipment){
+    north.notes=(north.notes||[]).filter(n=>!n.startsWith('Kuchnia E2 — '));
+    const e6=north.equipment.find(e=>e.id===6);
+    if(e6){const oldEnd=e6.x+e6.w;Object.assign(e6,{x:oldEnd-600,w:600,kind:'cabinet',label:'SŁUPEK',height:2340});
+      const id=Math.max(north.nextEquipmentId||1,1+Math.max(0,...north.equipment.map(e=>e.id||0)));
+      north.equipment.push({id,kind:'cabinet',x:oldEnd-1000,y:0,w:400,d:600,label:'BLAT / OTW.',height:900});north.nextEquipmentId=id+1;
+    }
+    note(north,'E6: słupek 60 cm na końcu ciągu. Pomiędzy płytą i słupkiem otwarty regał dolny 40 cm z blatem; odstawianie przy płycie pozostaje wolne. Ekspres przy lewym odcinku blatu, czajnik na nowym blacie E3.');
+  }
+  if(op(21))op(21).pos=10206-3600;
+  if(op(20))op(20).pos=10206-5350;
+  if(op(23)){op(23).hinge=1;op(23).side=1;note(op(23),'Otwieranie ze spiżarni do kuchni/salonu, zawias od południa: skrzydło odkłada się w stronę salonu, poza północną zabudową.');}
+  if(op(29))op(29).pos+=200;
+  const island=f(73);
+  if(island?.key==='island'){
+    island.notes=(island.notes||[]).filter(n=>!n.startsWith('Wyspa E2 — '));
+    Object.assign(island,{x:2000+island.w/2,y:2500,d:1000,seating:{mode:'table',count:2,overhang:400}});
+    rename(island,['Wyspa 170×90 — blat roboczy'],'Wyspa 170×100 — blat i 2 hokery');
+    island.z[1]={...island.z[1],d:1000,l:'hokery / komunikacja od jadalni'};
+    note(island,'Blat 170×100 cm, 120 cm do północnej i zachodniej zabudowy. Korpus głębokości 60 cm od kuchni, podparcie blatu i nawis 40 cm od jadalni. Dwa hokery lub stół: osobne stany, nie założenie wygodnego jednoczesnego używania.');
+  }
+  const dogs=f(144);if(dogs){dogs.y+=550;note(dogs,'Przesunięte pod obniżone zachodnie okno, poza łukiem drzwi tarasowych; nadal osobno sprawdzane w audycie.');}
+  const shelf=f(80);
+  if(shelf){delete shelf.vertical;Object.assign(shelf,{key:'steel',w:1800,d:600,x:5750,y:500,rot:0,z:[Z('front',750,'dostęp do regałów',{c1:550})]});rename(shelf,['Spiżarnia: blat 125 — małe AGD'],'Regały 2×90×60 — spiżarnia');note(shelf,'Takie moduły jak M82: 2×90×60, dostęp od południa. Wschodni koniec przy blacie jest narożnikiem o ograniczonym dostępie.');}
+  const counter=f(81);
+  if(counter){Object.assign(counter,{key:'bench',vertical:{worktop:900},z:[Z('front',750,'praca przy blacie')]});rename(counter,['Regał 90×60 — zapasy'],'Spiżarnia: blat 90×60');note(counter,'Blat roboczy 90×60 cm zamiast regału; rezerwa na małe AGD, gniazda i odstawianie.');}
+  const shower=f(83);
+  if(shower){rename(shower,['Walk-in 130×90 — szkło 90 + powrót 30'],'Prysznic 130×90 — kabina zamknięta');shower.enclosedShower=true;
+    shower.notes=(shower.notes||[]).filter(n=>!n.startsWith('Szyba prawa 90 cm')&&!n.startsWith('Hydroizolacja całej podłogi'));
+    note(shower,'Zwykła kabina zamknięta 130×90 cm; położenie i wymiary bez zmian. Drzwi przesuwne/składane do doboru, bez łuku kolidującego z umywalką; hydroizolacja i odpływ według wybranego brodzika.');
+    for(const z of shower.z)z.l='wejście do kabiny';
+  }
+  const room=s.rooms.find(r=>r.id===61);if(room?.name==='Łazienka (walk-in)')room.name='Łazienka (prysznic)';
+  // Dziesięć centymetrów z głębokości garderoby dla łazienki z wanną.
+  for(const id of [53,55])if(w(id)){w(id).y1+=100;w(id).y2+=100;}
+  if(w(54))w(54).y2+=100;if(w(56))w(56).y1+=100;
+  for(const id of [129,130,131,132,133,135,136,137])if(f(id))f(id).y+=100;
+  const accessory=f(134);if(accessory){Object.assign(accessory,{key:'shelf',w:400,y:9750});rename(accessory,['PAX 50 — akcesoria'],'Regał 40 — akcesoria');delete accessory.joinery;note(accessory,'Po skróceniu garderoby o 10 cm: regał otwarty 40×60 zamiast PAX 50, z zachowaniem blend i przejścia 100 cm.');}
+  if(f(138)){f(138).d=50;f(138).y=9975;}
+  if(f(129))note(f(129),'Wanna przesunięta 10 cm na południe wraz z wydłużeniem łazienki. Do umywalki 102,5 cm; szerokość gotowa wnęki wanny nadal 195 cm.');
+  const sofa=f(143);if(sofa?.key==='sofabed'){Object.assign(sofa,{rot:180,x:15100,y:9515});note(sofa,'Dłuższy bok 200 cm pod południowym oknem, oparcie przy południowej ścianie; rozłożenie na północ.');}
+  if(op(6))op(6).pos+=500;
+  const technicalShelf=f(110);
+  if(technicalShelf){Object.assign(technicalShelf,{key:'steel',w:900,d:500,x:15100,y:3075,rot:180,z:[Z('front',750,'dostęp do regału')],joinery:{height:2000,bodyDepth:500}});rename(technicalShelf,['PAX 75 — mop i sprzęt porządkowy'],'Regał stalowy 90×50 — dolna ściana');technicalShelf.notes=(technicalShelf.notes||[]).filter(n=>!n.startsWith('Korpus nominalny 75')&&!n.startsWith('Wysokość pomieszczeń'));note(technicalShelf,'Zamiast PAX: regał stalowy 90×50 przy południowej ścianie. Dodatkowe regały na zachodzie i wschodzie, bez zastawiania serwisu urządzeń i brodzika. Płytszy regał pozostawia przejście 85 cm w przewężeniu.');}
+  const bench=f(113);if(bench){bench.w=800;bench.x=15350;bench.equipment=(bench.equipment||[]).filter(e=>e.kind!=='robot');rename(bench,['Ławka 120×40 — stacja robota pod spodem'],'Ławka 80×40 — siedzisko');note(bench,'Skrócona do 80 cm przy zachowanym lewym końcu; robot przeniesiony do pralni. Do początku otworu O39 pozostaje 10 cm.');}
+  if(f(109)){f(109).y=1875;note(f(109),'Regał 90×60 na zachodzie, od y1425 do2325; wolna rezerwa serwisowa przed urządzeniem na północy.');}
+  const add=(tag,key,props)=>{if(s.furn.some(f=>f.presetTag===tag))return;const it=makeFurn(s.nextId++,key,props.x,props.y,props.rot||0);Object.assign(it,props,{presetTag:tag});s.furn.push(it);};
+  add('nov12-robot-laundry','robotdock',{x:8873,y:2050,rot:270,w:400,d:450,name:'Robot ze stacją — pralnia, rezerwa 40×45',relocatedFrom:'E2-M113-E1',equipment:[{id:1,kind:'robot',x:25,y:50,w:350,d:350,label:'ROBOT'}],notes:['Przy bocznej ściance M91, w suchej części pralni; front na wschód. Do zabudowy po przeciwnej stronie 110,2 cm.','Rezerwa pod kompaktową stację; dopasować rzeczywiste gabaryty, wysokość i wymagane pole wyjazdu. Gniazdo przy boku zabudowy, przewód poza przejściem.','Przeniesiony element E2-M113-E1; ławka M113 ma teraz 80 cm.']});
+  add('nov12-tech-west','steel',{x:14600,y:2575,rot:270,w:500,d:600,name:'Regał stalowy 50×60 — zachód',notes:['Rezerwacja regału do doboru; front od środka kotłowni. Nie skalować półek ani nośności konkretnego zestawu.']});
+  add('nov12-tech-east','steel',{x:17025,y:2925,rot:90,w:400,d:350,name:'Regał stalowy 40×35 — przy wejściu',notes:['Płytki regał na wschodzie, poniżej brodzika i poza łukiem O39. Rezerwacja do potwierdzenia dostępnym korpusem i mocowaniem.']});
+  // w oznacza otwór budowlany; ościeżnica/montaż rezerwują po 50 mm z boków.
+  for(const wall of s.walls)for(const door of wall.op)if(door.type==='door'){
+    const target=door.id===10||door.id===21?900:[30,43].includes(door.id)?800:door.w>=900?900:800;
+    door.w=Math.max(door.w,target+100);door.frame={jamb:50,head:50,target,leafExtra:20,source:'rezerwa koncepcyjna, karta wybranej ościeżnicy do potwierdzenia'};
+    door.height=Math.max(door.height||2100,2100);door.sill=door.sill||0;
+  }
+  // O45 poprzednio nachodziło na powrót S50. Nowy otwór jest pośrodku zatoki 115 cm.
+  if(op(45))op(45).pos=10975-4775;
+  if(op(43))op(43).pos=5325-4775;
+  if(op(30))op(30).pos+=50;
+  if(op(4))op(4).pos+=50;
+  if(op(39))op(39).pos=16300-13925;
+  if(op(58))op(58).pos-=50;
+  defaults(s);
 }
 
 // Projekt Główny: 40 cm z szerokości walk-in = 5 cm wnęki i 35 cm pralni.
@@ -2167,9 +2258,9 @@ function defaults(s){
   return s;
 }
 
-// V32: walk-in, wnęka, pralnia/BILLY i szerokość przy WC. Stare edycje zachowane.
+// V33: kuchnia, stolarka, jadalnia, garderoba i wyposażenie. Etapy starszych migracji zależą od klucza.
 function loadSavedVariant(v){
-  for(const key of [LS,CORNER_LS,KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
+  for(const key of [LS,UTILITY_LS,CORNER_LS,KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
     try{
       const raw=localStorage.getItem(key+':'+v);if(!raw)continue;
       const s=defaults(JSON.parse(raw));s.variant=v;
@@ -2194,7 +2285,8 @@ function loadSavedVariant(v){
       if([ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')enlargeE2Window5(s);
       if([WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')optimizeE2Kitchen(s);
       if([KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')resizeE2Corner(s);
-      if(key!==LS&&v==='E2')reviseE2UtilityRooms(s);
+      if(![LS,UTILITY_LS].includes(key)&&v==='E2')reviseE2UtilityRooms(s);
+      if(key!==LS&&v==='E2')reviseE2KitchenAndDoors(s);
       return s;
     }catch(e){}
   }
@@ -2241,6 +2333,7 @@ function setArrangement(f,mode){
   const a=f.arrangements && f.arrangements[mode];
   if(!a) return;
   f.w=a.w; f.d=a.d; f.parts=a.parts.map(p=>[...p]); f.arrangements.mode=mode;
+  if(mode==='expanded'&&S.variant==='E2')for(const island of S.furn)if(island.seating)island.seating.mode='table';
 }
 
 /* ---------- geometria ---------- */
@@ -2255,6 +2348,40 @@ function segDist(p,a,b){
   const q = {x:a.x+t*dx, y:a.y+t*dy};
   return {d:Math.hypot(p.x-q.x, p.y-q.y), t, q};
 }
+function doorMetrics(o){
+  const jamb=o.type==='door'&&o.frame?Math.max(0,Math.min(o.w/3,+o.frame.jamb||0)):0;
+  const clear=Math.max(0,o.w-2*jamb),leaf=Math.min(o.w,clear+(jamb?(+o.frame.leafExtra||0):0));
+  return {jamb,clear,leaf,leafInset:(o.w-leaf)/2};
+}
+// Otwór konstrukcyjny, rezerwa ościeżnicy i rzeczywiście wolny odcinek w rzucie.
+function auditDoors(state=S){
+  const rows=[];
+  for(const wall of state.walls)for(const o of wall.op)if(o.type==='door'){
+    const g=geom(wall),m=doorMetrics(o),start=o.pos-o.w/2,end=o.pos+o.w/2,blocks=[];
+    for(const other of state.walls){
+      if(other.id===wall.id)continue;
+      const q=geom(other);if(Math.abs(g.d.x*q.d.x+g.d.y*q.d.y)>.1)continue;
+      const h=other.t/2,b={x1:Math.min(other.x1,other.x2)-h,x2:Math.max(other.x1,other.x2)+h,y1:Math.min(other.y1,other.y2)-h,y2:Math.max(other.y1,other.y2)+h};
+      const points=[[b.x1,b.y1],[b.x2,b.y1],[b.x2,b.y2],[b.x1,b.y2]].map(([x,y])=>({u:(x-g.a.x)*g.d.x+(y-g.a.y)*g.d.y,v:(x-g.a.x)*g.n.x+(y-g.a.y)*g.n.y}));
+      if(Math.min(...points.map(p=>p.v))>=wall.t/2-.01||Math.max(...points.map(p=>p.v))<=-wall.t/2+.01)continue;
+      blocks.push({id:other.id,a:Math.min(...points.map(p=>p.u)),b:Math.max(...points.map(p=>p.u))});
+    }
+    let free=[[start+m.jamb,end-m.jamb]];
+    for(const b of blocks)free=free.flatMap(([a,z])=>b.b<=a||b.a>=z?[[a,z]]:[[a,Math.max(a,b.a)],[Math.min(z,b.b),z]].filter(([a,z])=>z>a));
+    const effective=Math.max(0,...free.map(([a,b])=>b-a)),height=(o.height||2100)-(o.frame?.head||0),min=o.id===10?900:800,issues=[],warnings=[];
+    const left=Math.max(0,...blocks.filter(b=>b.b<=start+.01).map(b=>b.b),...wall.op.filter(p=>p.id!==o.id&&p.pos+p.w/2<=start).map(p=>p.pos+p.w/2));
+    const right=Math.min(g.L,...blocks.filter(b=>b.a>=end-.01).map(b=>b.a),...wall.op.filter(p=>p.id!==o.id&&p.pos-p.w/2>=end).map(p=>p.pos-p.w/2));
+    const piers=[start-left,right-end],intruding=blocks.filter(b=>Math.min(b.b,end)-Math.max(b.a,start)>1).map(b=>'S'+b.id);
+    if(effective<min-1)issues.push('światło '+Math.round(effective)+' mm < '+min+' mm');
+    if(height<2000)issues.push('wysokość w świetle < 2000 mm');
+    if(intruding.length)issues.push('inna ściana w otworze: '+intruding.join(', '));
+    if(!o.frame)warnings.push('brak dobranej rezerwy ościeżnicy');
+    if(Math.min(...piers)<100)warnings.push('krótki odcinek do narożnika: '+piers.map(Math.round).join(' / ')+' mm; dobrać opaski i mocowanie');
+    rows.push({id:o.id,wall:wall.id,rough:o.w,clear:m.clear,effective:Math.round(effective),height,piers:piers.map(Math.round),issues,warnings});
+  }
+  return rows;
+}
+
 function quad(g,s,e,h){
   const P = (u,v) => [g.a.x+g.d.x*u+g.n.x*v, g.a.y+g.d.y*u+g.n.y*v];
   return [P(s,-h), P(e,-h), P(e,h), P(s,h)];
@@ -2273,7 +2400,9 @@ function lbox(T,x,y,w,h){
 }
 function furnBodies(f){
   const T = fT(f), L = LIBK[f.key], parts = f.parts || (L && L.parts) || [[0,0,1,1]];
-  return parts.map(([x,y,w,h]) => lbox(T, x*f.w, y*f.d, w*f.w, h*f.d));
+  const bodies=parts.map(([x,y,w,h]) => lbox(T, x*f.w, y*f.d, w*f.w, h*f.d));
+  if(f.seating?.mode==='stools')for(const x of [200,1000])bodies.push(lbox(T,x,-600,500,600));
+  return bodies;
 }
 function zoneLocal(f,z){
   if (z.rect) return z.rect;
@@ -2367,7 +2496,7 @@ function bboxAll(){
 }
 
 /* ---------- analiza: rasteryzacja ścian, obrys, pomieszczenia ---------- */
-function analyse(){
+function analyse(options={}){
   EXT = computeExt();
   const ws = S.walls.filter(vis);
   const res = {rooms:new Map(), regions:[], bbox:null};
@@ -2456,11 +2585,11 @@ function analyse(){
     res.regions.push(reg);
     res.rooms.set(r.id,{state:'ok', reg});
   }
-  analyseFurn(res, grid, lab, ox, oy, nx, ny, G);
+  analyseFurn(res, grid, lab, ox, oy, nx, ny, G,options);
   return res;
 }
 
-function analyseFurn(res, grid, lab, ox, oy, nx, ny, G){
+function analyseFurn(res, grid, lab, ox, oy, nx, ny, G,options={}){
   const N = nx*ny, r = Math.max(400, +S.set.minPass || 750)/2;
   const each = (b,sh,fn) => {
     const x1 = Math.max(0, Math.ceil((b.x1+sh-ox)/G-.5)), x2 = Math.min(nx-1, Math.floor((b.x2-sh-ox)/G-.5));
@@ -2485,12 +2614,12 @@ function analyseFurn(res, grid, lab, ox, oy, nx, ny, G){
     cellsNear(g, -e[0], g.L+e[1], -h, h, (i,u) => { if (!cuts.some(c => u > c[0] && u < c[1])) pg[i] = 1; });
     for (const o of w.op) {
       if (o.type === 'window') continue;
-      const s0 = o.pos-o.w/2, s1 = o.pos+o.w/2, sd = o.side >= 0 ? 1 : -1, hu = o.hinge ? s1 : s0;
-      // przejście przez drzwi liczymy jako wystarczające, także po r w głąb obu pomieszczeń
-      cellsNear(g, s0+G/2, s1-G/2, -h-r, h+r, i => { forced[i] = 1; if (w.ext) entry.push(i); });
-      // pole skrzydła drzwi (ćwiartka koła)
-      const v1 = sd > 0 ? h : -h-o.w, v2 = sd > 0 ? h+o.w : -h;
-      if (o.type === 'door') cellsNear(g, s0, s1, v1, v2, (i,u,v) => { if ((u-hu)**2 + (v-sd*h)**2 <= o.w*o.w) swing[i] = 1; });
+      const m=doorMetrics(o),s0=o.pos-o.w/2,s1=o.pos+o.w/2,sd=o.side>=0?1:-1,a=s0+m.leafInset,b=s1-m.leafInset,hu=o.hinge?b:a;
+      if(m.jamb){cellsNear(g,s0,s0+m.jamb,-h,h,i=>pg[i]=1);cellsNear(g,s1-m.jamb,s1,-h,h,i=>pg[i]=1);}
+      // Nie wymuszaj dojścia przez zbyt wąskie światło ani przez rezerwę ościeżnicy.
+      if(!o.frame||m.clear>=S.set.minPass)cellsNear(g,s0+m.jamb+G/2,s1-m.jamb-G/2,-h-r,h+r,i=>{forced[i]=1;if(w.ext&&(!options.entryId||o.id===options.entryId))entry.push(i);});
+      const v1=sd>0?h:-h-m.leaf,v2=sd>0?h+m.leaf:-h;
+      if(o.type==='door')cellsNear(g,a,b,v1,v2,(i,u,v)=>{if((u-hu)**2+(v-sd*h)**2<=m.leaf*m.leaf)swing[i]=1;});
     }
   }
   const FB = S.furn.filter(f => vis(f) && !f.ref).map(f => ({f, bodies:furnBodies(f), zones:furnZones(f)}));
@@ -2801,11 +2930,12 @@ function opShape(w,o,color,sw){
   const L = (a,b) => `M${a.x.toFixed(1)} ${a.y.toFixed(1)}L${b.x.toFixed(1)} ${b.y.toFixed(1)}`;
   let d = L(P(s0,-h),P(s0,h)) + L(P(s1,-h),P(s1,h));
   if (o.type === 'door') {
-    const hu = o.hinge ? s1 : s0, ou = o.hinge ? s0 : s1, sd = o.side >= 0 ? 1 : -1;
+    const m=doorMetrics(o),a=s0+m.leafInset,b=s1-m.leafInset,hu = o.hinge ? b : a, ou = o.hinge ? a : b, sd = o.side >= 0 ? 1 : -1;
     const H = P(hu, sd*h), J = P(ou, sd*h);
-    const E = {x:H.x+g.n.x*sd*o.w, y:H.y+g.n.y*sd*o.w};
+    if(m.jamb)for(const [a,b] of [[s0,s0+m.jamb],[s1-m.jamb,s1]]){const q=[P(a,-h),P(b,-h),P(b,h),P(a,h)];d+=q.map((p,i)=>(i?'L':'M')+p.x.toFixed(1)+' '+p.y.toFixed(1)).join('')+'Z';}
+    const E = {x:H.x+g.n.x*sd*m.leaf, y:H.y+g.n.y*sd*m.leaf};
     const cr = (E.x-H.x)*(J.y-H.y) - (E.y-H.y)*(J.x-H.x);
-    d += L(H,E) + `M${E.x.toFixed(1)} ${E.y.toFixed(1)}A${o.w} ${o.w} 0 0 ${cr>0?1:0} ${J.x.toFixed(1)} ${J.y.toFixed(1)}`;
+    d += L(H,E) + `M${E.x.toFixed(1)} ${E.y.toFixed(1)}A${m.leaf} ${m.leaf} 0 0 ${cr>0?1:0} ${J.x.toFixed(1)} ${J.y.toFixed(1)}`;
   } else if (o.type === 'slide') {
     const m = (s0+s1)/2;
     d += L(P(s0,-h*.25),P(m+80,-h*.25)) + L(P(m-80,h*.25),P(s1,h*.25)) + L(P(s0,-h),P(s1,-h)) + L(P(s0,h),P(s1,h));
@@ -2829,7 +2959,7 @@ function drawOps(){
       const sd = o.type === 'door' ? -(o.side >= 0 ? 1 : -1) : 1, off = w.t/2 + px(9);
       const lx = g.a.x+g.d.x*o.pos+g.n.x*sd*off, ly = g.a.y+g.d.y*o.pos+g.n.y*sd*off;
       let ang = Math.atan2(g.d.y,g.d.x)*180/Math.PI; if (ang > 90) ang -= 180; if (ang <= -90) ang += 180;
-      s += `<text x="${lx}" y="${ly}" font-size="${px(10)}" font-weight="600" text-anchor="middle" dominant-baseline="middle" fill="${on?'#1f6feb':'#7a3510'}" stroke="#fff" stroke-width="${px(3)}" paint-order="stroke" pointer-events="none" transform="rotate(${ang} ${lx} ${ly})">${Math.round(o.w/10)}</text>`;
+      s += `<text x="${lx}" y="${ly}" font-size="${px(10)}" font-weight="600" text-anchor="middle" dominant-baseline="middle" fill="${on?'#1f6feb':'#7a3510'}" stroke="#fff" stroke-width="${px(3)}" paint-order="stroke" pointer-events="none" transform="rotate(${ang} ${lx} ${ly})">${Math.round((o.type==='door'&&o.frame?doorMetrics(o).clear:o.w)/10)}${o.type==='door'&&o.frame?' św.':''}</text>`;
       const q = quad(g, o.pos-o.w/2, o.pos+o.w/2, Math.max(w.t/2, px(8)));
       s += `<polygon class="hit ui" data-o="${w.id}:${o.id}" points="${pts(q)}" fill="${on?'rgba(31,111,235,.15)':'transparent'}" style="cursor:${tool==='select'?'ew-resize':'inherit'}"/>`;
     }
@@ -2897,7 +3027,7 @@ function decoPath(f){
     case 'sink': el(w/2,d*.55,w*.38,d*.3); break;
     case 'bath': rc(70,70,w-140,d-140); el(f.decoMirrorX?230:w-230,d/2,45,45); break;
     case 'shower': line(0,0,w,d); line(w,0,0,d); el(w/2,d/2,45,45); break;
-    case 'walkin': if (!f.equipment) {line(w-35,0,w-35,d); line(w-65,0,w-65,d); line(150,100,w-150,100);} break;
+    case 'walkin': if(f.enclosedShower){rc(0,0,w,d);line(w/2,d,w/2,d-60);line(w/2-60,d-30,w/2+60,d-30);} if (!f.equipment) {line(w-35,0,w-35,d); line(w-65,0,w-65,d); line(150,100,w-150,100);} break;
     case 'washer': el(w/2,d/2,Math.min(w,d)*.35,Math.min(w,d)*.35); break;
     case 'circle': el(w/2,d/2,w/2,d/2); break;
     case 'hatch': for (let x=-d; x<w; x+=120) line(Math.max(0,x),Math.max(0,-x),Math.min(w,x+d),Math.min(d,w-x)); break;
@@ -2913,6 +3043,7 @@ function decoPath(f){
     if(kind==='hob') for(const xx of [.28,.72]) for(const yy of [.28,.72]) el(x+ww*xx,y+dd*yy,ww*.12,dd*.12);
     if(kind==='fridge'){line(x,y,x+ww,y+dd);line(x+ww,y,x,y+dd);}
   }
+  if(f.seating?.mode==='stools')for(const x of [200,1000]){rc(x,-500,500,450);line(x,-500,x+500,-500);}
   return p;
 }
 function furnMarkup(f, info, on, isGhost){
@@ -3095,11 +3226,13 @@ function renderPass(){
   const unreached = A.hasEntry ? A.regions.filter(r => !A.roomReach.has(r.k)).map(r => (S.rooms.find(x => x.id === r.rooms[0]) || {}).name).filter(Boolean) : [];
   let h = '<div class="kv">' + kv([
     ['Wejście (drzwi zewn.)', A.hasEntry ? 'jest ✓' : 'brak drzwi zewn.', A.hasEntry ? 'ok' : 'warn'],
+    ...(S.variant==='E2'?[['Drzwi: szerokość / otwór',auditDoors().some(d=>d.issues.length)?'wymaga poprawy':'kontrola modelu OK',auditDoors().some(d=>d.issues.length)?'warn':'ok']]:[]),
     ['Meble z problemem', `${bad.length} / ${n}`, bad.length ? 'warn' : 'ok'],
     ['Meble z uwagami', String([...A.fs.values()].filter(v => !v.msgs.length && v.warns.length).length), ''],
     ...(nRef ? [['Elementy do wyjaśnienia', String(nRef), 'warn']] : []),
     ['Pomieszczenia bez dojścia', unreached.length ? unreached.join(', ') : 'brak ✓', unreached.length ? 'warn' : 'ok'],
   ]) + '</div>';
+  if(S.variant==='E2')h+='<p class="hint"><a href="https://github.com/bartas93/Ogrodniki-rzut/blob/main/audyt-projekt-glowny.md" target="_blank" rel="noopener noreferrer">Pełny audyt domu i ograniczenia ↗</a></p>';
   if (bad.length) h += '<div class="flist">' + bad.map(([id,v]) => {
     const f = S.furn.find(f => f.id === id);
     return `<button data-fsel="${id}" title="${esc(v.msgs.join('; '))}">${esc(f.name)}</button>`;
@@ -3189,7 +3322,12 @@ function findElement(query){
   if(equipment&&kind.toUpperCase()!=='M')return 'Wyposażenie należy do mebla (M).';
   const key=({S:'w',O:'o',M:'f',P:'r'})[kind.toUpperCase()]+Number(number);
   const candidate=elementRecords(variantStateFor(v)).find(it=>it.key===key&&(equipment?it.eq?.id===Number(equipment):!it.eq));
-  if(!candidate)return 'Nie znaleziono elementu '+query.trim()+'.';
+  if(!candidate){
+    const previous=v+'-'+kind.toUpperCase()+Number(number)+(equipment?'-E'+Number(equipment):'');
+    const moved=variantStateFor(v).furn.find(f=>f.relocatedFrom?.toUpperCase()===previous.toUpperCase());
+    if(moved)return findElement(v+'-M'+moved.id);
+    return 'Nie znaleziono elementu '+query.trim()+'.';
+  }
   if(v!==S.variant)switchVariant(v);
   const target=elementRecords().find(it=>it.key===key&&(equipment?it.eq?.id===Number(equipment):!it.eq));
   // Szukanie odkrywa warstwę, aby zaznaczenie było widoczne także po wczytaniu zapisu.
@@ -3264,6 +3402,7 @@ function renderPanel(){
         <div class="row"><span>Warstwa</span><input type="text" id="pLayer" value="${esc(f.layer)}" placeholder="główna"></div>
         ${f.vertical ? '<div class="hint">Wysokości od gotowej podłogi: '+Object.entries(f.vertical).map(([k,v])=>esc(({worktop:'blat',screenCentre:'środek TV',basinTop:'umywalka',mirrorBottom:'dół lustra',seat:'siedzisko WC'})[k]||k)+' '+v+' mm').join(' · ')+'</div>' : ''}
         ${f.notes ? '<ul class="hint">'+f.notes.map(n=>'<li>'+esc(n)+'</li>').join('')+'</ul>' : ''}
+        ${f.seating?'<div class="row"><span>Jadalnia</span><select id="pSeating"><option value="table" '+(f.seating.mode==='table'?'selected':'')+'>Stół — hokery odstawione</option><option value="stools" '+(f.seating.mode==='stools'?'selected':'')+'>Dwa zajęte hokery — stół nieużywany</option></select></div><p class="hint">Rozłożenie stołu przełącza stan na odstawione hokery. Stan hokerów zawiera dwie strefy zajęte przez siedzących 50×60 cm, liczone jako przeszkody.</p>':''}
         ${f.arrangements ? '<div class="row"><button id="pArrangement">'+(f.arrangements.mode==='expanded'?'Pokaż stół złożony':esc(f.arrangements.label||'Pokaż stół 280 cm + 10 zajętych krzeseł'))+'</button></div>' : ''}
         ${f.ref ? '<div class="hint warn">Element z rysunku bez jednoznacznego opisu — nie jest sprawdzany ani traktowany jak przeszkoda. Opisz go albo zamień na mebel z biblioteki.</div><div class="row"><span>Sprawdzaj kolizje</span><input type="checkbox" id="pFRef"></div>' : ''}
         <div class="row"><span>Kontrola</span>${f.ref ? '—' : !info ? '—' : info.msgs.length ? `<b class="bad">${info.msgs.length} problem(y)</b>` : '<b class="ok">OK ✓</b>'}</div>
@@ -3292,13 +3431,15 @@ function renderPanel(){
     const f = findOp(+items[0].slice(1));
     if (f) {
       const g = geom(f.w), door = f.o.type === 'door';
-      h += `<h2>${door ? 'Drzwi' : f.o.type === 'slide' ? 'Drzwi przesuwne' : f.o.type === 'open' ? 'Przejście' : 'Okno'} ${Math.round(f.o.w/10)} cm</h2>
+      h += `<h2>${door ? 'Drzwi' : f.o.type === 'slide' ? 'Drzwi przesuwne' : f.o.type === 'open' ? 'Przejście' : 'Okno'} ${Math.round((door&&f.o.frame?doorMetrics(f.o).clear:f.o.w)/10)} cm${door&&f.o.frame?' w świetle modelu':''}</h2>
         <div class="row"><span>Typ</span><select id="pOType"><option value="door" ${door?'selected':''}>drzwi</option><option value="window" ${f.o.type==='window'?'selected':''}>okno</option><option value="slide" ${f.o.type==='slide'?'selected':''}>drzwi przesuwne / HS</option><option value="open" ${f.o.type==='open'?'selected':''}>przejście bez drzwi</option></select></div>
-        <div class="row"><span>Szerokość</span><input type="number" id="pOW" step="50" min="300" value="${f.o.w}"> mm</div>
+        <div class="row"><span>${door&&f.o.frame?'Otwór budowlany':'Szerokość'}</span><input type="number" id="pOW" step="50" min="300" value="${f.o.w}"> mm</div>
         <div class="row"><span>Od początku ściany</span><input type="number" id="pOPos" step="50" value="${Math.round(f.o.pos-f.o.w/2)}"> mm</div>
         <div class="row"><span>Do końca ściany</span>${Math.round(g.L-f.o.pos-f.o.w/2)} mm</div>
         ${f.o.height!==undefined ? '<div class="row"><span>Wysokość otworu</span><input type="number" id="pOHeight" min="300" step="50" value="'+f.o.height+'"> mm</div><div class="row"><span>Parapet / próg</span><input type="number" id="pOSill" min="0" step="50" value="'+f.o.sill+'"> mm</div>' : ''}
         ${f.o.opening ? '<div class="row"><span>Otwieranie</span><input type="text" id="pOOpening" value="'+esc(f.o.opening)+'"></div>' : ''}
+        ${door&&f.o.frame?`<div class="row"><span>Rezerwa na stronę</span><input id="pOJamb" type="number" min="0" max="150" step="5" value="${f.o.frame.jamb}"> mm</div><div class="row"><span>Światło modelowe</span><b>${doorMetrics(f.o).clear} × ${(f.o.height||2100)-f.o.frame.head} mm</b></div><p class="hint">Ościeżnica i montaż są uwzględnione w przejściu. Rezerwa koncepcyjna; rzeczywiste światło i opaski potwierdź kartą wybranego zestawu. Oznaczenie na rzucie pokazuje światło.</p>`:''}
+        ${door&&S.variant==='E2'?(()=>{const d=auditDoors().find(d=>d.id===f.o.id);return d?`<ul class="hint">${[...d.issues,...d.warnings].map(t=>`<li class="${d.issues.includes(t)?'bad':'warn'}">${esc(t)}</li>`).join('')}</ul>`:'';})():''}
         ${door ? '<div class="row"><button id="pHinge">Zawias ⇄</button><button id="pSide">Kierunek ⇅</button></div>' : ''}
         <div class="row"><button id="pDel">Usuń</button></div>
         <div class="hint">Przeciągnij otwór wzdłuż ściany, by go przesunąć.</div>`;
@@ -3369,6 +3510,7 @@ function renderPanel(){
   if (one && one[0] === 'o') {
     const f = findOp(+one.slice(1));
     on('pOType','change', e => { checkpoint(); f.o.type = e.target.value; changed(); });
+    on('pOJamb','change', e => {checkpoint();f.o.frame.jamb=clamp(+e.target.value||0,0,150);changed();});
     on('pOW','change', e => { const v = +e.target.value; if (v >= 300) { checkpoint(); const edge = f.o.pos-f.o.w/2; f.o.w = v; f.o.pos = edge+v/2; changed(); } });
     on('pOPos','change', e => { checkpoint(); f.o.pos = (+e.target.value||0) + f.o.w/2; changed(); });
     on('pOHeight','change', e => {const v=+e.target.value;if(v>=300){checkpoint();f.o.height=v;changed();}});
@@ -3389,6 +3531,7 @@ function renderPanel(){
     on('pFD','change', e => { const v = +e.target.value; if (v >= 100) { checkpoint(); f.d = v; changed(); } });
     on('pFRot','click', () => rotSel(1));
     on('pFDup','click', dupSel);
+    on('pSeating','change',e=>{checkpoint();f.seating.mode=e.target.value;if(f.seating.mode==='stools'){const table=S.furn.find(t=>t.key==='tableext'&&t.arrangements);if(table)setArrangement(table,'closed');}changed();});
     on('pArrangement','click', () => {checkpoint();setArrangement(f,f.arrangements.mode==='expanded'?'closed':'expanded');changed();});
     on('pFRef','change', e => { if (e.target.checked) { checkpoint(); delete f.ref; changed(); } });
     on('pLayer','change', e => { checkpoint(); f.layer = e.target.value.trim(); changed(); });

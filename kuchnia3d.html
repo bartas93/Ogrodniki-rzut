@@ -17,7 +17,7 @@
 </header>
 <main class="workspace">
   <aside class="catalog" id="catalog" aria-label="Lista szafek">
-    <div class="section-head"><div><span class="eyebrow">01 / UKŁAD</span><h2>Twoje szafki</h2></div><span class="pill">17 modułów</span></div>
+    <div class="section-head"><div><span class="eyebrow">01 / UKŁAD</span><h2>Twoje szafki</h2></div><span class="pill">15 modułów</span></div>
     <p class="muted intro">Baza: <strong>Castorama · GoodHome Caraway</strong>. Wybierz szafkę, zajrzyj do środka i przypisz jej zawartość.</p>
     <label class="search"><span class="sr-only">Szukaj szafki lub jej zawartości</span><input id="moduleSearch" type="search" placeholder="Szukaj: garnki, I2…"></label>
     <div id="moduleList"></div>
@@ -34,8 +34,8 @@
       <div id="sceneLabels"></div>
       <div id="noWebGL" hidden>Ta przeglądarka nie uruchomiła widoku 3D. Planowanie szafek, lista wyposażenia i zapis nadal działają. Spróbuj włączyć akcelerację grafiki lub otworzyć stronę w Chrome / Safari.</div>
     </div>
-    <div class="view-options"><label><input type="checkbox" id="labels" checked> Oznaczenia</label><label><input type="checkbox" id="dimensions" checked> Wymiary</label><label><input type="checkbox" id="appliances" checked> Sprzęty na blacie</label><button id="openAll">Otwórz wszystkie</button></div>
-    <div class="scene-footer"><span id="sceneHint">Przeciągnij, żeby obrócić · stuknij szafkę · dwa palce = zoom</span><span class="measure-chip">Wyspa 170 × 90 cm</span></div>
+    <div class="view-options"><label><input type="checkbox" id="labels" checked> Oznaczenia</label><label><input type="checkbox" id="dimensions" checked> Wymiary</label><label><input type="checkbox" id="appliances" checked> Sprzęty na blacie</label><label>Jadalnia <select id="seating" aria-label="Używanie jadalni"><option value="table">Stół</option><option value="stools">Dwa hokery</option></select></label><button id="openAll">Otwórz wszystkie</button></div>
+    <div class="scene-footer"><span id="sceneHint">Przeciągnij, żeby obrócić · stuknij szafkę · dwa palce = zoom</span><span class="measure-chip">Wyspa 170 × 100 cm</span></div>
     <div id="clearance" class="clearance" hidden></div>
     <nav class="mobile-tabs" aria-label="Panel planowania"><button id="showCatalog">Lista szafek</button><button id="showDetails" class="active">Wybrana szafka</button><button id="mobileInventory">Wyposażenie</button></nav>
   </section>
@@ -54,17 +54,17 @@
 <dialog id="helpDialog">
  <div class="dialog-top"><h2>Od szafki do gotowego planu</h2><button data-close class="circle" aria-label="Zamknij pomoc">×</button></div>
  <ol><li>Wybierz szafkę. Przyciskiem „Otwórz” zobaczysz front i wnętrze.</li><li>Wybierz mechanizm: szuflady, cargo, półki lub pionowe przegrody. Dobierz liczbę poziomów.</li><li>Przypisz przedmioty do przegród. Na liście wyposażenia zmień ich ilości i gabaryty.</li><li>Po zmianie mechanizmu stare przypisania pozostają. Niepasujące przegrody trzeba wskazać ponownie.</li><li>Zapis działa w tej przeglądarce. JSON służy do kopii i przenoszenia planu, CSV i wydruk do rozmowy ze stolarzem.</li></ol>
- <p>Układ odpowiada kuchni Projektu Głównego: ciąg 390 cm, słupki 160 cm + ślepy narożnik 60 cm, wyspa 170×90 cm i przejścia 130 cm. Prawy odcinek 100 cm roboczo podzielono na 2×50 cm. Wyspa: korpusy 60 cm od kuchni i 30 cm od jadalni.</p>
+ <p>Układ odpowiada kuchni Projektu Głównego: ciąg 390 cm, słupki 160 cm + ślepy narożnik 60 cm, wyspa 170×100 cm i przejścia 120 cm. Prawy odcinek: otwarty regał z blatem 40 cm oraz słupek 60 cm. Na zachodzie dodano słupek za piekarnikiem, a dawny słupek 40 cm zmieniono na niską szafkę z blatem. Wyspa: korpusy 60 cm od kuchni i nawis 40 cm od jadalni, z dwoma hokerami.</p>
  <p><strong>To plan koncepcyjny oparty na Castoramie.</strong> Korpusy Caraway mają płytę 18 mm, wysokość 72 cm i głębokość 57 cm. Z nogami 15 cm i blatem 3 cm dają wysokość 90 cm. Słupki AGD przyjęto z paneli 219 cm + nogi 15 cm: 234 cm, do kompletacji z półkami i frontami. Każdy moduł pokazuje kartę produktu albo informację o konieczności dopasowania.</p>
- <p>Tył wyspy 30 cm oraz słupek 40 cm oznaczono jako elementy do dopasowania / na wymiar. Nie potwierdzono dla nich gotowego kompletnego korpusu Caraway. Dwa standardowe rzędy z frontami przekraczają 90 cm głębokości wyspy. Karty produktów sprawdzono 12.11.2026; stany magazynowe i kompletację trzeba potwierdzić w sklepie.</p>
+ <p>Dolny korpus 40 cm ma kartę Caraway. Dwa nowe słupki 60 cm są do kompletacji z paneli, półek i frontów. Nawis 40 cm wyspy wymaga dobrania grubości, podparcia i mocowania blatu; brak szafek w miejscu na nogi. Stół i hokery są użytkowane osobno. Po wczytaniu dawnego planu zawartość R1–R3 pozostaje do przeniesienia. Karty produktów sprawdzono 12.11.2026; stany magazynowe i kompletację trzeba potwierdzić w sklepie.</p>
  <p>Wymiary przegród są szacunkowymi rezerwami na wyposażenie, po uwzględnieniu przybliżonego miejsca prowadnic. Zawiasy, syfon, rezerwę płyty, wentylację AGD, udźwig i pełne otwarcie sprawdź z wykonawcą i instrukcjami wybranych produktów. Nie wszystkie pokazane warianty mechanizmów mają potwierdzony komplet katalogowy.</p>
  <p>Kolory i podziały frontów są poglądowe. Zmiany wyposażenia zapisują się osobno od rzutu domu. Wczytanie JSON z edytora rzutu nie zastępuje pliku tego planera. Biblioteka 3D jest dołączona do strony; model nie potrzebuje zewnętrznego CDN.</p>
- <p><a href="kuchnia3d-plan.md">Plan modułów i źródła Castoramy</a> · <a href="kuchnia-E2-ergonomia.md">Analiza układu i ograniczenia</a> · <a href="vendor/three/LICENSE">Three.js — licencja MIT</a></p>
+ <p><a href="kuchnia3d-plan.md">Plan modułów i źródła Castoramy</a> · <a href="audyt-projekt-glowny.md">Analiza układu i ograniczenia</a> · <a href="vendor/three/LICENSE">Three.js — licencja MIT</a></p>
 </dialog>
 <dialog id="confirmDialog"><h2>Przywrócić propozycję wyposażenia?</h2><p>Aktualny plan zostanie zastąpiony. Najpierw możesz zapisać kopię JSON. Rzut domu pozostaje osobno.</p><div class="dialog-bottom"><button id="cancelReset">Anuluj</button><button id="confirmReset" class="primary">Przywróć propozycję</button></div></dialog>
 <div id="toast" role="status" hidden></div>
 <section id="printReport" aria-label="Zestawienie do wydruku"></section>
-<noscript><p>Planer wymaga włączonego JavaScript. <a href="kuchnia-E2-ergonomia.md">Opis kuchni</a>.</p></noscript>
+<noscript><p>Planer wymaga włączonego JavaScript. <a href="audyt-projekt-glowny.md">Opis kuchni</a>.</p></noscript>
 <script type="module" src="kuchnia3d.mjs"></script>
 </body>
 </html>

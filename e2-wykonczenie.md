@@ -152,3 +152,14 @@ W łazience z wanną umywalka 60 cm zamiast 80 uwalnia WC: wydzielona szerokoś�
 V32 przenosi v31, aktualizując wyłącznie wskazane ściany, wyposażenie dwóch łazienek, wnękę i dwa nowe regały, z zachowaniem nazw, notatek, pozostałych edycji oraz wariantów. Bieżące v32 nie jest ponownie migrowane, kopie pozostają. Test `tools/check_main_project.js` oraz testy przeglądarkowe.
 
 [Osobna kuchnia 3D](https://bartas93.github.io/Ogrodniki-rzut/kuchnia3d.html) jest funkcjonalnym planerem zawartości i mechanizmów opartym na **Castoramie**. Ma własny zapis, interaktywne fronty i szuflady, inwentarz, notatki, kontrolę gabarytu pojedynczej sztuki oraz JSON/CSV/PNG/wydruk. [Pełny zakres i źródła](kuchnia3d-plan.md), w tym wyjątki wymagające doboru lub wykonania na wymiar, zachowana geometria i ograniczenia komunikacji przy otwartych frontach. Brak synchronizacji z 2D i zapisu w chmurze.
+
+
+## Aktualizacja kuchni, drzwi i całościowy audyt — 12.11.2026
+
+Aktualne decyzje: [§23 wymagań](wymagania-projektowe.md#23-projekt-główny--kuchnia-drzwi-i-audyt-12112026). [Pełny audyt całego domu](audyt-projekt-glowny.md) zawiera tabelę14 drzwi, scenariusze komunikacji, ograniczenia montażowe, ergonomię oraz kwestie instalacji, konstrukcji, światła i akustyki. [Kuchnia3D](kuchnia3d-plan.md) ma ten sam nowy układ domyślny: dodatkowe słupki, niską szafkę40, otwarty regał40, wyspę170×100 i przejścia120cm, dwa hokery zamiast tylnego rzędu szafek.
+
+Kotłownia zachowuje urządzenia i brodzik, ma cztery regały z przejściem85cm. Ławka80cm, O39 w lewo40cm, robot w pralni. O6 w prawo50cm. Garderoba krótsza10cm, wanna10cm na południe, zachowane przejście100cm. Prysznic130×90 jako kabina zamknięta, bez przesunięcia. M143 pod południowym oknem. Pozostałe położenia i otwory w §23.
+
+W modelu ościeżnica z montażem zabiera po50mm otworu. Rezerwy nie są gotowym zestawieniem do zamówienia. O45 ma teraz100cm otworu dla90cm światła i nie nachodzi na S50; O43 ma zbyt mało miejsca na dowolną opaskę. Rozłożona suszarka M89 odcina wyjście ogrodowe i blokuje obsługę pralni; jej dotychczasowy status referencyjny tego nie naprawia. Konflikt jednoczesnego rozkładania M75/M76 pozostaje. W trzech podstawowych stanach brak problemów i pomieszczeń bez dojścia; uwagi dziewięciu mebli (dziesięciu przy stole dla10 osób) nie zostały ukryte zmianą progów.
+
+V33 zachowuje starsze kopie i własne edycje poza zakresem aktualizacji. Rzeczywiste publiczne stany v23/v32 znajdują się w fixtures testu migracji. Planer3D v2 zachowuje dane v1 i oferuje przeniesienie dawnej zawartości R1–R3 bez kasowania; własne wpisy wymagają sprawdzenia wobec zmienionych gabarytów. Pozostałe warianty bez zmian geometrii.

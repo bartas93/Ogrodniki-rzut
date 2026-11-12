@@ -1,3 +1,5 @@
+> Układ historyczny sprzed ostatniej przebudowy kuchni. Aktualne słupki, wyspa 170×100 cm, przejścia 120 cm i hokery: [plan kuchni 3D](kuchnia3d-plan.md) oraz [audyt domu](audyt-projekt-glowny.md).
+
 # Kuchnia E2 — ergonomia po korekcie
 
 Układ L z osobną wyspą jest sensowny. Zachowane 130 cm między wyspą a północnym blatem i zachodnimi słupkami daje wygodne miejsce do pracy. Poprawiono kolejność sprzętów i skrócono najdłuższy bok trójkąta pracy, bez przesuwania ścian, zlewu, zmywarki ani wyspy.

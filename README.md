@@ -56,3 +56,8 @@ Aktualizacja 12.11.2026:
 - **[Kuchnia 3D](https://bartas93.github.io/Ogrodniki-rzut/kuchnia3d.html)**: osobny interaktywny planer oparty na **Castoramie**. Fronty i pojedyncze szuflady, dobór mechanizmów, przypisywanie wyposażenia, własne przedmioty i gabaryty, sprzęty codzienne, notatki, cofanie i osobny zapis. JSON do kopii, CSV i wydruk z modułami/źródłami, PNG widoku. Komputer i dotyk na emulowanym telefonie sprawdzone. [Układ, źródła produktów i ograniczenia](kuchnia3d-plan.md), m.in. płytki tył wyspy na wymiar i słupek 40 cm do dopasowania.
 
 Planer 3D uruchamiaj przez HTTP(S), np. lokalnie `python -m http.server 8000`, potem `http://localhost:8000/kuchnia3d.html`. Biblioteka Three.js jest dołączona z licencją MIT; bez instalacji zależności i zewnętrznego CDN. Kontrole: `timeout 30s node tools/check_kitchen3d.mjs`, `timeout 60s node tools/check_kitchen_browser.js` oraz `timeout 60s node tools/check_kitchen_browser.js mobile`.
+
+
+Projekt Główny — kolejna aktualizacja12.11.2026: słupki i blaty kuchni według ID, **wyspa170×100cm z dwoma hokerami i przejściami120cm**, zmiany spiżarni, garderoby i sofy, cztery regały kotłowni, ławka80cm i robot w pralni. Drzwi mają oddzielny otwór budowlany oraz światło po uwzględnieniu rezerwy ościeżnicy; O45 skorygowane. [Szczegółowy audyt całego domu](audyt-projekt-glowny.md) wskazuje również ciasne opaski O43, problem rozłożonej suszarki, ograniczenia mebli, konstrukcji i instalacji. Aktualny zapis rzutuv33 oraz niezależna kuchnia3Dv2 zachowują starsze kopie i własne edycje poza zakresem zmian.
+
+Kontrola: `timeout 30s node tools/check_project_revision.js` i `timeout 30s node tools/audit_main_project.js`. [Aktualny układ kuchni, zawartość, źródła Castoramy i migracja starych szafek](kuchnia3d-plan.md).

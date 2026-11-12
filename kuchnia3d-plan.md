@@ -1,69 +1,73 @@
-# Projekt Główny — planer kuchni 3D
+# Projekt Główny — kuchnia 3D, słupki i hokery
 
-[Otwórz planer](https://bartas93.github.io/Ogrodniki-rzut/kuchnia3d.html) · [Rzut domu](https://bartas93.github.io/Ogrodniki-rzut/?variant=E2) · [Ergonomia kuchni](kuchnia-E2-ergonomia.md)
+[Otwórz planer](https://bartas93.github.io/Ogrodniki-rzut/kuchnia3d.html) · [Rzut domu](https://bartas93.github.io/Ogrodniki-rzut/?variant=E2) · [Szczegółowy audyt domu](audyt-projekt-glowny.md)
 
-Stan koncepcji: 12.11.2026. Podstawa zakupowa: **Castorama, GoodHome Caraway**, z wyposażeniem Soto i Pebre tam, gdzie potwierdzono kartę produktu. Pozycje wymagające wykonania na wymiar lub dalszego doboru są opisane w panelu każdej szafki. To propozycja do zaplanowania, z cenami, kompletacją i dostępnością do sprawdzenia przed zamówieniem.
+Aktualizacja 12.11.2026 zastępuje poprzednią wyspę170×90 i tylny rząd płytkich szafek. Podstawa produktów nadal **Castorama · GoodHome Caraway**, z przykładami mechanizmów Soto/Pebre. Kolory, podziały frontów i układ wewnętrzny są propozycjami do kompletacji.
 
-## Obsługa
+## Układ i zawartość
 
-Wybierz szafkę na modelu lub liście. „Otwórz i pokaż” otwiera moduł i ustawia kamerę przed nim; „Zobacz” przy przegrodzie pokazuje pojedynczą szufladę. Przeciąganie obraca widok; kółko lub dwa palce przybliżają. Na telefonie panele przełącza się przyciskami pod modelem. Dostępne są widoki z góry i z przodu, oznaczenia, wymiary, sprzęty codzienne oraz PNG aktualnego widoku.
+Zachodni ciąg ma teraz280 cm: od południa dodatkowy słupek60, piekarnik60, lodówka60, niska szafka40 z blatem i ślepy narożnik60. Północny ciąg390 cm: blat60, zlew80, zmywarka60, moduł30, płyta60, **otwarty regał z blatem40 oraz słupek60**. Wyspa **170×100 cm**, korpusy60 cm od kuchni i nawis40 cm od jadalni, dwa hokery. Przejścia od północy i zachodu **120 cm**, od wschodu100 cm.
 
-W panelu można zmienić mechanizm, liczbę półek, przypisać przedmioty do przegród, zmienić ich ilości i dodać notatki. Zmiana mechanizmu zachowuje zawartość: przypisania do usuniętych przegród wymagają ponownego wskazania miejsca. Cofnij/Ponów obejmuje edycję wyposażenia. Lista wyposażenia pozwala zmienić zakładaną liczbę sztuk, gabaryty i dodać własne pozycje; pokazuje też, gdzie trafiły.
-
-Zapis automatyczny działa **lokalnie w tej przeglądarce**, pod osobnym kluczem `ogrodniki-kuchnia3d-v1`. Nie modyfikuje zapisów rzutu, nie synchronizuje własnych przesunięć mebli z 2D i nie przesyła planu na serwer. Kopię oraz przenoszenie między urządzeniami zapewnia JSON. CSV zawiera wszystkie moduły z ich statusem, EAN i kartą produktu, przypisania oraz brakujące pozycje. Wydruk zawiera zestawienie modułów, zawartości, notatek i sprzętów. Bez WebGL pozostają lista, planowanie oraz zapis/odczyt, bez widoku i PNG 3D.
-
-## Układ i proponowana zawartość
-
-Model zachowuje współrzędne i gabaryty domyślnej kuchni: zachodni ciąg 220 cm z narożnikiem, północny 390 cm, wyspa **170×90 cm**, przejścia od północy i zachodu **130 cm**. Ciąg północny 390 cm plus ślepy narożnik 60 cm daje 450 cm blatu. Nie przesuwano zlewu, płyty, lodówki ani wyspy w rzucie 2D.
-
-| Kod | Powiązanie z ID rzutu | Moduł / propozycja przechowywania |
+| Kod | ID rzutu | Przeznaczenie |
 |---|---|---|
-| W1 | E2-M71-E2 | Piekarnik 60; naczynia żaroodporne i formy w dolnej szufladzie, schowek nad piekarnikiem |
-| W2 | E2-M71-E1 | Lodówka 60; wentylacja i fronty do doboru do AGD |
-| W3 | E2-M71-E3 | Słupek zapasów 40, półki na suche produkty; **do dopasowania** |
-| C1 | E2-M71-E4 | Ślepy niski narożnik 60; nie liczymy go jako dostępnego schowka |
-| N1 | E2-M72-E1 | 60: przybory, folie, deski do krojenia |
-| N2 | E2-M72-E2 | 80: zlew i segregacja, środki i worki poza rezerwą syfonu |
-| N3 | E2-M72-E3 | Wnęka zmywarki 60, bez dodatkowego korpusu |
-| N4 | E2-M72-E4 | 30: cargo na przyprawy, oleje i sosy |
-| N5 | E2-M72-E5 | 60: płyta, szuflady na patelnie, rezerwa wentylacji nad nimi |
-| N6A / N6B | E2-M72-E6 | Podział prawego metra na 2×50: pojemniki / naczynia do serwowania |
+| W4 | E2-M71-E5 | Nowy słupek60 za piekarnikiem: zapasy, tekstylia i miejsce do dalszego przydziału |
+| W1 | E2-M71-E2 | Piekarnik60, naczynia żaroodporne i formy poniżej, schowek nad nim |
+| W2 | E2-M71-E1 | Lodówka60, fronty i wentylacja do doboru do AGD |
+| W3 | E2-M71-E3 | Niska szafka40 z blatem na czajnik; dawny słupek zmieniony przy zachowanym ID |
+| C1 | E2-M71-E4 | Ślepy niski narożnik60, bez dostępnego schowka |
+| N1 | E2-M72-E1 | 60: przybory, folie i deski; na lewym blacie ekspres |
+| N2 | E2-M72-E2 | 80: zlew, segregacja i środki poza syfonem |
+| N3 | E2-M72-E3 | Wnęka zmywarki60, bez dodatkowego korpusu |
+| N4 | E2-M72-E4 | Cargo30: przyprawy, oleje i sosy |
+| N5 | E2-M72-E5 | Płyta60, szuflady na patelnie, rezerwa wentylacji |
+| N6A | E2-M72-E7 | Otwarty regał dolny40 z blatem do odstawiania przy płycie |
+| N6B | E2-M72-E6 | Końcowy słupek60: szkło, kieliszki, kubki i bidony |
 | I1 | E2-M73 | 80 od kuchni: garnki i pokrywki |
-| I2 | E2-M73 | 60 od kuchni: sztućce, talerze duże/głębokie/małe i miski |
-| I3 | E2-M73 | 30 od kuchni: pionowe blachy |
-| R1 / R2 / R3 | E2-M73 | 80/60/30 od jadalni, głębokość 30: szklanki/kieliszki, kubki/bidony, tekstylia; **na wymiar** |
-| BLAT | E2-M72 / E2-M73 | Ekspres, czajnik, Thermomix, dzbanek i noże |
+| I2 | E2-M73 | 60 od kuchni: sztućce, talerze i miski |
+| I3 | E2-M73 | 30 od kuchni: blachy pionowo |
+| BLAT | E2-M72 / E2-M73 | Pięć sprzętów codziennych, z edycją gabarytów i położenia |
 
-To 17 modułów oraz odrębna karta sprzętów na blacie. Kody są trwałe w tym planerze, a ID E2 pozostają identyfikatorami rzutu domu. Nie nadano nowych numerów istniejącym obiektom E2.
+To 15 modułów fizycznych plus karta BLAT. Dawne R1–R3 nie są już szafkami: tam jest miejsce na nogi. Nowa propozycja przenosi ich zawartość do słupków. Przy migracji własnego zapisu stare przypisania są zachowane i pokazane do ręcznego przeniesienia, bez pozornej pojemności nieistniejących schowków.
 
-Lista startowa obejmuje 28 kategorii / 233 sztuki, z których 230 ma proponowane przypisanie. Trzy sztuki dodatkowego małego AGD (np. airfryer/toster/grill) pozostawiono jawnie do znalezienia miejsca po podaniu modeli. Liczby i gabaryty są edytowalne; propozycja nie potwierdza, że wszystkie stosy i organizery zmieszczą się jednocześnie. Zawartość 3D jest symboliczna, liczby znajdują się w panelu i zestawieniu.
+Lista startowa: 28 kategorii,233 sztuki,230 przypisanych. Dodatkowe3 sztuki małego AGD (np. airfryer/toster/grill) wymagają znalezienia miejsca po podaniu gabarytów. Można zmieniać ilości, rozmiary i dodawać własne pozycje. Kontrola sprawdza **pojedynczą sztukę** wobec szacunkowej rezerwy w przegrodzie; nie pakuje stosów ani nie potwierdza udźwigu i kompletacji okuć. Symbole w 3D nie przedstawiają całej liczby naczyń.
 
-Ekspres i czajnik zajmują ostatnie 60 cm północnego blatu; pierwsze 40 cm za płytą pozostaje wolne. Thermomix, dzbanek i blok noży są na prawych 50 cm wyspy, pozostawiając około 120×90 cm roboczo. Gabaryty i położenia sprzętów można dopasować w karcie BLAT; kontrola zgłasza ich nachodzenie, wyjście poza blat i zajęcie rezerwy przygotowania. Zasilanie wyspy wymaga instalacji, bez przewodu przez przejście. Para i ruch robota wymagają wolnej przestrzeni zgodnie z instrukcjami wybranych urządzeń.
+## Używanie
 
-## Korpusy i potwierdzone źródła Castoramy
+Wybierz szafkę z modelu albo listy. „Otwórz i pokaż” ustawia kamerę, „Zobacz” pokazuje pojedynczą szufladę. Można zmieniać mechanizm, poziomy półek, przypisania, ilości i notatki. Zmiana mechanizmu zachowuje zawartość; przypisania do usuniętych przegród wymagają ponownego wskazania miejsca. Cofnij/Ponów obejmuje edycję planu.
 
-Karty sprawdzono 12.11.2026. Korpusy dolne mają **wysokość 72 cm, głębokość 57 cm, płytę 18 mm**; nóżki 15 cm dają 87 cm, a przyjęty blat 3 cm — wysokość gotową 90 cm. Model rezerwuje 60 cm głębokości na korpus, front i montaż. Wymiary rezerwacji nie są wymiarami samej płyty korpusu.
+Przeciągnięcie obraca widok, kółko lub dwa palce przybliżają, stuknięcie wybiera szafkę. Gest można rozpocząć także na etykiecie szafki; przeciągnięcie nie jest wtedy traktowane jako wybór. Telefon ma osobne zakładki paneli. Są widoki z góry i z przodu, oznaczenia, wymiary, podgląd sprzętów i PNG sceny. Bez WebGL pozostaje planowanie na listach i zapis.
 
-| Podstawa | EAN i karta produktu | Moduły / liczba korpusów |
+Przełącznik **Jadalnia: Stół / Dwa hokery** pokazuje alternatywne użycie. W rzucie2D wybór znajduje się przy M73; rozłożenie stołu odstawia hokery. Dwa zajęte miejsca mają rezerwacje50×60 cm od krawędzi wyspy. Do złożonego nieużywanego stołu nominalnie75 cm; nie jest to deklaracja wygody jednoczesnego użycia obu zestawów. Nawis40 cm wymaga dobranego podparcia i mocowania blatu.
+
+## Sprzęty codzienne i ergonomia
+
+Ekspres jest na lewym blacie60 cm przy oknie, czajnik na W3. Thermomix, dzbanek i blok noży zajmują prawy pas50 cm wyspy; wolne około120×100 cm na przygotowanie. Blat40 cm między płytą i słupkiem pozostaje wolny. Gabaryty i współrzędne można zmienić w BLAT; kontrola sygnalizuje wyjście poza przydzielony blat, nachodzenie i zajęcie rezerwy przygotowania.
+
+Trójkąt frontów lodówka–zlew–płyta nadal1,22/1,60/2,69 m; ciągły blat między zlewem i płytą90 cm. Przy otwartej zmywarce założonej na 72 cm z przejścia120 zostaje48 cm. Dwa przeciwległe wysuwy45 cm pozostawiają30 cm, zmywarka naprzeciw szuflady — około3 cm. Planer pokazuje ostrzeżenie, nie zakłada swobodnego przechodzenia między otwartymi frontami. Wymiary AGD i okuć należy podstawić z instrukcji konkretnych modeli.
+
+Słupek obok piekarnika nie daje blatu na gorącą blachę: nadal trzeba odłożyć ją na wyspę przez120 cm. Zasilanie wyspy bez przewodu przez przejście. Dobrać odstępy płyty od pionowego boku, chłodzenie, okap, syfon i zasilanie; ekspres i czajnik potrzebują bezpiecznego odstawiania oraz odstępów od wody/pary.
+
+## Potwierdzone źródła Castoramy
+
+Karty sprawdzone 12.11.2026. Dolne korpusy Caraway mają wysokość72, głębokość57 cm, płytę18 mm. Nogi15 cm i blat3 cm dają90 cm gotowego blatu. Model rezerwuje60 cm głębokości na korpus, front i montaż.
+
+| Podstawa | EAN / karta | Moduły i liczba |
 |---|---|---|
-| Caraway 30 | [3663602637417](https://www.castorama.pl/korpus-szafki-kuchennej-dolnej-goodhome-caraway-30-cm/3663602637417_CAPL.prd) | N4, I3 — 2 |
-| Caraway 50 | [3663602637448](https://www.castorama.pl/korpus-szafki-kuchennej-dolnej-goodhome-caraway-50-cm/3663602637448_CAPL.prd) | N6A, N6B — 2 |
-| Caraway 60 | [3663602637455](https://www.castorama.pl/korpus-szafki-kuchennej-dolnej-goodhome-caraway-60-cm/3663602637455_CAPL.prd) | N1, N5, I2 — 3 |
-| Caraway 80 | [3663602637462](https://www.castorama.pl/korpus-szafki-kuchennej-dolnej-goodhome-caraway-80-cm/3663602637462_CAPL.prd) | N2, I1 — 2 |
-| Panele do słupka AGD | [3663602637905](https://www.castorama.pl/panele-do-slupka-wysokiego-agd-goodhome-caraway/3663602637905_CAPL.prd) | W1 i W2 — dwie zabudowy do kompletacji, nie dwa gotowe korpusy |
-| Soto standard 60 | [3663602479161](https://www.castorama.pl/korpus-szuflady-goodhome-soto-60-cm-antracyt/3663602479161_CAPL.prd) | Przykład: gł. 45, szer. zewn. 56,4, wys. 10,8 cm |
-| Soto głęboka 60 | [3663602479277](https://www.castorama.pl/korpus-szuflady-glebokiej-goodhome-soto-60-cm-antracyt/3663602479277_CAPL.prd) | Przykład: gł. 45, szer. zewn. 56,4, bok 19 cm |
-| Pebre cargo 30 | [3663602480150](https://www.castorama.pl/kosz-cargo-goodhome-pebre-30-cm/3663602480150_CAPL.prd) | N4: dwa poziomy, 26,4×48,6×48,4 cm |
+| Caraway30 | [3663602637417](https://www.castorama.pl/korpus-szafki-kuchennej-dolnej-goodhome-caraway-30-cm/3663602637417_CAPL.prd) | N4,I3 — 2 |
+| Caraway40 | [3663602637424](https://www.castorama.pl/korpus-szafki-kuchennej-dolnej-goodhome-caraway-40-cm/3663602637424_CAPL.prd) | W3,N6A — 2; N6A bez frontu, wykończenie korpusu do doboru |
+| Caraway60 | [3663602637455](https://www.castorama.pl/korpus-szafki-kuchennej-dolnej-goodhome-caraway-60-cm/3663602637455_CAPL.prd) | N1,N5,I2 — 3 |
+| Caraway80 | [3663602637462](https://www.castorama.pl/korpus-szafki-kuchennej-dolnej-goodhome-caraway-80-cm/3663602637462_CAPL.prd) | N2,I1 — 2 |
+| Panele wysokiego słupka AGD | [3663602637905](https://www.castorama.pl/panele-do-slupka-wysokiego-agd-goodhome-caraway/3663602637905_CAPL.prd) | W1,W2,W4,N6B — cztery zabudowy do kompletacji, nie cztery gotowe korpusy |
+| Soto standard60 | [3663602479161](https://www.castorama.pl/korpus-szuflady-goodhome-soto-60-cm-antracyt/3663602479161_CAPL.prd) | Przykład gł.45, szer. zewn.56,4, wys.10,8 cm |
+| Soto głęboka60 | [3663602479277](https://www.castorama.pl/korpus-szuflady-glebokiej-goodhome-soto-60-cm-antracyt/3663602479277_CAPL.prd) | Przykład gł.45, szer. zewn.56,4, bok19 cm |
+| Pebre cargo30 | [3663602480150](https://www.castorama.pl/kosz-cargo-goodhome-pebre-30-cm/3663602480150_CAPL.prd) | N4, dwa poziomy,26,4×48,6×48,4 cm |
 
-Łącznie baza dziewięciu dolnych korpusów katalogowych. Dobór frontów, prowadnic, zawiasów, nóżek, blend, cokołów, paneli końcowych, blatów, mocowań i AGD pozostaje otwarty. Panele słupków bazują na boku 219×57 cm, po dodaniu nóżek 15 cm model ma 234 cm wysokości; potrzebne są półki, poprzeczki, fronty i wentylacja. Nie podano ilości paneli jako gotowej listy zakupowej.
+Łącznie dziewięć standardowych korpusów dolnych. Słupki modelowe234 cm bazują na panelach219 cm i nogach15 cm, ale wymagają półek, poprzeczek, frontów, blend, mocowań i wentylacji. W4/N6B jako szafy magazynowe wymagają potwierdzenia użycia wybranego zestawu paneli z odpowiednimi półkami; karta paneli AGD nie jest kompletnym korpusem na zapasy. Pozostałe mechanizmy są propozycjami, nie potwierdzonym katalogowym kompletem w każdej szerokości. Blat, panele końcowe, nóżki, cokoły i AGD dobiera się osobno. Nie podano cen ani dostępności jako potwierdzonych.
 
-**Wyjątki:** nie potwierdzono kompletnego wysokiego korpusu Caraway 40 cm dla W3 ani standardowych korpusów dolnych głębokości 30 cm dla R1–R3. Utrzymanie wyspy 90 cm oznacza płytki tył na wymiar albo rezygnację z tych schowków. Dwa pełne standardowe rzędy z frontami przekroczą 90 cm. Narożnik C1 wymaga panelu/blendy; jest niedostępny. Mechanizmy inne niż przytoczone przykłady są propozycjami do doboru w danej szerokości, bez deklaracji zgodności całego zestawu.
+## Zapis i zgodność
 
-## Kontrole i ograniczenia
+Planer przechowuje dane lokalnie pod **ogrodniki-kuchnia3d-v2**, schema2. Odczytuje dawny v1 oraz stare JSON schema1, zachowując stare kopie, ilości, nazwy, notatki i przydziały. Dawne R1–R3 mają status wycofanych; można przenieść ich zawartość do dowolnej rzeczywistej przegrody bez usuwania przypisania i jego numeru. Stare pozycje mogą wymagać sprawdzenia gabarytów w nowych szafkach. Domyślne położenia sprzętów migrowane do nowych blatów; własne położenia i gabaryty pozostają do sprawdzenia przez użytkownika.
 
-- Rzeczywisty WebGL, otwieranie pojedynczych szuflad i całych frontów, rzut z góry, dobór mechanizmu bez usuwania zawartości, zapis po przeładowaniu, własne przedmioty, gabaryty, import/eksport i tryb bez WebGL sprawdzone w Chromium. Telefon emulowany 412×915: rzeczywiste zdarzenia dotykowe pan/pinch, wybór szafki, podgląd szuflady, panele, lista i zapis. Brak testu na fizycznym telefonie.
-- Kontrola pojemności porównuje gabaryt **jednej sztuki** z szacunkową rezerwą w przegrodzie. Nie układa wielu sztuk, nie liczy stosów, nośności ani zajętości przestrzeni przez okucia. Podziały frontów i rezerwy prowadnic są poglądowe. Zlew/syfon, płyta, wentylacja, rzeczywiste wysokości frontów i systemy mocowania wymagają projektu wykonawczego.
-- Model sygnalizuje zawężenie przejścia przy otwartych frontach. Przykładowy wysuw szuflady 45 cm naprzeciw 45 cm pozostawia z 130 cm około 40 cm; przy otwartej zmywarce przyjętej na 72 cm i szufladzie — około 13 cm. Nie zakładać wygodnej komunikacji podczas jednoczesnego otwarcia. Dawne 60 cm skrzydła z analizy ergonomii było przybliżeniem; trzeba wstawić faktyczny model AGD.
-- Brak zmiany konstrukcji domu, automatycznej synchronizacji geometrii z edytorem, zamawiania produktów lub zapisu w chmurze. Kolory i wygląd frontów są ilustracyjne.
+JSON służy do kopii i przenoszenia między urządzeniami. CSV zawiera moduły z EAN/źródłami, przypisania i brakujące pozycje; wydruk także notatki i sprzęty. Zmiany nie modyfikują zapisów rzutu domu i nie synchronizują automatycznie ręcznie przesuniętych ścian/mebli z 2D. Brak zapisu w chmurze i wysyłki inwentarza na serwer.
 
-Testy: `timeout 30s node tools/check_kitchen3d.mjs`, `timeout 60s node tools/check_kitchen_browser.js`, `timeout 60s node tools/check_kitchen_browser.js mobile`. Three.js 0.180.0 dołączony lokalnie, [licencja MIT](vendor/three/LICENSE); bez CDN i zewnętrznych tekstur.
+Three.js 0.180.0 dołączony lokalnie z [licencją MIT](vendor/three/LICENSE), bez CDN. Testy: `timeout 30s node tools/check_kitchen3d.mjs`; `timeout 60s node tools/check_kitchen_browser.js` i osobno argumenty `mobile` oraz `legacy`. Model, JSON/CSV/PNG/wydruk, migracja oraz dotyk sprawdzone w Chromium; telefon emulowany 412×915, bez fizycznego urządzenia.

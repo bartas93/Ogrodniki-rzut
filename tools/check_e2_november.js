@@ -60,31 +60,5 @@ for(const id of [75,76,101]){
   }
   assert.equal(conflictingProxies,2,'Kontrola musi wykryć, a nie ukryć kolizję obu rezerw');
 }
-const previous=JSON.parse(JSON.stringify(s));
-const changed=[75,76,86,87,101];
-for(const f of previous.furn)if(changed.includes(f.id))f.x+=123;
-const custom=previous.furn.find(f=>f.key==='k240');custom.name='Mój zachowany blat';custom.notes=['Własna notatka'];
-previous.furn.push({...previous.furn[0],id:previous.nextId++,name:'Mój dodatkowy mebel'});
-const saved=new Map([['ogrodniki-rzut-v23:E2',JSON.stringify(previous)]]);
-const migrated=launch(saved).current();
-for(const id of changed){const actual=migrated.furn.find(f=>f.id===id),expected=s.furn.find(f=>f.id===id);assert.equal(JSON.stringify(actual),JSON.stringify(expected));}
-assert.equal(migrated.furn.find(f=>f.key==='k240').name,'Mój zachowany blat');
-assert.ok(migrated.furn.some(f=>f.name==='Mój dodatkowy mebel'));
-assert.equal(saved.get('ogrodniki-rzut-v23:E2'),JSON.stringify(previous),'Nie usuwaj kopii v23');
-const e2s=api.fresh('E2S');e2s.furn[0].name='Moja kuchnia E2S';saved.set('ogrodniki-rzut-v23:E2S',JSON.stringify(e2s));
-assert.equal(JSON.stringify(launch(saved).load('E2S')),JSON.stringify(e2s));
-// V24: obracamy tylko M75, zachowując jego nazwę/warstwę i wszystkie inne edycje.
-const v24=JSON.parse(JSON.stringify(s));
-const oldSofa=v24.furn.find(f=>f.id===75);oldSofa.rot=270;oldSofa.x=685;oldSofa.y=6650;oldSofa.name='Moja sofa';oldSofa.layer='Własna warstwa';
-v24.furn.find(f=>f.id===76).x+=50;v24.rooms[0].name='Mój salon';
-saved.set('ogrodniki-rzut-v24:E2',JSON.stringify(v24));
-const from24=launch(saved).current(),updatedSofa=from24.furn.find(f=>f.id===75);
-assert.equal(updatedSofa.rot,0);assert.equal(updatedSofa.x,2150);assert.equal(updatedSofa.y,6435);
-assert.equal(updatedSofa.name,'Moja sofa');assert.equal(updatedSofa.layer,'Własna warstwa');
-for(const field of ['walls','rooms','hidden','set','ui','nextId'])assert.equal(JSON.stringify(from24[field]),JSON.stringify(v24[field]),'Zachowaj '+field);
-assert.equal(JSON.stringify(from24.furn.filter(f=>f.id!==75)),JSON.stringify(v24.furn.filter(f=>f.id!==75)),'Tylko M75 może się zmienić');
-assert.equal(saved.get('ogrodniki-rzut-v24:E2'),JSON.stringify(v24),'Nie usuwaj kopii v24');
-for(const v of ['E2S','R1','R2','R3']){const state=api.fresh(v);state.furn[0].name='Własny '+v;saved.set('ogrodniki-rzut-v24:'+v,JSON.stringify(state));assert.equal(JSON.stringify(launch(saved).load(v)),JSON.stringify(state),'Niezależny '+v);}
-const v32=JSON.parse(JSON.stringify(s));v32.furn.find(f=>f.id===75).x+=50;saved.set('ogrodniki-rzut-v32:E2',JSON.stringify(v32));
-assert.equal(JSON.stringify(launch(saved).current()),JSON.stringify(v32),'Nie nadpisuj późniejszych edycji v32');
-console.log('E2_NOVEMBER_OK: narożnik 305×220, układ U, WC/umywalka, sofa pokoju 3 i migracja; wykryta kolizja konserwatywnych rezerw M75/M76 rozłożonych jednocześnie');
+// Migracje rzeczywistych zapisów v23/v32: tools/check_project_revision.js.
+console.log('E2_NOVEMBER_OK: M76 305×220, układ U, WC/umywalka, sofa pokoju 3; kontrola wykrywa kolizję rezerw M75/M76 rozłożonych jednocześnie');

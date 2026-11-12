@@ -7,7 +7,7 @@ function launch(saved=new Map()){
 }
 const api=launch(),s=api.state(),get=(state,id)=>state.furn.find(f=>f.id===id),tall=get(s,71),counter=get(s,72);
 const fridge=tall.equipment.find(e=>e.kind==='fridge'),oven=tall.equipment.find(e=>e.kind==='oven'),pantry=tall.equipment.find(e=>e.id===3),corner=tall.equipment.find(e=>e.kind==='filler');
-assert.equal(fridge.id,1);assert.equal(fridge.x,600);assert.equal(oven.id,2);assert.equal(oven.x,0);assert.equal(pantry.w,400);assert.equal(corner.id,4);assert.equal(corner.height,900);
+assert.equal(fridge.id,1);assert.equal(fridge.x,1200);assert.equal(oven.id,2);assert.equal(oven.x,600);assert.equal(pantry.w,400);assert.equal(corner.id,4);assert.equal(corner.height,900);
 for(const f of [tall,counter]){
  const sorted=[...f.equipment].sort((a,b)=>a.x-b.x);let end=0;
  for(const e of sorted){assert.equal(e.x,end,'Brak luk i nakładania modułów M'+f.id);assert.ok(e.w>0&&e.d<=f.d);end=e.x+e.w;}
@@ -30,6 +30,6 @@ for(const key of Object.keys(old).filter(k=>k!=='furn'))assert.equal(JSON.string
 for(const id of [71,72]){const changed=get(m,id),previous=get(old,id);for(const key of Object.keys(previous).filter(k=>!['equipment','nextEquipmentId','notes'].includes(k)))assert.equal(JSON.stringify(changed[key]),JSON.stringify(previous[key]),'M'+id+' '+key);assert.ok(changed.notes.includes('Moja uwaga '+id));}
 assert.equal(get(m,71).equipment.find(e=>e.kind==='fridge').id,1);assert.equal(get(m,72).equipment.find(e=>e.kind==='hob').id,5);
 assert.equal(saved.get('ogrodniki-rzut-v29:E2'),JSON.stringify(old));
-const custom=clone(m);get(custom,72).equipment.find(e=>e.id===5).x+=20;saved.set('ogrodniki-rzut-v32:E2',JSON.stringify(custom));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(custom),'Nie powtarzaj migracji v32');
+const custom=clone(m);get(custom,72).equipment.find(e=>e.id===5).x+=20;saved.set('ogrodniki-rzut-v33:E2',JSON.stringify(custom));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(custom),'Nie powtarzaj migracji v32');
 for(const v of ['E2S','R1','R2','R3']){const state=clone(api.fresh(v));saved.set('ogrodniki-rzut-v29:'+v,JSON.stringify(state));assert.equal(JSON.stringify(launch(saved).load(v)),JSON.stringify(state),v);}
 console.log('E2_KITCHEN_OK: trójkąt '+lengths.map(l=>(l/1000).toFixed(2)).join(' / ')+' m, blat 90 cm, dostępne zapasy 40 cm + niski narożnik, trwałe ID i migracja tylko M71/M72');

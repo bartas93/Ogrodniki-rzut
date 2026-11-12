@@ -13,3 +13,5 @@ dialog{border:1px solid var(--line);border-radius:14px;background:var(--white);p
 .supplier-box{margin:15px 0;border:1px solid var(--line);background:var(--paper);border-radius:7px;padding:11px;font-size:10px;line-height:1.6}.supplier-box strong{font-size:11px}.supplier-box p{margin-top:8px}.supplier-box small{display:block;color:var(--muted);font-size:9px;margin-top:3px}
 .supplier-box summary{cursor:pointer;font-weight:650;font-size:11px}.slot-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}.slot-heading button{font-size:9px;min-height:24px;padding:3px 7px}
 .item-name,.inventory-item h3,.inventory-item .where{overflow-wrap:anywhere}.inventory-item>div{min-width:0}
+
+.view-options select{padding:3px;font-size:10px;max-width:100px}.assignment select{max-width:100%;min-width:0}@media(max-width:800px){.view-options{flex-wrap:wrap;bottom:85px}.view-options select{font-size:9px}.view-options label{white-space:nowrap}}
