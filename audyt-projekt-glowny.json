@@ -1,0 +1,1395 @@
+{
+  "variant": "E2",
+  "sourceRevision": 34,
+  "sourceSha256": "0ae298ce740e7b0be7c73e392da4776613bf3e596eca8c3d86d6874fe03c8979",
+  "precision": {
+    "wallOverlaps": [
+      {
+        "furniture": 103,
+        "wall": 35,
+        "dx": 23,
+        "dy": 600,
+        "penetration": 23
+      },
+      {
+        "furniture": 115,
+        "wall": 48,
+        "dx": 23,
+        "dy": 600,
+        "penetration": 23
+      },
+      {
+        "furniture": 141,
+        "wall": 8,
+        "dx": 23,
+        "dy": 600,
+        "penetration": 23
+      }
+    ],
+    "furnitureOverlaps": [],
+    "unsupportedWalls": []
+  },
+  "reviewMeasurements": {
+    "footprintWidth": 17824,
+    "footprintDepth": 10624,
+    "roomRasterArea": 140.33,
+    "laundry": {
+      "closedAisle": 1325,
+      "nominalDoorLeaf": 500,
+      "oneDoorOpen": 825,
+      "twoDoorsOpen": 325
+    },
+    "bath": {
+      "wcZoneWidth": 900,
+      "basinToBath": 1025
+    },
+    "bedroom": {
+      "bedToCrib": 50,
+      "cribToTV": 800
+    },
+    "utilityDeviceGaps": [
+      20,
+      20
+    ],
+    "cabinetBays": [
+      {
+        "ids": [
+          102,
+          103
+        ],
+        "left": 10950,
+        "right": 12700,
+        "width": 1750,
+        "usedWidth": 1748,
+        "leftMargin": 25,
+        "rightMargin": -23
+      },
+      {
+        "ids": [
+          114,
+          115
+        ],
+        "left": 5950,
+        "right": 7700,
+        "width": 1750,
+        "usedWidth": 1748,
+        "leftMargin": 25,
+        "rightMargin": -23
+      },
+      {
+        "ids": [
+          139,
+          140,
+          141
+        ],
+        "left": 14950,
+        "right": 17200,
+        "width": 2250,
+        "usedWidth": 2248,
+        "leftMargin": 25,
+        "rightMargin": -23
+      }
+    ],
+    "staleStorageNotes": [
+      "Robot sprzątający: stacja pod ławką wiatrołapu z gniazdem."
+    ]
+  },
+  "dryingRack": {
+    "gardenExitFromMain": false,
+    "problems": [
+      {
+        "id": 88,
+        "messages": [
+          "strefa „załadunek i wyjęcie urządzeń” zablokowana w 37%: Suszarka stojąca — ograniczenie zaakceptowane"
+        ]
+      },
+      {
+        "id": 90,
+        "messages": [
+          "strefa „otwarcie drzwi” zablokowana w 87%: Suszarka stojąca — ograniczenie zaakceptowane"
+        ]
+      },
+      {
+        "id": 91,
+        "messages": [
+          "strefa „otwarcie drzwi” zablokowana w 81%: Suszarka stojąca — ograniczenie zaakceptowane"
+        ]
+      }
+    ]
+  },
+  "doors": [
+    {
+      "id": 4,
+      "wall": 1,
+      "rough": 900,
+      "clear": 800,
+      "effective": 800,
+      "height": 2050,
+      "piers": [
+        50,
+        200
+      ],
+      "issues": [],
+      "warnings": [
+        "krótki odcinek do narożnika: 50 / 200 mm; dobrać opaski i mocowanie"
+      ]
+    },
+    {
+      "id": 10,
+      "wall": 8,
+      "rough": 1000,
+      "clear": 900,
+      "effective": 900,
+      "height": 2050,
+      "piers": [
+        300,
+        725
+      ],
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "id": 21,
+      "wall": 18,
+      "rough": 1000,
+      "clear": 900,
+      "effective": 900,
+      "height": 2250,
+      "piers": [
+        500,
+        2900
+      ],
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "id": 23,
+      "wall": 22,
+      "rough": 900,
+      "clear": 800,
+      "effective": 800,
+      "height": 2050,
+      "piers": [
+        650,
+        650
+      ],
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "id": 28,
+      "wall": 27,
+      "rough": 900,
+      "clear": 800,
+      "effective": 800,
+      "height": 2050,
+      "piers": [
+        1250,
+        950
+      ],
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "id": 29,
+      "wall": 27,
+      "rough": 1000,
+      "clear": 900,
+      "effective": 900,
+      "height": 2050,
+      "piers": [
+        600,
+        700
+      ],
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "id": 30,
+      "wall": 27,
+      "rough": 900,
+      "clear": 800,
+      "effective": 800,
+      "height": 2050,
+      "piers": [
+        50,
+        50
+      ],
+      "issues": [],
+      "warnings": [
+        "krótki odcinek do narożnika: 50 / 50 mm; dobrać opaski i mocowanie"
+      ]
+    },
+    {
+      "id": 39,
+      "wall": 38,
+      "rough": 900,
+      "clear": 800,
+      "effective": 800,
+      "height": 2050,
+      "piers": [
+        900,
+        450
+      ],
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "id": 41,
+      "wall": 40,
+      "rough": 1000,
+      "clear": 900,
+      "effective": 900,
+      "height": 2050,
+      "piers": [
+        1000,
+        650
+      ],
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "id": 43,
+      "wall": 42,
+      "rough": 900,
+      "clear": 800,
+      "effective": 800,
+      "height": 2050,
+      "piers": [
+        25,
+        25
+      ],
+      "issues": [],
+      "warnings": [
+        "krótki odcinek do narożnika: 25 / 25 mm; dobrać opaski i mocowanie"
+      ]
+    },
+    {
+      "id": 45,
+      "wall": 42,
+      "rough": 1000,
+      "clear": 900,
+      "effective": 900,
+      "height": 2050,
+      "piers": [
+        75,
+        75
+      ],
+      "issues": [],
+      "warnings": [
+        "krótki odcinek do narożnika: 75 / 75 mm; dobrać opaski i mocowanie"
+      ]
+    },
+    {
+      "id": 46,
+      "wall": 42,
+      "rough": 900,
+      "clear": 800,
+      "effective": 800,
+      "height": 2050,
+      "piers": [
+        50,
+        1000
+      ],
+      "issues": [],
+      "warnings": [
+        "krótki odcinek do narożnika: 50 / 1000 mm; dobrać opaski i mocowanie"
+      ]
+    },
+    {
+      "id": 52,
+      "wall": 51,
+      "rough": 900,
+      "clear": 800,
+      "effective": 800,
+      "height": 2050,
+      "piers": [
+        650,
+        50
+      ],
+      "issues": [],
+      "warnings": [
+        "krótki odcinek do narożnika: 650 / 50 mm; dobrać opaski i mocowanie"
+      ]
+    },
+    {
+      "id": 58,
+      "wall": 57,
+      "rough": 900,
+      "clear": 800,
+      "effective": 800,
+      "height": 2050,
+      "piers": [
+        50,
+        50
+      ],
+      "issues": [],
+      "warnings": [
+        "krótki odcinek do narożnika: 50 / 50 mm; dobrać opaski i mocowanie"
+      ]
+    }
+  ],
+  "rooms": [
+    {
+      "id": 59,
+      "name": "Salon + kuchnia + jadalnia + komunikacja",
+      "area": 44.76,
+      "dimensions": null,
+      "openings": [
+        "O2",
+        "O13",
+        "O14",
+        "O19",
+        "O20"
+      ],
+      "roughGlazingArea": 13.15,
+      "requiredAtOneEighth": 5.6
+    },
+    {
+      "id": 60,
+      "name": "Spiżarnia",
+      "area": 4.07,
+      "dimensions": [
+        1850,
+        2200
+      ],
+      "openings": [],
+      "roughGlazingArea": 0,
+      "requiredAtOneEighth": 0.51
+    },
+    {
+      "id": 61,
+      "name": "Łazienka (prysznic)",
+      "area": 5.12,
+      "dimensions": [
+        3100,
+        1650
+      ],
+      "openings": [],
+      "roughGlazingArea": 0,
+      "requiredAtOneEighth": 0.64
+    },
+    {
+      "id": 62,
+      "name": "Pralnia / suszarnia",
+      "area": 12.83,
+      "dimensions": null,
+      "openings": [
+        "O5"
+      ],
+      "roughGlazingArea": 1.44,
+      "requiredAtOneEighth": 1.6
+    },
+    {
+      "id": 63,
+      "name": "Pokój 3",
+      "area": 12.44,
+      "dimensions": [
+        3200,
+        4000
+      ],
+      "openings": [
+        "O6"
+      ],
+      "roughGlazingArea": 2.25,
+      "requiredAtOneEighth": 1.56
+    },
+    {
+      "id": 64,
+      "name": "Kotłownia / gospodarcze",
+      "area": 8.99,
+      "dimensions": [
+        2900,
+        3100
+      ],
+      "openings": [
+        "O7"
+      ],
+      "roughGlazingArea": 0.36,
+      "requiredAtOneEighth": 1.12
+    },
+    {
+      "id": 65,
+      "name": "Wiatrołap",
+      "area": 5.85,
+      "dimensions": [
+        2250,
+        2600
+      ],
+      "openings": [
+        "O9"
+      ],
+      "roughGlazingArea": 0.36,
+      "requiredAtOneEighth": 0.73
+    },
+    {
+      "id": 66,
+      "name": "Pokój 2",
+      "area": 12.02,
+      "dimensions": [
+        2850,
+        4250
+      ],
+      "openings": [
+        "O15"
+      ],
+      "roughGlazingArea": 2.25,
+      "requiredAtOneEighth": 1.5
+    },
+    {
+      "id": 67,
+      "name": "Sypialnia",
+      "area": 13.81,
+      "dimensions": null,
+      "openings": [
+        "O16"
+      ],
+      "roughGlazingArea": 2.7,
+      "requiredAtOneEighth": 1.73
+    },
+    {
+      "id": 68,
+      "name": "Łazienka (wanna)",
+      "area": 4.88,
+      "dimensions": [
+        1950,
+        2500
+      ],
+      "openings": [],
+      "roughGlazingArea": 0,
+      "requiredAtOneEighth": 0.61
+    },
+    {
+      "id": 69,
+      "name": "Garderoba",
+      "area": 3.6,
+      "dimensions": [
+        2250,
+        1600
+      ],
+      "openings": [],
+      "roughGlazingArea": 0,
+      "requiredAtOneEighth": 0.45
+    },
+    {
+      "id": 70,
+      "name": "Gabinet",
+      "area": 11.97,
+      "dimensions": null,
+      "openings": [
+        "O11",
+        "O17"
+      ],
+      "roughGlazingArea": 3.15,
+      "requiredAtOneEighth": 1.5
+    }
+  ],
+  "kitchen": {
+    "triangle": [
+      1221,
+      1600,
+      2693
+    ],
+    "northAisle": 1200,
+    "westAisle": 1200,
+    "eastAisle": 1000,
+    "islandSize": [
+      1700,
+      1000
+    ],
+    "stoolsToUnusedTable": 750,
+    "closedTableToIsland": 1350
+  },
+  "wardrobe": {
+    "aisle": 1000,
+    "accessoryShelfWidth": 400
+  },
+  "technical": {
+    "pinch": 850,
+    "shelves": [
+      {
+        "id": 109,
+        "w": 900,
+        "d": 600
+      },
+      {
+        "id": 110,
+        "w": 900,
+        "d": 500
+      },
+      {
+        "id": 148,
+        "w": 500,
+        "d": 600
+      },
+      {
+        "id": 149,
+        "w": 400,
+        "d": 350
+      }
+    ],
+    "shelfFootprint": 1.43
+  },
+  "scenarios": [
+    {
+      "name": "Codziennie: stół złożony, hokery odstawione",
+      "problems": [],
+      "warnings": [
+        {
+          "id": 74,
+          "name": "Stół 160→280, 4→10 os.",
+          "messages": [
+            "strefa „krzesła” częściowo zajęta (19%): Sofa 200×97 — spanie 140×200"
+          ]
+        },
+        {
+          "id": 76,
+          "name": "Narożnik 305×220 — dłuższy bok przy ścianie zachodniej",
+          "messages": [
+            "strefa „dojście po rozłożeniu” częściowo zajęta (10%): Stolik 110×60"
+          ]
+        },
+        {
+          "id": 101,
+          "name": "Sofa 200×97 — spanie 140×200",
+          "messages": [
+            "strefa „dojście” częściowo zajęta (12%): Biurko 140×70 (przy oknie)"
+          ]
+        },
+        {
+          "id": 110,
+          "name": "Regał stalowy 90×50 — dolna ściana",
+          "messages": [
+            "strefa „dostęp do regału” częściowo zajęta (28%): Regał stalowy 50×60 — zachód"
+          ]
+        },
+        {
+          "id": 118,
+          "name": "PAX 100 — pościel",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 119,
+          "name": "PAX 75 — ręczniki",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 120,
+          "name": "PAX 50 — leki i dokumenty",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 127,
+          "name": "Umywalka 60 + lustro",
+          "messages": [
+            "strefa „przed umywalką” częściowo zajęta (6%): ściana"
+          ]
+        },
+        {
+          "id": 148,
+          "name": "Regał stalowy 50×60 — zachód",
+          "messages": [
+            "strefa „dostęp” częściowo zajęta (8%): Regał stalowy 90×50 — dolna ściana"
+          ]
+        }
+      ],
+      "unreachable": []
+    },
+    {
+      "name": "Dwa zajęte hokery, stół złożony i nieużywany",
+      "problems": [],
+      "warnings": [
+        {
+          "id": 74,
+          "name": "Stół 160→280, 4→10 os.",
+          "messages": [
+            "strefa „krzesła” częściowo zajęta (19%): Sofa 200×97 — spanie 140×200",
+            "strefa „krzesła” częściowo zajęta (8%): Wyspa 170×100 — blat i 2 hokery"
+          ]
+        },
+        {
+          "id": 76,
+          "name": "Narożnik 305×220 — dłuższy bok przy ścianie zachodniej",
+          "messages": [
+            "strefa „dojście po rozłożeniu” częściowo zajęta (10%): Stolik 110×60"
+          ]
+        },
+        {
+          "id": 101,
+          "name": "Sofa 200×97 — spanie 140×200",
+          "messages": [
+            "strefa „dojście” częściowo zajęta (12%): Biurko 140×70 (przy oknie)"
+          ]
+        },
+        {
+          "id": 110,
+          "name": "Regał stalowy 90×50 — dolna ściana",
+          "messages": [
+            "strefa „dostęp do regału” częściowo zajęta (28%): Regał stalowy 50×60 — zachód"
+          ]
+        },
+        {
+          "id": 118,
+          "name": "PAX 100 — pościel",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 119,
+          "name": "PAX 75 — ręczniki",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 120,
+          "name": "PAX 50 — leki i dokumenty",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 127,
+          "name": "Umywalka 60 + lustro",
+          "messages": [
+            "strefa „przed umywalką” częściowo zajęta (6%): ściana"
+          ]
+        },
+        {
+          "id": 148,
+          "name": "Regał stalowy 50×60 — zachód",
+          "messages": [
+            "strefa „dostęp” częściowo zajęta (8%): Regał stalowy 90×50 — dolna ściana"
+          ]
+        }
+      ],
+      "unreachable": []
+    },
+    {
+      "name": "Stół 280 cm / 10 osób, hokery odstawione",
+      "problems": [],
+      "warnings": [
+        {
+          "id": 73,
+          "name": "Wyspa 170×100 — blat i 2 hokery",
+          "messages": [
+            "strefa „hokery / komunikacja od jadalni” częściowo zajęta (21%): Stół 160→280, 4→10 os."
+          ]
+        },
+        {
+          "id": 74,
+          "name": "Stół 160→280, 4→10 os.",
+          "messages": [
+            "strefa „krzesła” częściowo zajęta (16%): Sofa 200×97 — spanie 140×200"
+          ]
+        },
+        {
+          "id": 76,
+          "name": "Narożnik 305×220 — dłuższy bok przy ścianie zachodniej",
+          "messages": [
+            "strefa „dojście po rozłożeniu” częściowo zajęta (10%): Stolik 110×60"
+          ]
+        },
+        {
+          "id": 101,
+          "name": "Sofa 200×97 — spanie 140×200",
+          "messages": [
+            "strefa „dojście” częściowo zajęta (12%): Biurko 140×70 (przy oknie)"
+          ]
+        },
+        {
+          "id": 110,
+          "name": "Regał stalowy 90×50 — dolna ściana",
+          "messages": [
+            "strefa „dostęp do regału” częściowo zajęta (28%): Regał stalowy 50×60 — zachód"
+          ]
+        },
+        {
+          "id": 118,
+          "name": "PAX 100 — pościel",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 119,
+          "name": "PAX 75 — ręczniki",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 120,
+          "name": "PAX 50 — leki i dokumenty",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 127,
+          "name": "Umywalka 60 + lustro",
+          "messages": [
+            "strefa „przed umywalką” częściowo zajęta (6%): ściana"
+          ]
+        },
+        {
+          "id": 148,
+          "name": "Regał stalowy 50×60 — zachód",
+          "messages": [
+            "strefa „dostęp” częściowo zajęta (8%): Regał stalowy 90×50 — dolna ściana"
+          ]
+        }
+      ],
+      "unreachable": []
+    },
+    {
+      "name": "Spanie M75",
+      "problems": [],
+      "warnings": [
+        {
+          "id": 74,
+          "name": "Stół 160→280, 4→10 os.",
+          "messages": [
+            "strefa „krzesła” częściowo zajęta (19%): Sofa 200×97 — spanie 140×200"
+          ]
+        },
+        {
+          "id": 76,
+          "name": "Narożnik 305×220 — dłuższy bok przy ścianie zachodniej",
+          "messages": [
+            "strefa „dojście po rozłożeniu” częściowo zajęta (23%): Rozłożenie M75",
+            "strefa „po rozłożeniu” częściowo zajęta (20%): Rozłożenie M75"
+          ]
+        },
+        {
+          "id": 101,
+          "name": "Sofa 200×97 — spanie 140×200",
+          "messages": [
+            "strefa „dojście” częściowo zajęta (12%): Biurko 140×70 (przy oknie)"
+          ]
+        },
+        {
+          "id": 110,
+          "name": "Regał stalowy 90×50 — dolna ściana",
+          "messages": [
+            "strefa „dostęp do regału” częściowo zajęta (28%): Regał stalowy 50×60 — zachód"
+          ]
+        },
+        {
+          "id": 118,
+          "name": "PAX 100 — pościel",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 119,
+          "name": "PAX 75 — ręczniki",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 120,
+          "name": "PAX 50 — leki i dokumenty",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 127,
+          "name": "Umywalka 60 + lustro",
+          "messages": [
+            "strefa „przed umywalką” częściowo zajęta (6%): ściana"
+          ]
+        },
+        {
+          "id": 148,
+          "name": "Regał stalowy 50×60 — zachód",
+          "messages": [
+            "strefa „dostęp” częściowo zajęta (8%): Regał stalowy 90×50 — dolna ściana"
+          ]
+        }
+      ],
+      "unreachable": []
+    },
+    {
+      "name": "Spanie M76",
+      "problems": [
+        {
+          "id": 75,
+          "name": "Sofa 200×97 — spanie 140×200",
+          "messages": [
+            "strefa „po rozłożeniu” zablokowana w 58%: Rozłożenie M76"
+          ]
+        }
+      ],
+      "warnings": [
+        {
+          "id": 74,
+          "name": "Stół 160→280, 4→10 os.",
+          "messages": [
+            "strefa „krzesła” częściowo zajęta (19%): Sofa 200×97 — spanie 140×200"
+          ]
+        },
+        {
+          "id": 76,
+          "name": "Narożnik 305×220 — dłuższy bok przy ścianie zachodniej",
+          "messages": [
+            "strefa „dojście po rozłożeniu” częściowo zajęta (10%): Stolik 110×60"
+          ]
+        },
+        {
+          "id": 101,
+          "name": "Sofa 200×97 — spanie 140×200",
+          "messages": [
+            "strefa „dojście” częściowo zajęta (12%): Biurko 140×70 (przy oknie)"
+          ]
+        },
+        {
+          "id": 110,
+          "name": "Regał stalowy 90×50 — dolna ściana",
+          "messages": [
+            "strefa „dostęp do regału” częściowo zajęta (28%): Regał stalowy 50×60 — zachód"
+          ]
+        },
+        {
+          "id": 118,
+          "name": "PAX 100 — pościel",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 119,
+          "name": "PAX 75 — ręczniki",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 120,
+          "name": "PAX 50 — leki i dokumenty",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 127,
+          "name": "Umywalka 60 + lustro",
+          "messages": [
+            "strefa „przed umywalką” częściowo zajęta (6%): ściana"
+          ]
+        },
+        {
+          "id": 148,
+          "name": "Regał stalowy 50×60 — zachód",
+          "messages": [
+            "strefa „dostęp” częściowo zajęta (8%): Regał stalowy 90×50 — dolna ściana"
+          ]
+        }
+      ],
+      "unreachable": []
+    },
+    {
+      "name": "Spanie M101",
+      "problems": [],
+      "warnings": [
+        {
+          "id": 74,
+          "name": "Stół 160→280, 4→10 os.",
+          "messages": [
+            "strefa „krzesła” częściowo zajęta (19%): Sofa 200×97 — spanie 140×200"
+          ]
+        },
+        {
+          "id": 76,
+          "name": "Narożnik 305×220 — dłuższy bok przy ścianie zachodniej",
+          "messages": [
+            "strefa „dojście po rozłożeniu” częściowo zajęta (10%): Stolik 110×60"
+          ]
+        },
+        {
+          "id": 101,
+          "name": "Sofa 200×97 — spanie 140×200",
+          "messages": [
+            "strefa „dojście” częściowo zajęta (12%): Biurko 140×70 (przy oknie)"
+          ]
+        },
+        {
+          "id": 110,
+          "name": "Regał stalowy 90×50 — dolna ściana",
+          "messages": [
+            "strefa „dostęp do regału” częściowo zajęta (28%): Regał stalowy 50×60 — zachód"
+          ]
+        },
+        {
+          "id": 118,
+          "name": "PAX 100 — pościel",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 119,
+          "name": "PAX 75 — ręczniki",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 120,
+          "name": "PAX 50 — leki i dokumenty",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 127,
+          "name": "Umywalka 60 + lustro",
+          "messages": [
+            "strefa „przed umywalką” częściowo zajęta (6%): ściana"
+          ]
+        },
+        {
+          "id": 148,
+          "name": "Regał stalowy 50×60 — zachód",
+          "messages": [
+            "strefa „dostęp” częściowo zajęta (8%): Regał stalowy 90×50 — dolna ściana"
+          ]
+        }
+      ],
+      "unreachable": []
+    },
+    {
+      "name": "Spanie M117",
+      "problems": [],
+      "warnings": [
+        {
+          "id": 74,
+          "name": "Stół 160→280, 4→10 os.",
+          "messages": [
+            "strefa „krzesła” częściowo zajęta (19%): Sofa 200×97 — spanie 140×200"
+          ]
+        },
+        {
+          "id": 76,
+          "name": "Narożnik 305×220 — dłuższy bok przy ścianie zachodniej",
+          "messages": [
+            "strefa „dojście po rozłożeniu” częściowo zajęta (10%): Stolik 110×60"
+          ]
+        },
+        {
+          "id": 101,
+          "name": "Sofa 200×97 — spanie 140×200",
+          "messages": [
+            "strefa „dojście” częściowo zajęta (12%): Biurko 140×70 (przy oknie)"
+          ]
+        },
+        {
+          "id": 110,
+          "name": "Regał stalowy 90×50 — dolna ściana",
+          "messages": [
+            "strefa „dostęp do regału” częściowo zajęta (28%): Regał stalowy 50×60 — zachód"
+          ]
+        },
+        {
+          "id": 116,
+          "name": "Biurko 140×70 (przy oknie)",
+          "messages": [
+            "strefa „krzesło” częściowo zajęta (17%): Rozłożenie M117"
+          ]
+        },
+        {
+          "id": 118,
+          "name": "PAX 100 — pościel",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 119,
+          "name": "PAX 75 — ręczniki",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 120,
+          "name": "PAX 50 — leki i dokumenty",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 127,
+          "name": "Umywalka 60 + lustro",
+          "messages": [
+            "strefa „przed umywalką” częściowo zajęta (6%): ściana"
+          ]
+        },
+        {
+          "id": 148,
+          "name": "Regał stalowy 50×60 — zachód",
+          "messages": [
+            "strefa „dostęp” częściowo zajęta (8%): Regał stalowy 90×50 — dolna ściana"
+          ]
+        }
+      ],
+      "unreachable": []
+    },
+    {
+      "name": "Spanie M143",
+      "problems": [],
+      "warnings": [
+        {
+          "id": 74,
+          "name": "Stół 160→280, 4→10 os.",
+          "messages": [
+            "strefa „krzesła” częściowo zajęta (19%): Sofa 200×97 — spanie 140×200"
+          ]
+        },
+        {
+          "id": 76,
+          "name": "Narożnik 305×220 — dłuższy bok przy ścianie zachodniej",
+          "messages": [
+            "strefa „dojście po rozłożeniu” częściowo zajęta (10%): Stolik 110×60"
+          ]
+        },
+        {
+          "id": 101,
+          "name": "Sofa 200×97 — spanie 140×200",
+          "messages": [
+            "strefa „dojście” częściowo zajęta (12%): Biurko 140×70 (przy oknie)"
+          ]
+        },
+        {
+          "id": 110,
+          "name": "Regał stalowy 90×50 — dolna ściana",
+          "messages": [
+            "strefa „dostęp do regału” częściowo zajęta (28%): Regał stalowy 50×60 — zachód"
+          ]
+        },
+        {
+          "id": 118,
+          "name": "PAX 100 — pościel",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 119,
+          "name": "PAX 75 — ręczniki",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 120,
+          "name": "PAX 50 — leki i dokumenty",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 127,
+          "name": "Umywalka 60 + lustro",
+          "messages": [
+            "strefa „przed umywalką” częściowo zajęta (6%): ściana"
+          ]
+        },
+        {
+          "id": 142,
+          "name": "Biurko 140×70 (przy oknie)",
+          "messages": [
+            "strefa „krzesło” częściowo zajęta (18%): Rozłożenie M143"
+          ]
+        },
+        {
+          "id": 148,
+          "name": "Regał stalowy 50×60 — zachód",
+          "messages": [
+            "strefa „dostęp” częściowo zajęta (8%): Regał stalowy 90×50 — dolna ściana"
+          ]
+        }
+      ],
+      "unreachable": []
+    },
+    {
+      "name": "Spanie M75 + M101 + M117 + M143 (bez M76)",
+      "problems": [],
+      "warnings": [
+        {
+          "id": 74,
+          "name": "Stół 160→280, 4→10 os.",
+          "messages": [
+            "strefa „krzesła” częściowo zajęta (19%): Sofa 200×97 — spanie 140×200"
+          ]
+        },
+        {
+          "id": 76,
+          "name": "Narożnik 305×220 — dłuższy bok przy ścianie zachodniej",
+          "messages": [
+            "strefa „dojście po rozłożeniu” częściowo zajęta (23%): Rozłożenie M75",
+            "strefa „po rozłożeniu” częściowo zajęta (20%): Rozłożenie M75"
+          ]
+        },
+        {
+          "id": 101,
+          "name": "Sofa 200×97 — spanie 140×200",
+          "messages": [
+            "strefa „dojście” częściowo zajęta (12%): Biurko 140×70 (przy oknie)"
+          ]
+        },
+        {
+          "id": 110,
+          "name": "Regał stalowy 90×50 — dolna ściana",
+          "messages": [
+            "strefa „dostęp do regału” częściowo zajęta (28%): Regał stalowy 50×60 — zachód"
+          ]
+        },
+        {
+          "id": 116,
+          "name": "Biurko 140×70 (przy oknie)",
+          "messages": [
+            "strefa „krzesło” częściowo zajęta (17%): Rozłożenie M117"
+          ]
+        },
+        {
+          "id": 118,
+          "name": "PAX 100 — pościel",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 119,
+          "name": "PAX 75 — ręczniki",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 120,
+          "name": "PAX 50 — leki i dokumenty",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 127,
+          "name": "Umywalka 60 + lustro",
+          "messages": [
+            "strefa „przed umywalką” częściowo zajęta (6%): ściana"
+          ]
+        },
+        {
+          "id": 142,
+          "name": "Biurko 140×70 (przy oknie)",
+          "messages": [
+            "strefa „krzesło” częściowo zajęta (18%): Rozłożenie M143"
+          ]
+        },
+        {
+          "id": 148,
+          "name": "Regał stalowy 50×60 — zachód",
+          "messages": [
+            "strefa „dostęp” częściowo zajęta (8%): Regał stalowy 90×50 — dolna ściana"
+          ]
+        }
+      ],
+      "unreachable": []
+    },
+    {
+      "name": "Rezerwa M76 + M101 + M117 + M143 (M75 zamknięta)",
+      "problems": [
+        {
+          "id": 75,
+          "name": "Sofa 200×97 — spanie 140×200",
+          "messages": [
+            "strefa „po rozłożeniu” zablokowana w 58%: Rozłożenie M76"
+          ]
+        }
+      ],
+      "warnings": [
+        {
+          "id": 74,
+          "name": "Stół 160→280, 4→10 os.",
+          "messages": [
+            "strefa „krzesła” częściowo zajęta (19%): Sofa 200×97 — spanie 140×200"
+          ]
+        },
+        {
+          "id": 76,
+          "name": "Narożnik 305×220 — dłuższy bok przy ścianie zachodniej",
+          "messages": [
+            "strefa „dojście po rozłożeniu” częściowo zajęta (10%): Stolik 110×60"
+          ]
+        },
+        {
+          "id": 101,
+          "name": "Sofa 200×97 — spanie 140×200",
+          "messages": [
+            "strefa „dojście” częściowo zajęta (12%): Biurko 140×70 (przy oknie)"
+          ]
+        },
+        {
+          "id": 110,
+          "name": "Regał stalowy 90×50 — dolna ściana",
+          "messages": [
+            "strefa „dostęp do regału” częściowo zajęta (28%): Regał stalowy 50×60 — zachód"
+          ]
+        },
+        {
+          "id": 116,
+          "name": "Biurko 140×70 (przy oknie)",
+          "messages": [
+            "strefa „krzesło” częściowo zajęta (17%): Rozłożenie M117"
+          ]
+        },
+        {
+          "id": 118,
+          "name": "PAX 100 — pościel",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 119,
+          "name": "PAX 75 — ręczniki",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 120,
+          "name": "PAX 50 — leki i dokumenty",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 127,
+          "name": "Umywalka 60 + lustro",
+          "messages": [
+            "strefa „przed umywalką” częściowo zajęta (6%): ściana"
+          ]
+        },
+        {
+          "id": 142,
+          "name": "Biurko 140×70 (przy oknie)",
+          "messages": [
+            "strefa „krzesło” częściowo zajęta (18%): Rozłożenie M143"
+          ]
+        },
+        {
+          "id": 148,
+          "name": "Regał stalowy 50×60 — zachód",
+          "messages": [
+            "strefa „dostęp” częściowo zajęta (8%): Regał stalowy 90×50 — dolna ściana"
+          ]
+        }
+      ],
+      "unreachable": []
+    },
+    {
+      "name": "Próba równoczesnego spania M75 + rezerwa M76 — oczekiwana kolizja",
+      "problems": [
+        {
+          "id": 163,
+          "name": "Rozłożenie M75",
+          "messages": [
+            "nachodzi na: Rozłożenie M76"
+          ]
+        },
+        {
+          "id": 164,
+          "name": "Rozłożenie M76",
+          "messages": [
+            "nachodzi na: Rozłożenie M75"
+          ]
+        }
+      ],
+      "warnings": [
+        {
+          "id": 74,
+          "name": "Stół 160→280, 4→10 os.",
+          "messages": [
+            "strefa „krzesła” częściowo zajęta (19%): Sofa 200×97 — spanie 140×200"
+          ]
+        },
+        {
+          "id": 76,
+          "name": "Narożnik 305×220 — dłuższy bok przy ścianie zachodniej",
+          "messages": [
+            "strefa „dojście po rozłożeniu” częściowo zajęta (23%): Rozłożenie M75"
+          ]
+        },
+        {
+          "id": 101,
+          "name": "Sofa 200×97 — spanie 140×200",
+          "messages": [
+            "strefa „dojście” częściowo zajęta (12%): Biurko 140×70 (przy oknie)"
+          ]
+        },
+        {
+          "id": 110,
+          "name": "Regał stalowy 90×50 — dolna ściana",
+          "messages": [
+            "strefa „dostęp do regału” częściowo zajęta (28%): Regał stalowy 50×60 — zachód"
+          ]
+        },
+        {
+          "id": 118,
+          "name": "PAX 100 — pościel",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 119,
+          "name": "PAX 75 — ręczniki",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 120,
+          "name": "PAX 50 — leki i dokumenty",
+          "messages": [
+            "strefa „otwarcie drzwi” częściowo zajęta (25%): ściana"
+          ]
+        },
+        {
+          "id": 127,
+          "name": "Umywalka 60 + lustro",
+          "messages": [
+            "strefa „przed umywalką” częściowo zajęta (6%): ściana"
+          ]
+        },
+        {
+          "id": 148,
+          "name": "Regał stalowy 50×60 — zachód",
+          "messages": [
+            "strefa „dostęp” częściowo zajęta (8%): Regał stalowy 90×50 — dolna ściana"
+          ]
+        }
+      ],
+      "unreachable": []
+    }
+  ],
+  "limitations": [
+    "Raster 50 mm; niezależna kontrola prostokątów wykrywa także mniejsze penetracje ścian osiowych.",
+    "Brak modelu pionowego okuć, pełnych frontów i instalacji.",
+    "Światło drzwi według przyjętej rezerwy; nie zestawienie do zamówienia.",
+    "Powierzchnia okien brutto jest górną granicą, nie potwierdzeniem doświetlenia w świetle ościeżnic.",
+    "Niepotwierdzone jednoczesne spanie M75/M76."
+  ]
+}
