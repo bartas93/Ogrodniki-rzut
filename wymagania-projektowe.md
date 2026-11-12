@@ -256,3 +256,16 @@ Ta sekcja zastępuje wcześniejsze położenia wskazanych elementów. [Szczegó�
 Zapis **v33** migruje v32 oraz odpowiednie starsze wersje, zachowując własne nazwy/notatki i niewskazane obiekty oraz stare kopie; bieżący v33 ma pierwszeństwo. M71/M72 nie renumerują istniejącego wyposażenia, nowe dostaje wolne ID. Konstrukcja pozostałych wariantów niezależna. Kuchnia3D ma własny zapis v2 z odczytem v1; zawartość wycofanych szafek R1–R3 zachowana do przeniesienia. Bez chmury i automatycznego przenoszenia własnej geometrii między edytorami.
 
 Testy: `timeout 30s node tools/check_project_revision.js`, `timeout 30s node tools/audit_main_project.js`, `timeout 30s node tools/check_kitchen3d.mjs`, testy przeglądarkowe edytora i kuchni (osobno desktop/mobile/legacy).
+
+
+## 24. Pralnia — płytkie PAX zamiast BILLY (12.11.2026)
+
+**[DECYZJA]** Oba BILLY zastąpione PAX o nominalnej głębokości35cm plus drzwi. Wybrany układ **100+50cm**, trzy rozwierane fronty50cm, wysokość236,4cm. Zachowane identyfikatory obiektów (domyślnie M145/M146) i tagi identyfikujące dawną zabudowę, bez przeliczania numerów reszty projektu.
+
+Według kart IKEA rzeczywiste korpusy mają99,8/49,8cm szerokości i **35,5cm głębokości**. Drzwi FORSAND jako odniesienie mają grubość1,8cm; przyjęto20mm rezerwy frontu, łącznie **37,5cm** bez wystającego uchwytu. Korpusy kotwione do ściany; w suchej części pralni. Korpus100: x8500–8875,y2550–3548; korpus50: x8500–8875,y3550–4048. Zostaje17,7cm do gotowej południowej ściany/przestrzeni przy otworze.
+
+Do szaf naprzeciw **132,5cm**; przy jednym otwartym froncie około82,5cm, przy dwóch przeciwległych około32,5cm (bez uchwytów). Nie otwierać obu stron naraz ani frontu przy otwartych O29. Kontrola korpusów i stref nie modeluje osobnych łuków wszystkich frontów. Zero nowych problemów i pomieszczeń bez dojścia w sprawdzonych stanach; wcześniejsze ograniczenia suszarki i pozostałe uwagi nadal aktualne.
+
+Źródła: [PAX100×35×236](https://www.ikea.com/pl/pl/p/pax-obudowa-szafy-bialy-00214572/), [PAX50×35×236](https://www.ikea.com/pl/pl/p/pax-obudowa-szafy-bialy-40214565/), [FORSAND50×229](https://www.ikea.com/pl/pl/p/forsand-drzwi-bialy-60391091/). Drzwi, zawiasy KOMPLEMENT, półki i uchwyty do kompletacji; nie zlecono zakupu.
+
+Zapis **v34** migruje v33, zmieniając tylko te dwa obiekty i znacznik rewizji. Własne nazwy/notatki i pozostałe edycje zachowane, usuniętego BILLY nie odtwarza. Starsze klucze i inne warianty pozostają. Nie ponawia zmian kuchni, drzwi, garderoby ani robota. Własne edycje v34 mają pierwszeństwo. Testy zakresu migracji i geometrii w `tools/check_project_revision.js`, `tools/check_main_project.js` oraz test przeglądarkowy.

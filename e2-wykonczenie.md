@@ -163,3 +163,12 @@ Kotłownia zachowuje urządzenia i brodzik, ma cztery regały z przejściem85cm.
 W modelu ościeżnica z montażem zabiera po50mm otworu. Rezerwy nie są gotowym zestawieniem do zamówienia. O45 ma teraz100cm otworu dla90cm światła i nie nachodzi na S50; O43 ma zbyt mało miejsca na dowolną opaskę. Rozłożona suszarka M89 odcina wyjście ogrodowe i blokuje obsługę pralni; jej dotychczasowy status referencyjny tego nie naprawia. Konflikt jednoczesnego rozkładania M75/M76 pozostaje. W trzech podstawowych stanach brak problemów i pomieszczeń bez dojścia; uwagi dziewięciu mebli (dziesięciu przy stole dla10 osób) nie zostały ukryte zmianą progów.
 
 V33 zachowuje starsze kopie i własne edycje poza zakresem aktualizacji. Rzeczywiste publiczne stany v23/v32 znajdują się w fixtures testu migracji. Planer3D v2 zachowuje dane v1 i oferuje przeniesienie dawnej zawartości R1–R3 bez kasowania; własne wpisy wymagają sprawdzenia wobec zmienionych gabarytów. Pozostałe warianty bez zmian geometrii.
+
+
+## PAX35 + drzwi w pralni (12.11.2026)
+
+Zgodnie z [§24 wymagań](wymagania-projektowe.md#24-pralnia--płytkie-pax-zamiast-billy-12112026) M145/M146 zastępują dawne BILLY jako PAX100+50cm, wysokość236,4cm. Nominalny korpus35cm ma faktycznie35,5; z drzwiami1,8cm i rezerwą przyjęto **37,5cm** całej głębokości, bez wystającego uchwytu. Trzy fronty50cm i zawiasy do kompletacji. Własne nazwy, uwagi i numery zachowane.
+
+Przejście do szaf naprzeciw132,5cm, około82,5cm przy jednym otwartym froncie. Dwa przeciwległe fronty lub front przy O29 wymagają używania naprzemiennie. Nie zmniejszano stref ani progów; bez nowych problemów i niedostępnych pomieszczeń. Stare ograniczenie rozłożonej suszarki nadal obowiązuje. Kotwienie do ściany i sucha część pralni według instrukcji IKEA.
+
+V34 odczytuje v33, aktualizując wyłącznie dawną parę BILLY, zachowując resztę i stare kopie; nie odtwarza usuniętych szaf. Nowe edycje v34 nie są ponownie migrowane. Pozostałe warianty i niezależna kuchnia3D nie zmieniły geometrii.

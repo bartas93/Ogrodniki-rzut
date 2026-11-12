@@ -223,7 +223,8 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 'use strict';
 const $ = s => document.querySelector(s);
 const svg = $('#cv');
-const LS = 'ogrodniki-rzut-v33';
+const LS = 'ogrodniki-rzut-v34';
+const LAYOUT_LS = 'ogrodniki-rzut-v33';
 const UTILITY_LS = 'ogrodniki-rzut-v32';
 const CORNER_LS = 'ogrodniki-rzut-v31';
 const KITCHEN_LS = 'ogrodniki-rzut-v30';
@@ -1209,7 +1210,28 @@ function variantE2(){
   resizeE2Corner(s);
   reviseE2UtilityRooms(s);
   reviseE2KitchenAndDoors(s);
+  replaceLaundryBillyWithPax(s);
   return s;
+}
+
+// Korpusy PAX nominalnie 35 cm: faktyczne 355 mm + 20 mm rezerwy frontu.
+function replaceLaundryBillyWithPax(s){
+  if(s.projectRevision>=34)return;
+  for(const [index,nominalWidth,start,content] of [[0,1000,2550,'kosze i akcesoria'],[1,500,3550,'ręczniki i zapasy']]){
+    const it=s.furn.find(f=>f.presetTag==='nov12-billy-'+index);
+    if(!it)continue; // Nie odtwarzaj usuniętego ręcznie obiektu.
+    const previousName=it.name;
+    Object.assign(it,{key:index?'pax50':'pax',w:nominalWidth-2,d:375,x:8687.5,y:start+(nominalWidth-2)/2,rot:270,
+      joinery:{nominalWidth,bodyWidth:nominalWidth-2,nominalDepth:350,bodyDepth:355,frontDepth:20,doorThickness:18,doorCount:index?1:2,height:2364},
+      z:[Z('front',750,'otwarcie drzwi i dostęp')]});
+    if(previousName.startsWith('BILLY 80×28×202 — '))it.name='PAX '+nominalWidth/10+'×35 + drzwi — '+content;
+    it.notes=[...(it.notes||[]).filter(n=>!n.startsWith('IKEA BILLY 80×28×202')&&!n.startsWith('W suchej części pralni, poza rozbryzgiem zlewu;')),
+      'PAX nominalnie '+nominalWidth/10+'×35×236 cm; rzeczywisty korpus '+(nominalWidth-2)/10+'×35,5×236,4 cm. Drzwi rozwierane po 50 cm, np. FORSAND grubości 1,8 cm; łączna rezerwacja głębokości 37,5 cm obejmuje 2 cm na front.',
+      'Korpusy 100 + 50 cm, trzy fronty 50 cm i zawiasy KOMPLEMENT do doboru. Do zabudowy naprzeciw 132,5 cm; po otwarciu jednego frontu około 82,5 cm, bez rezerwy na wystający uchwyt.',
+      'Nie otwierać jednocześnie drzwi PAX po obu stronach przejścia ani frontu przy otwartych O29. Przy dwóch przeciwległych frontach pozostaje około 32,5 cm; kontrola rastra nie modeluje ich osobnych łuków.',
+      'Sucha część pralni, poza rozbryzgiem. Mocowanie do ściany i montaż zgodnie z instrukcją IKEA; uchwyty i ewentualny cokół zwiększający odsunięcie wymagają uwzględnienia.'];
+  }
+  s.projectRevision=34;
 }
 
 // Projekt Główny: kuchnia ze słupkami, otwory z rezerwą ościeżnic i wariant hokerów.
@@ -2258,9 +2280,9 @@ function defaults(s){
   return s;
 }
 
-// V33: kuchnia, stolarka, jadalnia, garderoba i wyposażenie. Etapy starszych migracji zależą od klucza.
+// V34: BILLY -> płytkie PAX z drzwiami. Z v33 zmieniamy wyłącznie dwa wskazane obiekty.
 function loadSavedVariant(v){
-  for(const key of [LS,UTILITY_LS,CORNER_LS,KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
+  for(const key of [LS,LAYOUT_LS,UTILITY_LS,CORNER_LS,KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
     try{
       const raw=localStorage.getItem(key+':'+v);if(!raw)continue;
       const s=defaults(JSON.parse(raw));s.variant=v;
@@ -2285,8 +2307,9 @@ function loadSavedVariant(v){
       if([ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')enlargeE2Window5(s);
       if([WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')optimizeE2Kitchen(s);
       if([KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')resizeE2Corner(s);
-      if(![LS,UTILITY_LS].includes(key)&&v==='E2')reviseE2UtilityRooms(s);
-      if(key!==LS&&v==='E2')reviseE2KitchenAndDoors(s);
+      if(![LS,LAYOUT_LS,UTILITY_LS].includes(key)&&v==='E2')reviseE2UtilityRooms(s);
+      if(![LS,LAYOUT_LS].includes(key)&&v==='E2')reviseE2KitchenAndDoors(s);
+      if(key!==LS&&v==='E2')replaceLaundryBillyWithPax(s);
       return s;
     }catch(e){}
   }

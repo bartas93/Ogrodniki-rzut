@@ -112,12 +112,22 @@ W pokojach i salonie pole brutto ma rezerwę względem1:8, lecz bez wymiarów pr
 
 O6 po przesunięciu ma środek12200 mm, biurko M100 środek11650 mm. Nakłada się na szerokość biurka, ale oś okna jest55 cm na prawo od osi biurka. To możliwe użytkowo; ewentualne centrowanie biurka byłoby osobną decyzją i wymaga ponownego sprawdzenia sofy oraz odblasków na monitorze. Nie przesuwałem go automatycznie.
 
+## Aktualizacja pralni — płytkie PAX z drzwiami
+
+Dawne M145/M146 to teraz PAX **100 + 50 cm**, trzy rozwierane fronty 50 cm, wysokość 236,4 cm. Korpusy nominalnie „35 cm” mają według kart IKEA faktycznie **35,5 cm** głębokości. Przykładowy front FORSAND ma 1,8 cm; przyjęto 2 cm rezerwy frontu i **37,5 cm** całej głębokości, bez wystającego uchwytu. Rzeczywiste szerokości 99,8 i 49,8 cm, bez skalowania korpusów do dawnych BILLY80.
+
+Zabudowa x8500–8875, y2550–3548 oraz3550–4048. Do szaf po przeciwnej stronie pozostaje **132,5 cm**. Po otwarciu jednego frontu nominalnie82,5 cm; przy dwóch przeciwległych około32,5 cm, dlatego fronty otwierać naprzemiennie. Również dolnego frontu i drzwi O29 nie traktować jako swobodnie używanych równocześnie — ich pola mogą się krzyżować. Kontroler korpusów i stref nie modeluje osobnych łuków wszystkich frontów. Nie zmniejszano jego progów ani stref, brak nowych problemów i niedostępnych pomieszczeń w sprawdzonych stanach.
+
+Szafy kotwić do ściany; montaż, zawiasy, półki i uchwyty zgodnie z instrukcjami producenta. Zachowane dotychczasowe ID oraz własne nazwy/notatki. Wcześniejsze ograniczenie rozłożonej suszarki nadal obowiązuje.
+
+Źródła IKEA sprawdzone 12.11.2026: [PAX100×35×236](https://www.ikea.com/pl/pl/p/pax-obudowa-szafy-bialy-00214572/), [PAX50×35×236](https://www.ikea.com/pl/pl/p/pax-obudowa-szafy-bialy-40214565/), [FORSAND50×229](https://www.ikea.com/pl/pl/p/forsand-drzwi-bialy-60391091/). To dobór gabarytów, bez potwierdzenia stanu magazynowego lub zlecenia zakupu.
+
 ## Kwestie, których rzut nie rozstrzyga
 
 - **Wentylacja:** dwa pomieszczenia kąpielowe, pralnia i spiżarnia potrzebują zaprojektowanych wywiewów oraz drogi transferu powietrza. Dobrać otwory/kratki drzwiowe do aktualnych wymagań i przepływów. Okap kuchenny nie może tłoczyć tłuszczu do zwykłej rekuperacji; ustalić oddzielny wyrzut albo obieg zamknięty i bilans powietrza.
 - **Woda i kanalizacja:** sprawdzić spadki, piony, odpowietrzenie, rewizje WC, syfony wanny i brodzików. Samo przesunięcie stelaża lub wanny nie potwierdza możliwości prowadzenia odpływu w posadzce. Odpływ brodzika psa zabezpieczyć przed sierścią; pralka, zlew, robot myjący i stelaże muszą mieć dostępne zawory i rewizje.
 - **Konstrukcja:** przeniesienie otworów O20/O21 i powiększenie otworów drzwiowych wymagają dobranych nadproży, oparć, słupków i koordynacji z wieńcem. Ściana zewnętrzna ma 412 mm, z warstwą silikatu180 mm; rzut nie jest obliczeniem nośności ani projektem więźby/wiązarów. Przy obrysie17,824×10,624 m konstruktor musi rozstrzygnąć podparcia dachu.
-- **Wilgoć i elektryka:** hydroizolacja, strefy gniazd przy natrysku, odpływy i ochrona urządzeń w pralni do projektu instalacyjnego. BILLY przeznaczone do suchej części pralni i mocowania do ściany; nie są meblami odpornymi na zalewanie. Robot nie może stać w rozbryzgu ani blokować wyjmowania pralki.
+- **Wilgoć i elektryka:** hydroizolacja, strefy gniazd przy natrysku, odpływy i ochrona urządzeń w pralni do projektu instalacyjnego. Płytkie PAX zastąpiły BILLY; przeznaczone do suchej części pralni i mocowania do ściany, bez deklaracji odporności na zalewanie. Robot nie może stać w rozbryzgu ani blokować wyjmowania pralki.
 - **Akustyka:** kotłownia sąsiaduje z pokojem3; wymaga oceny hałasu, drgań i izolacji instalacji. Drzwi, podcięcia i przejścia przewodów wpływają na izolacyjność pokoi i gabinetu. Rysunek150 mm ściany nie jest pomiarem akustyki.
 - **Termika i stolarka:** U przegród i mostki przy nadprożach/progach wymagają obliczeń. Okap100 cm może ograniczać słońce i światło; nie przeprowadzono analizy nasłonecznienia. Potwierdzić parapety, wysokości oparć, klamki, podziały FIX/uchylne oraz bezpieczne otwieranie nad meblami.
 - **Przechowywanie:** sprawdzić nośność i kotwienie regałów, rzeczywiste wysokości oraz otwieranie wszystkich frontów PAX. Liczba przypisanych naczyń nie jest potwierdzeniem upakowania stosów, organizerów ani udźwigu szuflad. Regały50×60 i 40×35 kotłowni to rezerwacje do doboru, nie zweryfikowane modele do zamówienia.
@@ -126,7 +136,7 @@ O6 po przesunięciu ma środek12200 mm, biurko M100 środek11650 mm. Nakłada si
 
 - Wymiary pochodzą z modelu liczbowego, nie z odrysowania obrazka. Sprawdzono14 otworów drzwiowych, styki z prostopadłymi ścianami, rezerwy ram, skrzydła, korpusy i strefy, pomieszczenia, wybrane stany spania i alternatywne użycie jadalni. Dostęp badano także **wyłącznie od głównego wejścia O10**, żeby inne wejścia nie maskowały odciętej komunikacji wewnętrznej.
 - Po aktywowaniu rezerwy M76 widoczny pozostaje konflikt z rozkładaniem M75; nie zmieniano kontroli, by go ukryć. Rozłożenie pozostałych sof sprawdzone oddzielnie oraz w dotychczasowych scenariuszach testowych.
-- Test migracji używa rzeczywistych publicznych stanów v23/v32. Aktualizacja v33 zachowuje własne nazwy, notatki, niewskazane obiekty, wcześniejsze kopie, ID konstrukcji i modułów. Nowe obiekty otrzymują wolne numery. Inne warianty nie zmieniły geometrii.
+- Test migracji używa rzeczywistych publicznych stanów v23/v32. Aktualizacje v33/v34 zachowują własne nazwy, notatki, niewskazane obiekty, wcześniejsze kopie, ID konstrukcji i modułów. Nowe obiekty otrzymują wolne numery. Inne warianty nie zmieniły geometrii.
 - Edytor i kuchnia 3D: Chromium na komputerze i emulowany telefon412×915, działanie przycisków, wybór stanów jadalni, zapis, identyfikatory, JSON/CSV/PNG/wydruk; starsza kuchnia v1 zachowana przy przejściu do v2. Brak testu na fizycznym telefonie i pomiarów na budowie.
 - Kontrola rastrowa50 mm nie wykrywa wszystkich wystających uchwytów, tolerancji, przestrzeni nad meblami ani wymagań instalacyjnych. Warunki pozytywne raportu odnoszą się do podanych scenariuszy i rezerwacji, a nie dowolnego jednoczesnego otwarcia/rozłożenia całego wyposażenia.
 
