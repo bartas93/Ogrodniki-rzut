@@ -289,3 +289,16 @@ O43 wycentrowano w zatoce987,5mm, środek x5343,75mm; otwór900mm i modelowe św
 **[DO UZGODNIENIA]** Punkt7: [analiza kotłowni](kotlownia-analiza.md), dyskusja o funkcjach, urządzeniach i serwisie, dopiero następnie aktualizacja rysunku. M105–M111 i regały technicznego nie zmienione w tym etapie. Nie wybrano źródła/mocy/pojemności ani konkretnego zestawu urządzeń na podstawie tej analizy.
 
 Zapis **v35** migruje v34 wyłącznie przez `fixE2NicheMounting`, zachowując inne meble, otwory, ręczne nazwy/notatki i dawne kopie. Własny v35 ma pierwszeństwo; inne warianty i kuchnia3D pozostają niezależne. Nowy odcinek ściany dostaje wolny numer, istniejące ID bez zmian. Test: `tools/check_niche_mounting.js`, precyzyjny audyt i przeglądarka desktop/mobile. Aktualny audyt precyzyjny ma0 penetracji; historyczny v34 zachowany w fixtures i raporcie archiwalnym.
+
+
+## 26. Instalacje, przygotowania i przyszły wariant LPG (13.11.2026)
+
+**[USTALONE]** Docelowo 4 osoby, wodociąg, częste korzystanie z wanny, planowany zmiękczacz/filtr oraz przydomowa oczyszczalnia ścieków. Technologia/model POŚ nie zostały wybrane. Nie potwierdzono zgodności odprowadzania regeneracji zmiękczacza do POŚ; dobór musi obejmować oba urządzenia i legalny odbiornik popłuczyn. Osobno do rozstrzygnięcia ewentualny kondensat przyszłego kotła.
+
+**[DECYZJA]** Uwzględnić rolety zewnętrzne i ich detale przy oknach/nadprożach. Dla przyszłej PV przygotować trasy i podłączenia, miejsce na falownik i rezerwę elektryczną. Klimatyzacja jest możliwa w przyszłości; na obecnym etapie przygotować trasy, przepusty, zasilanie/sterowanie i rozwiązanie skroplin. Nie wybrano liczby jednostek, mocy ani średnic rur.
+
+**[OPCJA DO ZAPLANOWANIA]** Możliwość przyszłej zmiany pompy ciepła na kocioł LPG. Brak sieci gazowej; inwestor potwierdził duży zewnętrzny zbiornik na działce, nie małe butle. Wodna podłogówka pozwala zachować instalację odbiorczą przy zmianie źródła, ale gaz, wentylacja, przewód powietrzno-spalinowy, kondensat i lokalizacja zbiornika wymagają odrębnego doboru/projektu. Ocenić posadzkę względem terenu i odpływ brodzika psa w wariancie LPG. Nie potwierdzono gotowości obecnego technicznego do instalacji kotła LPG ani lokalizacji zbiornika. Nie wdrażać równoległego drugiego źródła bez uzgodnienia.
+
+**[REKOMENDACJA, NIE ZAKUP]** Do dalszego doboru wodna podłogówka z pompą powietrze–woda i osobnym zasobnikiem CWU klasy 300 l; moc po OZC, wydajność CWU po sprawdzeniu poborów i czasu ładowania. Modele pompy, rekuperatora i uzdatniania oraz budżet pozostają nieuzgodnione. Zbiornik LPG to przyszła możliwość, której warunki prawne/opłacalność wymagają ponownej oceny w terminie realizacji.
+
+[Przygotowania instalacyjne, zależności, źródła i zakres rezerwy LPG](instalacje-przygotowanie.md). To aktualizacja programu i dokumentacji; geometria rzutu oraz zapis v35 bez zmian. Obecny audyt geometryczny nie potwierdza zmieszczenia wszystkich nowych urządzeń i ich obsługi w technicznym.

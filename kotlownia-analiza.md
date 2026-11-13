@@ -2,6 +2,8 @@
 
 Status: **warianty do uzgodnienia, bez zmiany urządzeń na rzucie**. Dotyczy Projektu Głównego. Pomieszczenie ma około 2,90×3,10 m i 8,99 m² według rastra. Brodzik dla psa pozostaje w programie.
 
+**Uzupełnienie po rozmowie:** potwierdzone 4 osoby, wodociąg i częste korzystanie z wanny. Planowane uzdatnianie i POŚ (bez wybranego modelu); dodano rolety zewnętrzne, przygotowania pod przyszłą PV i możliwą klimatyzację. Przyszły gaz to LPG z dużego zbiornika na działce, bez dostępu do sieci. [Szczegółowe przygotowania i zależności](instalacje-przygotowanie.md). Rekomendacja do dalszego doboru: osobny zasobnik klasy 300 l; nie zatwierdzono jeszcze kompletu urządzeń. Odpływ regeneracji zmiękczacza do planowanej POŚ nie jest potwierdzony.
+
 ## Co naprawdę oznaczają trzy koła
 
 M105/M106/M107 to symbole Ø59,4 cm, opisane wspólnie jako pompa/zasobnik/bufor. Nie są trzema wybranymi produktami. Między nimi jest po20mm, a przy rekuperatorze nie rozrysowano kanałów ani wysunięcia filtrów. Nie należy dobierać instalacji do tych kół.
@@ -34,10 +36,11 @@ Nie usuwamy ani nie dodajemy bufora na podstawie samej liczby pomieszczeń. Trze
 - Przy rezerwie100cm przed nową wieżą obecny górny regał zachodni może wejść w pole serwisu. **Cztery regały nie są warunkiem nadrzędnym wobec obsługi urządzeń.** Docelowy układ półek ustalimy po ustawieniu instalacji.
 - Sprawdzić drogę wniesienia/wymiany przez O39, modelowo80cm w świetle, oraz zakręt w wiatrołapie. Szerokość urządzenia60cm nie dowodzi przejścia z opakowaniem ani możliwości obrotu.
 
-## Informacje potrzebne do następnej decyzji
+## Do dalszego doboru
 
-1. Powietrzna czy gruntowa pompa ciepła; czy podłogówka będzie w całym domu; ewentualne inne odbiorniki lub chłodzenie.
-2. Docelowa liczba osób, częstotliwość używania wanny i wymaganie kilku kąpieli pod rząd; dopiero potem porównanie pojemności zasobnika.
-3. Wybrane modele, jeśli już są, oraz potrzeba filtracji/zmiękczania wody.
+1. OZC, wybór rodzaju ogrzewania i kompletów do wyceny; uwzględnienie przyszłej zmiany źródła na LPG. Podłogówka wodna i pompa powietrze–woda to rekomendowany kierunek, nie zatwierdzony zestaw.
+2. Weryfikacja zasobnika klasy 300 l dla 4 osób i częstych kąpieli: rzeczywista pojemność użytkowa, jednoczesne pobory i czas ponownego nagrzania.
+3. Twardość wody, zgodny zestaw POŚ–zmiękczacz i sposób zagospodarowania odpływów.
+4. Miejsce na przyszły falownik, trasy PV/klimatyzacji i rezerwa LPG, z oceną współistnienia brodzika i nowych instalacji.
 
-Po odpowiedziach można wybrać wariant A/B i przygotować zwymiarowany układ z polami serwisowymi, następnie uzgodnić go i przenieść na rysunek. Obecny dokument nie wybiera marki, mocy, pojemności ani schematu wykonawczego.
+Na tej podstawie przygotować zwymiarowany układ z polami serwisowymi, uzgodnić go i przenieść na rysunek. Pozostawienie rezerwy nie jest potwierdzeniem, że wszystkie urządzenia zmieszczą się w dotychczasowym układzie regałów.
