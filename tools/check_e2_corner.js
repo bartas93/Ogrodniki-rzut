@@ -34,8 +34,8 @@ for(const key of Object.keys(old).filter(k=>k!=='furn'))assert.equal(JSON.string
 for(const id of [75,76]){assert.equal(get(m,id).name,get(old,id).name);assert.equal(get(m,id).layer,get(old,id).layer);assert.ok(get(m,id).notes.includes(id===75?'Moja uwaga o sofie':'Moja uwaga o tkaninie'));}
 assert.equal(get(m,76).w,3050);assert.equal(get(m,76).d,2200);assert.equal(get(m,75).x,2100);assert.equal(get(m,75).y,6435);
 assert.equal(saved.get('ogrodniki-rzut-v30:E2'),JSON.stringify(old),'Kopia v30 pozostaje');
-const custom=clone(m);get(custom,76).w=3000;get(custom,75).x+=50;saved.set('ogrodniki-rzut-v34:E2',JSON.stringify(custom));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(custom),'Nie migruj ponownie v32');
-saved.delete('ogrodniki-rzut-v34:E2');
+const custom=clone(m);get(custom,76).w=3000;get(custom,75).x+=50;saved.set('ogrodniki-rzut-v35:E2',JSON.stringify(custom));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(custom),'Nie migruj ponownie v32');
+saved.delete('ogrodniki-rzut-v35:E2');
 const safe=clone(old);Object.assign(get(safe,75),{x:3200,y:6300});saved.set('ogrodniki-rzut-v30:E2',JSON.stringify(safe));const safeLoaded=launch(saved).state();assert.equal(get(safeLoaded,75).x,3200);assert.equal(get(safeLoaded,75).y,6300,'Nie przesuwaj sofy ustawionej bez kolizji');
 const missing=clone(old);missing.furn=missing.furn.filter(f=>f.id!==76);saved.set('ogrodniki-rzut-v30:E2',JSON.stringify(missing));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(missing),'Nie odtwarzaj usuniętego M76 ani nie przesuwaj M75');
 for(const v of ['E2S','R1','R2','R3']){const own=clone(api.fresh(v));own.furn[0].name='Własny '+v;saved.set('ogrodniki-rzut-v30:'+v,JSON.stringify(own));assert.equal(JSON.stringify(launch(saved).load(v)),JSON.stringify(own),v+' bez zmian');}

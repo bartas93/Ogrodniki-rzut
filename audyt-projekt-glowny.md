@@ -1,12 +1,48 @@
-# Audyt Projektu Głównego — 12.11.2026
+# Audyt Projektu Głównego — aktualizacja 13.11.2026
 
 [Edytor domu](https://bartas93.github.io/Ogrodniki-rzut/) · [Kuchnia 3D](https://bartas93.github.io/Ogrodniki-rzut/kuchnia3d.html) · [Plan szafek i źródła Castoramy](kuchnia3d-plan.md)
+
+## Aktualny stan v35 — poprawione punkty1 i2
+
+**Trzy penetracje PAX usunięte; poprawione miejsce na opaski O43.** Pełne szerokości korpusów100/75/50cm i ich identyfikatory zachowane. Krótkie ścianki zamykające wnęki w pokojach i gabinecie zmieniono na lekkie nienośne75mm; nie zmniejszano przegród oddzielających pokoje. System odniesienia: [Rigips3.40.01, CW50+2×12,5mm](https://www.rigips.pl/system/sciany-dzialowe/3_40_01). Dla S40 pozostaje główna ściana150mm do poprzecznej S57, a tylko dolny powrót w gabinecie jest osobnym odcinkiem75mm, domyślnie nowy S150. Mocowania i detal ścianki do projektu wykonawczego.
+
+| Wnęka | Gotowa szerokość | Suma korpusów bez sztucznych odstępów | Zapas na obu końcach |
+|---|---:|---:|---:|
+| Pokój3, M102/M103 | 1787,5mm | 1746mm | 20,75 +20,75mm |
+| Pokój2, M114/M115 | 1787,5mm | 1746mm | 20,75 +20,75mm |
+| Gabinet, M139/M140/M141 | 2287,5mm | 2244mm | 21,75 +21,75mm |
+
+Korpusy dosunięte do siebie i wycentrowane we wnękach. Zapasy około4,2–4,4cm dotyczą montażu i blend; uchwyty oraz większe kąty otwarcia frontów wymagają doboru. Nie są obietnicą dowolnego frontu/uchwytu przy ścianie.
+
+**O43:** zatoka zwiększona z95 do98,75cm, otwór90cm wycentrowany, modelowe światło80cm. Dla odniesienia PORTA SYSTEM80 z opaską60mm szerokość zestawu94,6cm daje **po20,75mm do ściany**. Szerszy zestaw98,6cm nie daje przyjętej rezerwy — kontroler to ostrzega. Parametr pojawia się w panelu drzwi. [Źródło tabeli producenta](https://4business.portadoors.com/wp-content/uploads/2026/02/EN_Katalog-Porta_bez-cen_compressed.pdf); wymiary pionowe, rzeczywiste światło, wersję produktu i montaż potwierdzić przed zamówieniem. Dobór odniesienia szerokości nie jest kompletnym zamówieniem stolarki.
+
+**Weryfikacja po zmianie:** precyzyjna kontrola0 penetracji ścian i0 przecięć korpus–korpus, wszystkie pomieszczenia osiągalne od O10. Stany codzienny/hokerów/stołu mają0 problemów rastrowych i odpowiednio9/9/10 mebli z wcześniejszymi uwagami. Progi i strefy kontroli nie zostały osłabione. O43 ma0 uwag o dopasowaniu przy wskazanej opasce. Obrys17,824×10,624m,189,36m² zabudowy bez zmiany; suma regionów rastra około140,51m². Testy migracji sprawdzają zachowanie pozostałych ręcznych edycji, starych kopii i niezależność innych wariantów.
+
+[Aktualne pomiary i scenariusze v35 w JSON](audyt-projekt-glowny.json). Odtworzenie: `timeout 30s node tools/audit_main_project.js` — obecnie kod0; `timeout 30s node tools/check_niche_mounting.js`; `timeout 30s node tools/check_audit_precision.js`. Telefon i komputer sprawdzone w Chromium, bez fizycznego pomiaru okuć.
+
+## Decyzje inwestora po audycie
+
+| Punkt pierwotnej listy | Stan po odpowiedzi13.11 |
+|---|---|
+| 1 — PAX | Poprawione, zachowane korpusy |
+| 2 — O43 | Poprawiona rezerwa dla wskazanych opasek |
+| 3 — suszarki | Akceptacja przenośnych suszarek ustawianych w korytarzu; miejsce/wymiary do sprawdzenia. Nie potwierdzono przejścia75cm: obrys80cm zostawia40cm w pasie120cm lub52,5cm w pasie132,5cm. M89 pozostaje referencją, nie nową zweryfikowaną lokalizacją |
+| 4 — M75/M76 | Akceptacja przestawienia sofy przy okazjonalnym spaniu. Stały układ i negatywny test wspólnego rozłożenia pozostają |
+| 5 — piekarnik | Zaakceptowane odkładanie blach na wyspę przez przejście120cm |
+| 6 — wyspa | Rezerwacja miejsca zaakceptowana; konstrukcja/podparcie przy wyborze produktu |
+| 7 — kotłownia | [Analiza do dyskusji](kotlownia-analiza.md), ustalenie rozwiązań przed zmianą rysunku; urządzenia i regały teraz bez zmian |
+| 8 — drzwi łazienek | Zwężenie przy otwartym skrzydle zaakceptowane |
+| 9 — pralnia | Naprzemienne otwieranie frontów zaakceptowane |
+
+## Archiwalny audyt v34 — stan przed powyższymi poprawkami, 12.11.2026
+
+Poniżej zachowano szczegółowy review bazowy. Trzy kolizje PAX i ciasna zatoka O43 odnoszą się do historycznego v34; aktualny wynik jest powyżej. Także zapis o kodzie1 narzędzia dotyczy historycznego stanu. Pozostałe ograniczenia funkcjonalne nie znikają przez akceptację — zmienia się sposób planowanego używania.
 
 **Werdykt ponownego review:** projekt ma sensowny program i zachowane dojścia, ale **nie jest gotowy do zamawiania zabudów i stolarki**. Precyzyjna kontrola wykryła trzy rzeczywiste penetracje ścian przez PAX, niewidoczne w standardowej kontroli rastrowej. Ponadto pozostają istotne ograniczenia suszarki, spania w salonie, ościeżnicy O43 i otwierania wyposażenia. Poniżej oddzielono wykazane błędy, kompromisy użytkowe i kwestie niepotwierdzone.
 
 **Audytowana baza:** Projekt Główny / E2, rewizja zapisu v34, publiczny commit `0511b4f0e4e4647fc9f71eb19b2c6eb40c8a4da1`, zgodny z `origin/main` przed tym review. Obejmuje domyślną geometrię aplikacji, **bez dostępu do prywatnych zmian zapisanych wyłącznie w przeglądarce użytkownika**. Układu domu podczas review nie zmieniano; propozycje poniżej nie są zatwierdzonymi zmianami.
 
-[Pełne wyniki pomiarów i scenariuszy w JSON](audyt-projekt-glowny.json) zawierają SHA256 audytowanego pliku edytora. Snapshot jest dowodem tego review; przyszłe zmiany rzutu wymagają jego ponownego wygenerowania.
+[Archiwalne pomiary i scenariusze v34 w JSON](audyt-projekt-glowny-v34.json) zawierają SHA256 audytowanego pliku edytora. Snapshot jest dowodem historycznego review.
 
 **Wynik kontroli rastrowej 50 mm:** wszystkie 12 opisanych pomieszczeń dostępne od głównego wejścia O10; w stanach codziennym, dwóch hokerów i stołu dla 10 osób brak problemów wykrywanych przez ten kontroler. W stanie codziennym dziewięć mebli ma uwagi, przy stole dla 10 osób — dziesięć. **„0 problemów” w panelu nie obejmuje trzech błędów 23 mm ujawnionych poniżej.** To ograniczenie kontroli, nie dowód poprawnego montażu domu.
 

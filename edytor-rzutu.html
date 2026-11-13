@@ -223,7 +223,8 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 'use strict';
 const $ = s => document.querySelector(s);
 const svg = $('#cv');
-const LS = 'ogrodniki-rzut-v34';
+const LS = 'ogrodniki-rzut-v35';
+const PAX_LS = 'ogrodniki-rzut-v34';
 const LAYOUT_LS = 'ogrodniki-rzut-v33';
 const UTILITY_LS = 'ogrodniki-rzut-v32';
 const CORNER_LS = 'ogrodniki-rzut-v31';
@@ -1211,7 +1212,51 @@ function variantE2(){
   reviseE2UtilityRooms(s);
   reviseE2KitchenAndDoors(s);
   replaceLaundryBillyWithPax(s);
+  fixE2NicheMounting(s);
   return s;
+}
+
+// Tylko krótkie powroty wnękowe: lekka ścianka 75 mm, bez zmiany przegród pokoi.
+function fixE2NicheMounting(s){
+  if(s.projectRevision>=35)return;
+  defaults(s);
+  const wall=id=>s.walls.find(w=>w.id===id),note=(it,text)=>{if(it)it.notes=[...(it.notes||[]).filter(n=>!n.startsWith('Review 13.11 — ')),'Review 13.11 — '+text];};
+  const detail={purpose:'niche-return',finishedThickness:75,system:'CW50 + 2×12,5 mm GK',nonLoadBearing:true,source:'https://www.rigips.pl/system/sciany-dzialowe/3_40_01'};
+  for(const id of [35,47])if(wall(id)){wall(id).t=75;wall(id).detail={...detail};}
+  const main=wall(40),cross=wall(57);
+  let end=s.walls.find(w=>w.presetTag==='nov13-office-return');
+  if(!end&&main&&cross&&main.y1<cross.y1&&main.y2>cross.y1){
+    const split=cross.y1-main.y1;
+    if(!main.op.some(o=>o.pos-o.w/2<split&&o.pos+o.w/2>split)){
+      end={...JSON.parse(JSON.stringify(main)),id:s.nextId++,y1:cross.y1,t:75,op:main.op.filter(o=>o.pos>=split).map(o=>({...o,pos:o.pos-split})),presetTag:'nov13-office-return',detail:{...detail}};
+      main.op=main.op.filter(o=>o.pos<split);main.y2=cross.y1;s.walls.push(end);
+    }
+  }
+  const pack=(ids,left,right)=>{
+    const items=ids.map(id=>s.furn.find(f=>f.id===id)).filter(Boolean);
+    const width=it=>it.rot%180?it.d:it.w,total=items.reduce((sum,it)=>sum+width(it),0),margin=(right-left-total)/2;
+    let start=left+margin;
+    for(const it of items){it.x=start+width(it)/2;start+=width(it);note(it,'Korpusy łączone bez sztucznych odstępów. Łączny zapas wnęki '+((right-left-total)/10).toFixed(2)+' cm, po około '+(margin/10).toFixed(2)+' cm na końcach. Blendy, uchwyty i pełne otwarcie frontu dobrać przed montażem.');}
+  };
+  if(wall(34)&&wall(35))pack([102,103],wall(34).x1+wall(34).t/2,wall(35).x1-wall(35).t/2);
+  if(wall(47)&&wall(48))pack([114,115],wall(47).x1+wall(47).t/2,wall(48).x1-wall(48).t/2);
+  if(end&&wall(8))pack([139,140,141],end.x1+end.t/2,wall(8).x1-wall(8).t/2);
+  const host=wall(42),door=host?.op.find(o=>o.id===43);
+  if(door&&wall(25)&&wall(47)){
+    const left=wall(25).x1+wall(25).t/2,right=wall(47).x1-wall(47).t/2;
+    door.pos=(left+right)/2-host.x1;
+    door.frame={...door.frame,casing:{system:'PORTA SYSTEM 80, opaska 60 mm — odniesienie wymiarowe',outerWidth:946,minimumSideGap:10,source:'https://4business.portadoors.com/wp-content/uploads/2026/02/EN_Katalog-Porta_bez-cen_compressed.pdf'}};
+    note(door,'O43 wycentrowane w zatoce 98,75 cm. Otwór 90 cm, modelowe światło 80 cm. Zestaw z opaskami szerokości 94,6 cm mieści się z zapasem 2,075 cm na stronę; szersza opaska 98,6 cm nie zapewnia tego zapasu. Ostateczne zamówienie po pomiarze gotowych ścian.');
+  }
+  s.reviewDecisions={...(s.reviewDecisions||{}),date:'2026-11-13',
+    drying:'Akceptacja: suszarki przenośne ustawiane w korytarzu. Dokładne miejsce i prześwit wymagają wymiarów; brak potwierdzenia wolnych 75 cm.',
+    sleeping:'Akceptacja: na dodatkowe spanie sofa będzie przestawiana. Stały układ nie zapewnia jednoczesnego rozłożenia M75/M76.',
+    oven:'Akceptacja: gorące blachy odkładane na wyspę przez przejście 120 cm.',
+    island:'Rezerwacja miejsca zaakceptowana; podparcie i produkt do doboru przy zakupie.',
+    technical:'Do dyskusji i uzgodnienia przed aktualizacją urządzeń na rysunku.',
+    bathDoors:'Zaakceptowane lokalne zwężenie korytarza przez otwarte drzwi.',
+    laundryFronts:'Zaakceptowane naprzemienne otwieranie frontów.'};
+  s.projectRevision=35;
 }
 
 // Korpusy PAX nominalnie 35 cm: faktyczne 355 mm + 20 mm rezerwy frontu.
@@ -2280,9 +2325,9 @@ function defaults(s){
   return s;
 }
 
-// V34: BILLY -> płytkie PAX z drzwiami. Z v33 zmieniamy wyłącznie dwa wskazane obiekty.
+// V35: luzy wnęk, O43 i decyzje audytu. Starsze migracje tylko dla należnych kluczy.
 function loadSavedVariant(v){
-  for(const key of [LS,LAYOUT_LS,UTILITY_LS,CORNER_LS,KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
+  for(const key of [LS,PAX_LS,LAYOUT_LS,UTILITY_LS,CORNER_LS,KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
     try{
       const raw=localStorage.getItem(key+':'+v);if(!raw)continue;
       const s=defaults(JSON.parse(raw));s.variant=v;
@@ -2307,9 +2352,10 @@ function loadSavedVariant(v){
       if([ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')enlargeE2Window5(s);
       if([WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')optimizeE2Kitchen(s);
       if([KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')resizeE2Corner(s);
-      if(![LS,LAYOUT_LS,UTILITY_LS].includes(key)&&v==='E2')reviseE2UtilityRooms(s);
-      if(![LS,LAYOUT_LS].includes(key)&&v==='E2')reviseE2KitchenAndDoors(s);
-      if(key!==LS&&v==='E2')replaceLaundryBillyWithPax(s);
+      if(![LS,PAX_LS,LAYOUT_LS,UTILITY_LS].includes(key)&&v==='E2')reviseE2UtilityRooms(s);
+      if(![LS,PAX_LS,LAYOUT_LS].includes(key)&&v==='E2')reviseE2KitchenAndDoors(s);
+      if(![LS,PAX_LS].includes(key)&&v==='E2')replaceLaundryBillyWithPax(s);
+      if(key!==LS&&v==='E2')fixE2NicheMounting(s);
       return s;
     }catch(e){}
   }
@@ -2399,8 +2445,12 @@ function auditDoors(state=S){
     if(height<2000)issues.push('wysokość w świetle < 2000 mm');
     if(intruding.length)issues.push('inna ściana w otworze: '+intruding.join(', '));
     if(!o.frame)warnings.push('brak dobranej rezerwy ościeżnicy');
-    if(Math.min(...piers)<100)warnings.push('krótki odcinek do narożnika: '+piers.map(Math.round).join(' / ')+' mm; dobrać opaski i mocowanie');
-    rows.push({id:o.id,wall:wall.id,rough:o.w,clear:m.clear,effective:Math.round(effective),height,piers:piers.map(Math.round),issues,warnings});
+    const casing=o.frame?.casing,casingFit=casing?.outerWidth?{outerWidth:casing.outerWidth,sideGaps:piers.map(p=>p-(casing.outerWidth-o.w)/2),minimumSideGap:casing.minimumSideGap||10}:null;
+    if(casingFit){
+      if(Math.min(...casingFit.sideGaps)<0)issues.push('opaska nie mieści się między ścianami');
+      else if(Math.min(...casingFit.sideGaps)<casingFit.minimumSideGap)warnings.push('za mały zapas przy opasce: '+casingFit.sideGaps.map(n=>n.toFixed(1)).join(' / ')+' mm');
+    }else if(Math.min(...piers)<100)warnings.push('krótki odcinek do narożnika: '+piers.map(Math.round).join(' / ')+' mm; dobrać opaski i mocowanie');
+    rows.push({id:o.id,wall:wall.id,rough:o.w,clear:m.clear,effective:Math.round(effective),height,piers:piers.map(Math.round),...(casingFit?{casingFit}:{}),issues,warnings});
   }
   return rows;
 }
@@ -3462,7 +3512,7 @@ function renderPanel(){
         ${f.o.height!==undefined ? '<div class="row"><span>Wysokość otworu</span><input type="number" id="pOHeight" min="300" step="50" value="'+f.o.height+'"> mm</div><div class="row"><span>Parapet / próg</span><input type="number" id="pOSill" min="0" step="50" value="'+f.o.sill+'"> mm</div>' : ''}
         ${f.o.opening ? '<div class="row"><span>Otwieranie</span><input type="text" id="pOOpening" value="'+esc(f.o.opening)+'"></div>' : ''}
         ${door&&f.o.frame?`<div class="row"><span>Rezerwa na stronę</span><input id="pOJamb" type="number" min="0" max="150" step="5" value="${f.o.frame.jamb}"> mm</div><div class="row"><span>Światło modelowe</span><b>${doorMetrics(f.o).clear} × ${(f.o.height||2100)-f.o.frame.head} mm</b></div><p class="hint">Ościeżnica i montaż są uwzględnione w przejściu. Rezerwa koncepcyjna; rzeczywiste światło i opaski potwierdź kartą wybranego zestawu. Oznaczenie na rzucie pokazuje światło.</p>`:''}
-        ${door&&S.variant==='E2'?(()=>{const d=auditDoors().find(d=>d.id===f.o.id);return d?`<ul class="hint">${[...d.issues,...d.warnings].map(t=>`<li class="${d.issues.includes(t)?'bad':'warn'}">${esc(t)}</li>`).join('')}</ul>`:'';})():''}
+        ${door&&S.variant==='E2'?(()=>{const d=auditDoors().find(d=>d.id===f.o.id);return d?`${d.casingFit?`<p class="hint">${esc(f.o.frame.casing.system)}. Szerokość z opaskami ${d.casingFit.outerWidth} mm; zapas do ścian ${d.casingFit.sideGaps.map(n=>n.toFixed(1)).join(' / ')} mm. To odniesienie wymiarowe; dobór i pomiar przed zamówieniem.</p>`:''}<ul class="hint">${[...d.issues,...d.warnings].map(t=>`<li class="${d.issues.includes(t)?'bad':'warn'}">${esc(t)}</li>`).join('')}</ul>`:'';})():''}
         ${door ? '<div class="row"><button id="pHinge">Zawias ⇄</button><button id="pSide">Kierunek ⇅</button></div>' : ''}
         <div class="row"><button id="pDel">Usuń</button></div>
         <div class="hint">Przeciągnij otwór wzdłuż ściany, by go przesunąć.</div>`;

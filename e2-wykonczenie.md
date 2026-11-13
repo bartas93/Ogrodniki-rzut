@@ -1,5 +1,7 @@
 # E2 — poprawki po audycie, punkty 1–18
 
+Aktualizacja13.11.2026: najnowsze poprawki montażu wnęk i O43 oraz akceptacje inwestora opisuje §25 [wymagań](wymagania-projektowe.md#25-poprawki-po-review-i-akceptacje-inwestora-13112026). Krótkie powroty wnękowe mają75mm zamiast150; zestawy PAX z około4,2–4,4cm łącznego zapasu, bez zmniejszania korpusów. O43 ma miejsce na zestaw z opaskami946mm, zapas20,75mm na stronę. Pozostałe wcześniejsze opisy poniżej należy czytać chronologicznie. Punkt7 pozostaje [analizą do dyskusji](kotlownia-analiza.md), bez zmiany urządzeń.
+
 Stan: 24.10.2026. Dotyczy wyłącznie E2. Jest to koncepcja wyposażenia i wymiarów, nie projekt konstrukcyjny ani komplet dokumentacji wykonawczej. Punkty 19–26 nie zostały w tym etapie opracowane.
 
 ## Zmiany i decyzje

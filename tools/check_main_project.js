@@ -26,6 +26,6 @@ for(const id of changed){assert.equal(get(m,id).name,'Moje M'+id);assert.ok(get(
 for(const key of Object.keys(old).filter(k=>!['furn','walls','nextId','projectRevision'].includes(k)))assert.equal(JSON.stringify(m[key]),JSON.stringify(old[key]),key);
 const unchangedWalls=s=>s.walls.filter(w=>![24,31,33].includes(w.id));assert.equal(JSON.stringify(unchangedWalls(m)),JSON.stringify(unchangedWalls(old)));
 assert.equal(new Set(m.furn.map(f=>f.id)).size,m.furn.length);assert.equal(saved.get('ogrodniki-rzut-v31:E2'),JSON.stringify(old));
-const own=clone(m);get(own,79).d=420;saved.set('ogrodniki-rzut-v34:E2',JSON.stringify(own));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(own),'Nie powtarzaj migracji v32');
+const own=clone(m);get(own,79).d=420;saved.set('ogrodniki-rzut-v35:E2',JSON.stringify(own));assert.equal(JSON.stringify(launch(saved).state()),JSON.stringify(own),'Nie powtarzaj migracji v32');
 for(const v of ['E2S','R1','R2','R3']){const own=clone(app.fresh(v));saved.set('ogrodniki-rzut-v31:'+v,JSON.stringify(own));assert.equal(JSON.stringify(launch(saved).load(v)),JSON.stringify(own),v);}
 console.log('MAIN_PROJECT_OK: nazwa i domyślność, 40 cm = 5+35, PAX 100+50 z drzwiami, WC 90 cm przy 60 cm umywalce, garderoba zachowana, niezależna migracja i ID');

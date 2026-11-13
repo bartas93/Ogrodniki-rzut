@@ -269,3 +269,23 @@ Do szaf naprzeciw **132,5cm**; przy jednym otwartym froncie około82,5cm, przy d
 Źródła: [PAX100×35×236](https://www.ikea.com/pl/pl/p/pax-obudowa-szafy-bialy-00214572/), [PAX50×35×236](https://www.ikea.com/pl/pl/p/pax-obudowa-szafy-bialy-40214565/), [FORSAND50×229](https://www.ikea.com/pl/pl/p/forsand-drzwi-bialy-60391091/). Drzwi, zawiasy KOMPLEMENT, półki i uchwyty do kompletacji; nie zlecono zakupu.
 
 Zapis **v34** migruje v33, zmieniając tylko te dwa obiekty i znacznik rewizji. Własne nazwy/notatki i pozostałe edycje zachowane, usuniętego BILLY nie odtwarza. Starsze klucze i inne warianty pozostają. Nie ponawia zmian kuchni, drzwi, garderoby ani robota. Własne edycje v34 mają pierwszeństwo. Testy zakresu migracji i geometrii w `tools/check_project_revision.js`, `tools/check_main_project.js` oraz test przeglądarkowy.
+
+## 25. Poprawki po review i akceptacje inwestora (13.11.2026)
+
+**[DECYZJA]** Poprawić punkty1 i2 audytu: montaż PAX i O43. Zachowano pełne szerokości istniejących korpusów i ich ID. Krótkie powroty wnękowe S35/S47 mają teraz gotowe75mm jako lekkie ścianki nienośne CW50+2×12,5GK; źródło systemu: [Rigips3.40.01](https://www.rigips.pl/system/sciany-dzialowe/3_40_01). Dotyczy wyłącznie wydzieleń wnęk w obrębie jednego pokoju, nie przegród między pomieszczeniami. Główna S40 pozostaje150mm do S57; tylko jej dolny powrót w gabinecie jest osobnym odcinkiem75mm, tag `nov13-office-return`, nowy wolny ID (domyślnie S150). Detale sztywności, mocowań i połączeń do projektu wykonawczego; szafy kotwione do właściwego podłoża.
+
+Korpusy zestawiono bez sztucznych2mm przerw. Wnęki pokojów1787,5mm dla1746mm korpusów dają41,5mm zapasu, po20,75mm na końcach. Wnęka gabinetu2287,5mm dla2244mm korpusów daje43,5mm, po21,75mm. To rezerwa montażu/blend; uchwyty i wymagane pełne kąty otwarcia nadal dobiera się do frontów. Nie skalowano PAX75 do fikcyjnej szerokości.
+
+O43 wycentrowano w zatoce987,5mm, środek x5343,75mm; otwór900mm i modelowe światło800mm. Dla odniesienia PORTA SYSTEM80 z opaską60mm szerokość zestawu946mm zostawia20,75mm do ściany na stronę. Wersja z opaską80mm i szerokością986mm ma zbyt mały zapas. Źródło: [tabele wymiarów producenta](https://4business.portadoors.com/wp-content/uploads/2026/02/EN_Katalog-Porta_bez-cen_compressed.pdf). Panel pokazuje dobraną rezerwę szerokości; wysokość, montaż i komplet stolarki do potwierdzenia pomiarem/kartą produktu przed zamówieniem. Kontroler wykrywa zbyt szeroką opaskę zamiast ignorować krótki odcinek ściany.
+
+**[AKCEPTACJE, BEZ AUTOMATYCZNEJ ZMIANY UKŁADU]**
+- Punkt3: suszarki będą przenośne i ustawiane w korytarzu. Dokładnego miejsca i wymiarów nie uzgodniono. Obrys80cm w pasie120cm pozostawia40cm, a w pasie132,5cm —52,5cm, więc nie potwierdzono swobodnego przejścia75cm dla obecnej rezerwy. Nie dodano fikcyjnej, sprawdzonej pozycji; historyczna referencja M89 i negatywny test pozostają.
+- Punkt4: przy dodatkowym spaniu sofa będzie przestawiana; nie traktować nakładania rezerw M75/M76 jako żądania stałej przebudowy. Kontrola kolizji pozostaje aktywna.
+- Punkt5: blachy z piekarnika będą odkładane na wyspę przez przejście120cm; zaakceptowano ten sposób używania.
+- Punkt6: wyspa jest rezerwacją miejsca, a konstrukcja/podparcie nawisu będą dobrane przy zakupie. Nie oznacza to potwierdzenia nośności.
+- Punkt8: zaakceptowane lokalne zwężenie przez otwarte drzwi łazienek.
+- Punkt9: zaakceptowane naprzemienne otwieranie przeciwległych frontów pralni.
+
+**[DO UZGODNIENIA]** Punkt7: [analiza kotłowni](kotlownia-analiza.md), dyskusja o funkcjach, urządzeniach i serwisie, dopiero następnie aktualizacja rysunku. M105–M111 i regały technicznego nie zmienione w tym etapie. Nie wybrano źródła/mocy/pojemności ani konkretnego zestawu urządzeń na podstawie tej analizy.
+
+Zapis **v35** migruje v34 wyłącznie przez `fixE2NicheMounting`, zachowując inne meble, otwory, ręczne nazwy/notatki i dawne kopie. Własny v35 ma pierwszeństwo; inne warianty i kuchnia3D pozostają niezależne. Nowy odcinek ściany dostaje wolny numer, istniejące ID bez zmian. Test: `tools/check_niche_mounting.js`, precyzyjny audyt i przeglądarka desktop/mobile. Aktualny audyt precyzyjny ma0 penetracji; historyczny v34 zachowany w fixtures i raporcie archiwalnym.

@@ -1,38 +1,26 @@
 {
   "variant": "E2",
-  "sourceRevision": 34,
-  "sourceSha256": "0ae298ce740e7b0be7c73e392da4776613bf3e596eca8c3d86d6874fe03c8979",
+  "sourceRevision": 35,
+  "sourceSha256": "a440e3d1403716ccb12962a7f191f87924b587561a255ac4fa66363496d42df8",
+  "reviewDecisions": {
+    "date": "2026-11-13",
+    "drying": "Akceptacja: suszarki przenośne ustawiane w korytarzu. Dokładne miejsce i prześwit wymagają wymiarów; brak potwierdzenia wolnych 75 cm.",
+    "sleeping": "Akceptacja: na dodatkowe spanie sofa będzie przestawiana. Stały układ nie zapewnia jednoczesnego rozłożenia M75/M76.",
+    "oven": "Akceptacja: gorące blachy odkładane na wyspę przez przejście 120 cm.",
+    "island": "Rezerwacja miejsca zaakceptowana; podparcie i produkt do doboru przy zakupie.",
+    "technical": "Do dyskusji i uzgodnienia przed aktualizacją urządzeń na rysunku.",
+    "bathDoors": "Zaakceptowane lokalne zwężenie korytarza przez otwarte drzwi.",
+    "laundryFronts": "Zaakceptowane naprzemienne otwieranie frontów."
+  },
   "precision": {
-    "wallOverlaps": [
-      {
-        "furniture": 103,
-        "wall": 35,
-        "dx": 23,
-        "dy": 600,
-        "penetration": 23
-      },
-      {
-        "furniture": 115,
-        "wall": 48,
-        "dx": 23,
-        "dy": 600,
-        "penetration": 23
-      },
-      {
-        "furniture": 141,
-        "wall": 8,
-        "dx": 23,
-        "dy": 600,
-        "penetration": 23
-      }
-    ],
+    "wallOverlaps": [],
     "furnitureOverlaps": [],
     "unsupportedWalls": []
   },
   "reviewMeasurements": {
     "footprintWidth": 17824,
     "footprintDepth": 10624,
-    "roomRasterArea": 140.33,
+    "roomRasterArea": 140.51,
     "laundry": {
       "closedAisle": 1325,
       "nominalDoorLeaf": 500,
@@ -58,23 +46,23 @@
           103
         ],
         "left": 10950,
-        "right": 12700,
-        "width": 1750,
-        "usedWidth": 1748,
-        "leftMargin": 25,
-        "rightMargin": -23
+        "right": 12737.5,
+        "width": 1787.5,
+        "usedWidth": 1746,
+        "leftMargin": 20.75,
+        "rightMargin": 20.75
       },
       {
         "ids": [
           114,
           115
         ],
-        "left": 5950,
+        "left": 5912.5,
         "right": 7700,
-        "width": 1750,
-        "usedWidth": 1748,
-        "leftMargin": 25,
-        "rightMargin": -23
+        "width": 1787.5,
+        "usedWidth": 1746,
+        "leftMargin": 20.75,
+        "rightMargin": 20.75
       },
       {
         "ids": [
@@ -82,12 +70,12 @@
           140,
           141
         ],
-        "left": 14950,
+        "left": 14912.5,
         "right": 17200,
-        "width": 2250,
-        "usedWidth": 2248,
-        "leftMargin": 25,
-        "rightMargin": -23
+        "width": 2287.5,
+        "usedWidth": 2244,
+        "leftMargin": 21.75,
+        "rightMargin": 21.75
       }
     ],
     "staleStorageNotes": [
@@ -212,12 +200,12 @@
       "effective": 800,
       "height": 2050,
       "piers": [
-        50,
+        88,
         50
       ],
       "issues": [],
       "warnings": [
-        "krótki odcinek do narożnika: 50 / 50 mm; dobrać opaski i mocowanie"
+        "krótki odcinek do narożnika: 88 / 50 mm; dobrać opaski i mocowanie"
       ]
     },
     {
@@ -256,13 +244,19 @@
       "effective": 800,
       "height": 2050,
       "piers": [
-        25,
-        25
+        44,
+        44
       ],
+      "casingFit": {
+        "outerWidth": 946,
+        "sideGaps": [
+          20.75,
+          20.75
+        ],
+        "minimumSideGap": 10
+      },
       "issues": [],
-      "warnings": [
-        "krótki odcinek do narożnika: 25 / 25 mm; dobrać opaski i mocowanie"
-      ]
+      "warnings": []
     },
     {
       "id": 45,
@@ -383,7 +377,7 @@
     {
       "id": 63,
       "name": "Pokój 3",
-      "area": 12.44,
+      "area": 12.5,
       "dimensions": [
         3200,
         4000
@@ -425,7 +419,7 @@
     {
       "id": 66,
       "name": "Pokój 2",
-      "area": 12.02,
+      "area": 12.08,
       "dimensions": [
         2850,
         4250
@@ -434,7 +428,7 @@
         "O15"
       ],
       "roughGlazingArea": 2.25,
-      "requiredAtOneEighth": 1.5
+      "requiredAtOneEighth": 1.51
     },
     {
       "id": 67,
@@ -474,7 +468,7 @@
     {
       "id": 70,
       "name": "Gabinet",
-      "area": 11.97,
+      "area": 12.03,
       "dimensions": null,
       "openings": [
         "O11",
@@ -1303,14 +1297,14 @@
       "name": "Próba równoczesnego spania M75 + rezerwa M76 — oczekiwana kolizja",
       "problems": [
         {
-          "id": 163,
+          "id": 164,
           "name": "Rozłożenie M75",
           "messages": [
             "nachodzi na: Rozłożenie M76"
           ]
         },
         {
-          "id": 164,
+          "id": 165,
           "name": "Rozłożenie M76",
           "messages": [
             "nachodzi na: Rozłożenie M75"
