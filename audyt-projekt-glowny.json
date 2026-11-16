@@ -1,7 +1,7 @@
 {
   "variant": "E2",
   "sourceRevision": 35,
-  "sourceSha256": "a440e3d1403716ccb12962a7f191f87924b587561a255ac4fa66363496d42df8",
+  "sourceSha256": "b28fb8a6ed89e204397a120e961cc5841aaf729228fe396ce13c09e35ceb0cf0",
   "reviewDecisions": {
     "date": "2026-11-13",
     "drying": "Akceptacja: suszarki przenośne ustawiane w korytarzu. Dokładne miejsce i prześwit wymagają wymiarów; brak potwierdzenia wolnych 75 cm.",
@@ -1297,14 +1297,14 @@
       "name": "Próba równoczesnego spania M75 + rezerwa M76 — oczekiwana kolizja",
       "problems": [
         {
-          "id": 164,
+          "id": 321,
           "name": "Rozłożenie M75",
           "messages": [
             "nachodzi na: Rozłożenie M76"
           ]
         },
         {
-          "id": 165,
+          "id": 322,
           "name": "Rozłożenie M76",
           "messages": [
             "nachodzi na: Rozłożenie M75"

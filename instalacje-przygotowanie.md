@@ -67,3 +67,6 @@ Opcja techniczna nie gwarantuje przyszłej możliwości prawnej ani opłacalnoś
 ## Kolejność koordynacji
 
 Najpierw dane OZC, twardość wody i parametry odprowadzania ścieków; następnie zgodny zestaw POŚ–zmiękczacz i układ technicznego z rezerwą PV/LPG. Równolegle ustalenie rolet z oknami oraz stref klimatyzacji. Dopiero na tej podstawie zwymiarowanie urządzeń i tras na rysunku oraz projekty branżowe. Wszystkie instalacje nie zostały jeszcze pomieszczone i zweryfikowane w obecnym rzucie8,99 m².
+
+
+Aktualizacja 16.11.2026: dodano [warstwę programu instalacji w edytorze](instalacje-warstwa.md) oraz niezależny snapshot sprzed tej zmiany. Punkty i schematy tras nie potwierdzają zmieszczenia urządzeń, przekrojów ani gotowości wykonawczej.

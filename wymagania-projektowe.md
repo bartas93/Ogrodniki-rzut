@@ -301,4 +301,12 @@ Zapis **v35** migruje v34 wyłącznie przez `fixE2NicheMounting`, zachowując in
 
 **[REKOMENDACJA, NIE ZAKUP]** Do dalszego doboru wodna podłogówka z pompą powietrze–woda i osobnym zasobnikiem CWU klasy 300 l; moc po OZC, wydajność CWU po sprawdzeniu poborów i czasu ładowania. Modele pompy, rekuperatora i uzdatniania oraz budżet pozostają nieuzgodnione. Zbiornik LPG to przyszła możliwość, której warunki prawne/opłacalność wymagają ponownej oceny w terminie realizacji.
 
+## 27. Kopia referencyjna i warstwa instalacji (16.11.2026)
+
+- **[DECYZJA]** Utworzyć niezależny snapshot **Projekt główny 2026-11-16**, sprzed kolejnych zmian. Kod `E2REF20261116`, osobny stan, tylko odczyt z pomiarem, wyszukiwaniem i eksportem. Publiczna baza zamrożona w [JSON](snapshots/projekt-glowny-2026-11-16.json) oraz w HTML. W przeglądarce z wcześniejszym zapisem E2 zachować także jego ręczne edycje w lokalnej kopii; nie wysyłać ich do repozytorium. Kolejne zmiany E2 nie aktualizują snapshotu.
+- **[DECYZJA]** W bieżącym Projekcie Głównym dodać warstwę **Instalacje** obejmującą potrzebny program instalacyjny. Oddzielne filtry wentylacji/okapu, wody, kanalizacji/POŚ, ogrzewania, elektryki, LAN/sterowania oraz rezerw PV/AC/LPG/rolet. [Opis działania i zakres](instalacje-warstwa.md).
+- **[ZAKRES KONCEPCJI]** Punkty i strefy tras do koordynacji, z poziomami i uwagami; nie dobór wykonawczy. Nie wybrano urządzeń, średnic, przekrojów, spadków, pełnej liczby obwodów ani miejsc instalacji na działce. Rezerwy pionów, czerpni/wyrzutni, rozdzielnic i urządzeń sprawdzić na przekrojach i w projekcie branżowym. Sufitowa rekuperacja nie zastępuje odpowietrzenia kanalizacji ani przewodu powietrzno-spalinowego LPG.
+- Bez zmian obrysu, ścian, otworów, mebli i istniejących ID. Nowe ID instalacji `E2-I…`, kotwice przy urządzeniach i otworach, własne uwagi/przesunięcia, JSON oraz PNG z wybranymi branżami. R1/R2/R3/E2S i planer kuchni bez zmian geometrii.
+- Zapis v36 odczytuje v35 bez ponawiania starszych korekt; stare kopie pozostają. Snapshot jest utrwalany osobno przed dodaniem instalacji i nie jest ponownie nadpisywany. Dotychczasowe zaakceptowane ograniczenia domu pozostają jawne.
+
 [Przygotowania instalacyjne, zależności, źródła i zakres rezerwy LPG](instalacje-przygotowanie.md). To aktualizacja programu i dokumentacji; geometria rzutu oraz zapis v35 bez zmian. Obecny audyt geometryczny nie potwierdza zmieszczenia wszystkich nowych urządzeń i ich obsługi w technicznym.

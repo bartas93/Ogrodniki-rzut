@@ -99,6 +99,12 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
   #status{font-size:11px}
   .tgrid{grid-template-columns:1fr}
 }
+.service-filter{display:flex;align-items:center;gap:5px;margin:8px 0;font-size:12px;cursor:pointer}
+.service-filter input{min-width:20px;min-height:20px}.service-actions{display:flex;gap:5px;flex-wrap:wrap}
+.service-list{font-size:12px;margin:5px 0 10px}.service-list summary{cursor:pointer;padding:4px}
+.service-list button{display:block;width:100%;text-align:left;font-size:11px;margin:3px 0;white-space:normal}
+.service-selected{border-top:1px solid var(--line);margin-top:12px;font-size:12px}
+#props li,.service-selected li{margin:7px 0}#installationPanel ul,#props ul{padding-left:18px}
 </style>
 </head>
 <body>
@@ -109,6 +115,7 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
     <button id="bThumbs" title="Miniatury wszystkich wariantów naraz">▦ Warianty</button>
     <button id="bPanel" class="mobile-only" title="Pokaż / ukryj panel właściwości">Panel</button>
     <label class="tg"><input type="checkbox" id="tIds" title="Przybliż rzut, aby zobaczyć więcej ID. Pełne ID znajdziesz w panelu zaznaczenia."> ID elementów</label>
+    <button id="bInstallations" hidden title="Warstwa instalacji i filtry branż">Instalacje</button>
     <button id="bFindId">Znajdź ID</button>
     <button id="bView" title="Tryb podglądu (dotyk): przeciągnięcie przesuwa widok, stuknięcie pokazuje szczegóły, dwa palce = zoom">Podgląd</button>
     <span class="sep"></span>
@@ -153,6 +160,7 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
       <g id="gWalls"></g>
       <g id="gOps"></g>
       <g id="gFurn"></g>
+      <g id="gInstallations"></g>
       <g id="gRoof"></g>
       <g id="gDims"></g>
       <g id="gLabels"></g>
@@ -191,6 +199,7 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
     <div class="hint">Stawkę za m² powierzchni zabudowy wpisujesz Ty — edytor jej nie zgaduje.</div>
 
     <div id="layers"></div>
+    <div id="installationPanel"></div>
 
     <h2>Skróty</h2>
     <div class="keys">
@@ -223,7 +232,10 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 'use strict';
 const $ = s => document.querySelector(s);
 const svg = $('#cv');
-const LS = 'ogrodniki-rzut-v35';
+const LS = 'ogrodniki-rzut-v36';
+const NICHE_LS = 'ogrodniki-rzut-v35';
+const REFERENCE_VARIANT='E2REF20261116';
+const REFERENCE_LS='ogrodniki-reference-2026-11-16';
 const PAX_LS = 'ogrodniki-rzut-v34';
 const LAYOUT_LS = 'ogrodniki-rzut-v33';
 const UTILITY_LS = 'ogrodniki-rzut-v32';
@@ -2287,6 +2299,266 @@ function variantR3(){
   return s;
 }
 
+
+// Zamrożony stan opublikowany; nigdy nie wywołuje aktualnego konstruktora E2.
+const E2_REFERENCE_20261116={"walls":[{"id":1,"x1":-6,"y1":-6,"x2":17406,"y2":-6,"t":412,"ext":true,"layer":"","op":[{"id":2,"type":"window","pos":2256,"w":1500,"hinge":0,"side":1,"sill":1100,"height":1200,"opening":"FIX — bateria bez kolizji"},{"id":4,"type":"door","pos":7356,"w":900,"hinge":0,"side":-1,"sill":0,"height":2100,"frame":{"jamb":50,"head":50,"target":800,"leafExtra":20,"source":"rezerwa koncepcyjna, karta wybranej ościeżnicy do potwierdzenia"}},{"id":5,"type":"window","pos":8606,"w":1200,"hinge":0,"side":1,"sill":1200,"height":1200,"opening":"dół FIX, uchylne od 180 cm"},{"id":6,"type":"window","pos":12206,"w":1500,"hinge":0,"side":1,"sill":900,"height":1500,"opening":"dół FIX, uchylne od 170 cm"},{"id":7,"type":"window","pos":16006,"w":600,"hinge":0,"side":1,"sill":1500,"height":600,"opening":"dół FIX, uchylne od 170 cm"}],"buildUp":[{"name":"Tynk gipsowy","t":15},{"name":"Silikat","t":180},{"name":"Klej EPS","t":10},{"name":"EPS grafit λ 0,031","t":200},{"name":"Warstwa zbrojona","t":5},{"name":"Tynk elewacyjny","t":2}]},{"id":8,"x1":17406,"y1":-6,"x2":17406,"y2":10206,"t":412,"ext":true,"layer":"","op":[{"id":9,"type":"window","pos":3806,"w":600,"hinge":0,"side":1,"sill":1500,"height":600,"opening":"dół FIX, uchylne od 170 cm"},{"id":10,"type":"door","pos":4906,"w":1000,"hinge":0,"side":-1,"sill":0,"height":2100,"frame":{"jamb":50,"head":50,"target":900,"leafExtra":20,"source":"rezerwa koncepcyjna, karta wybranej ościeżnicy do potwierdzenia"}},{"id":11,"type":"window","pos":8356,"w":900,"hinge":0,"side":1,"sill":900,"height":1500,"opening":"dół FIX, uchylne od 170 cm"}],"buildUp":[{"name":"Tynk gipsowy","t":15},{"name":"Silikat","t":180},{"name":"Klej EPS","t":10},{"name":"EPS grafit λ 0,031","t":200},{"name":"Warstwa zbrojona","t":5},{"name":"Tynk elewacyjny","t":2}]},{"id":12,"x1":17406,"y1":10206,"x2":-6,"y2":10206,"t":412,"ext":true,"layer":"","op":[{"id":13,"type":"window","pos":16156,"w":1500,"hinge":0,"side":1,"sill":900,"height":1500,"opening":"dół FIX, uchylne od 170 cm"},{"id":14,"type":"slide","pos":13856,"w":2000,"hinge":0,"side":1,"sill":0,"height":2300},{"id":15,"type":"window","pos":10856,"w":1500,"hinge":0,"side":1,"sill":900,"height":1500,"opening":"dół FIX, uchylne od 170 cm"},{"id":16,"type":"window","pos":8406,"w":1800,"hinge":0,"side":1,"sill":900,"height":1500,"opening":"dół FIX, uchylne od 170 cm"},{"id":17,"type":"window","pos":2456,"w":1200,"hinge":0,"side":1,"sill":900,"height":1500,"opening":"dół FIX, uchylne od 170 cm"}],"buildUp":[{"name":"Tynk gipsowy","t":15},{"name":"Silikat","t":180},{"name":"Klej EPS","t":10},{"name":"EPS grafit λ 0,031","t":200},{"name":"Warstwa zbrojona","t":5},{"name":"Tynk elewacyjny","t":2}]},{"id":18,"x1":-6,"y1":10206,"x2":-6,"y2":-6,"t":412,"ext":true,"layer":"","op":[{"id":19,"type":"window","pos":1706,"w":1500,"hinge":0,"side":1,"sill":900,"height":1500,"opening":"dół FIX, uchylne od 170 cm"},{"id":20,"type":"window","pos":4856,"w":1500,"hinge":0,"side":1,"sill":900,"height":1500,"opening":"dół FIX, uchylne od 170 cm"},{"id":21,"type":"door","pos":6606,"w":1000,"hinge":0,"side":1,"sill":0,"height":2300,"frame":{"jamb":50,"head":50,"target":900,"leafExtra":20,"source":"rezerwa koncepcyjna, karta wybranej ościeżnicy do potwierdzenia"}}],"buildUp":[{"name":"Tynk gipsowy","t":15},{"name":"Silikat","t":180},{"name":"Klej EPS","t":10},{"name":"EPS grafit λ 0,031","t":200},{"name":"Warstwa zbrojona","t":5},{"name":"Tynk elewacyjny","t":2}]},{"id":22,"x1":4775,"y1":100,"x2":4775,"y2":2475,"t":150,"ext":false,"layer":"","op":[{"id":23,"type":"door","pos":1200,"w":900,"hinge":1,"side":1,"notes":["Aktualizacja 12.11 — Otwieranie ze spiżarni do kuchni/salonu, zawias od południa: skrzydło odkłada się w stronę salonu, poza północną zabudową."],"frame":{"jamb":50,"head":50,"target":800,"leafExtra":20,"source":"rezerwa koncepcyjna, karta wybranej ościeżnicy do potwierdzenia"},"height":2100,"sill":0}]},{"id":24,"x1":5175,"y1":2475,"x2":5175,"y2":4300,"t":150,"ext":false,"layer":"","op":[]},{"id":25,"x1":4775,"y1":4300,"x2":4775,"y2":10100,"t":150,"ext":false,"layer":"","op":[{"id":26,"type":"open","pos":675,"w":1200,"hinge":0,"side":1}]},{"id":27,"x1":4775,"y1":4300,"x2":13925,"y2":4300,"t":150,"ext":false,"layer":"","op":[{"id":28,"type":"door","pos":2175,"w":900,"hinge":0,"side":1,"frame":{"jamb":50,"head":50,"target":800,"leafExtra":20,"source":"rezerwa koncepcyjna, karta wybranej ościeżnicy do potwierdzenia"},"height":2100,"sill":0},{"id":29,"type":"door","pos":4825,"w":1000,"hinge":0,"side":-1,"frame":{"jamb":50,"head":50,"target":900,"leafExtra":20,"source":"rezerwa koncepcyjna, karta wybranej ościeżnicy do potwierdzenia"},"height":2100,"sill":0},{"id":30,"type":"door","pos":8575,"w":900,"hinge":1,"side":-1,"frame":{"jamb":50,"head":50,"target":800,"leafExtra":20,"source":"rezerwa koncepcyjna, karta wybranej ościeżnicy do potwierdzenia"},"height":2100,"sill":0}]},{"id":31,"x1":4775,"y1":2475,"x2":8425,"y2":2475,"t":150,"ext":false,"layer":"","op":[]},{"id":32,"x1":6775,"y1":100,"x2":6775,"y2":2475,"t":150,"ext":false,"layer":"","op":[]},{"id":33,"x1":8425,"y1":2475,"x2":8425,"y2":4300,"t":150,"ext":false,"layer":"","op":[]},{"id":34,"x1":10875,"y1":100,"x2":10875,"y2":4300,"t":150,"ext":false,"layer":"","op":[]},{"id":35,"x1":12775,"y1":4300,"x2":12775,"y2":3600,"t":75,"ext":false,"layer":"","op":[],"detail":{"purpose":"niche-return","finishedThickness":75,"system":"CW50 + 2×12,5 mm GK","nonLoadBearing":true,"source":"https://www.rigips.pl/system/sciany-dzialowe/3_40_01"}},{"id":36,"x1":14225,"y1":100,"x2":14225,"y2":3400,"t":150,"ext":false,"layer":"","op":[]},{"id":37,"x1":13925,"y1":3400,"x2":13925,"y2":4300,"t":150,"ext":false,"layer":"","op":[]},{"id":38,"x1":13925,"y1":3400,"x2":17300,"y2":3400,"t":150,"ext":false,"layer":"","op":[{"id":39,"type":"door","pos":2375,"w":900,"hinge":1,"side":-1,"frame":{"jamb":50,"head":50,"target":800,"leafExtra":20,"source":"rezerwa koncepcyjna, karta wybranej ościeżnicy do potwierdzenia"},"height":2100,"sill":0}]},{"id":40,"x1":14875,"y1":3400,"x2":14875,"y2":6200,"t":150,"ext":false,"layer":"","op":[{"id":41,"type":"door","pos":1575,"w":1000,"hinge":0,"side":1,"frame":{"jamb":50,"head":50,"target":900,"leafExtra":20,"source":"rezerwa koncepcyjna, karta wybranej ościeżnicy do potwierdzenia"},"height":2100,"sill":0}]},{"id":42,"x1":4775,"y1":5650,"x2":13725,"y2":5650,"t":150,"ext":false,"layer":"","op":[{"id":43,"type":"door","pos":568.75,"w":900,"hinge":0,"side":1,"frame":{"jamb":50,"head":50,"target":800,"leafExtra":20,"source":"rezerwa koncepcyjna, karta wybranej ościeżnicy do potwierdzenia","casing":{"system":"PORTA SYSTEM 80, opaska 60 mm — odniesienie wymiarowe","outerWidth":946,"minimumSideGap":10,"source":"https://4business.portadoors.com/wp-content/uploads/2026/02/EN_Katalog-Porta_bez-cen_compressed.pdf"}},"height":2100,"sill":0,"notes":["Review 13.11 — O43 wycentrowane w zatoce 98,75 cm. Otwór 90 cm, modelowe światło 80 cm. Zestaw z opaskami szerokości 94,6 cm mieści się z zapasem 2,075 cm na stronę; szersza opaska 98,6 cm nie zapewnia tego zapasu. Ostateczne zamówienie po pomiarze gotowych ścian."]},{"id":44,"type":"open","pos":4300,"w":2350,"hinge":0,"side":1},{"id":45,"type":"door","pos":6200,"w":1000,"hinge":1,"side":1,"frame":{"jamb":50,"head":50,"target":900,"leafExtra":20,"source":"rezerwa koncepcyjna, karta wybranej ościeżnicy do potwierdzenia"},"height":2100,"sill":0},{"id":46,"type":"door","pos":7425,"w":900,"hinge":0,"side":-1,"frame":{"jamb":50,"head":50,"target":800,"leafExtra":20,"source":"rezerwa koncepcyjna, karta wybranej ościeżnicy do potwierdzenia"},"height":2100,"sill":0}]},{"id":47,"x1":5875,"y1":5650,"x2":5875,"y2":6350,"t":75,"ext":false,"layer":"","op":[],"detail":{"purpose":"niche-return","finishedThickness":75,"system":"CW50 + 2×12,5 mm GK","nonLoadBearing":true,"source":"https://www.rigips.pl/system/sciany-dzialowe/3_40_01"}},{"id":48,"x1":7775,"y1":5650,"x2":7775,"y2":10100,"t":150,"ext":false,"layer":"","op":[]},{"id":49,"x1":7775,"y1":6425,"x2":10325,"y2":6425,"t":150,"ext":false,"layer":"","op":[]},{"id":50,"x1":10325,"y1":5650,"x2":10325,"y2":6425,"t":150,"ext":false,"layer":"","op":[]},{"id":51,"x1":11625,"y1":5650,"x2":11625,"y2":10100,"t":150,"ext":false,"layer":"","op":[{"id":52,"type":"door","pos":3850,"w":900,"hinge":1,"side":1,"frame":{"jamb":50,"head":50,"target":800,"leafExtra":20,"source":"rezerwa koncepcyjna, karta wybranej ościeżnicy do potwierdzenia"},"height":2100,"sill":0}]},{"id":53,"x1":11625,"y1":8325,"x2":14025,"y2":8325,"t":150,"ext":false,"layer":"","op":[]},{"id":54,"x1":13725,"y1":5650,"x2":13725,"y2":8325,"t":150,"ext":false,"layer":"","op":[]},{"id":55,"x1":13725,"y1":8325,"x2":14025,"y2":8325,"t":150,"ext":false,"layer":"","op":[]},{"id":56,"x1":14025,"y1":8325,"x2":14025,"y2":10100,"t":150,"ext":false,"layer":"","op":[]},{"id":57,"x1":13725,"y1":6200,"x2":17300,"y2":6200,"t":150,"ext":false,"layer":"","op":[{"id":58,"type":"door","pos":575,"w":900,"hinge":0,"side":1,"frame":{"jamb":50,"head":50,"target":800,"leafExtra":20,"source":"rezerwa koncepcyjna, karta wybranej ościeżnicy do potwierdzenia"},"height":2100,"sill":0}]},{"id":150,"x1":14875,"y1":6200,"x2":14875,"y2":6900,"t":75,"ext":false,"layer":"","op":[],"presetTag":"nov13-office-return","detail":{"purpose":"niche-return","finishedThickness":75,"system":"CW50 + 2×12,5 mm GK","nonLoadBearing":true,"source":"https://www.rigips.pl/system/sciany-dzialowe/3_40_01"}}],"rooms":[{"id":59,"name":"Salon + kuchnia + jadalnia + komunikacja","x":1000,"y":5500,"layer":""},{"id":60,"name":"Spiżarnia","x":5600,"y":1600,"layer":""},{"id":61,"name":"Łazienka (prysznic)","x":6900,"y":3950,"layer":""},{"id":62,"name":"Pralnia / suszarnia","x":9800,"y":2900,"layer":""},{"id":63,"name":"Pokój 3","x":12000,"y":2400,"layer":""},{"id":64,"name":"Kotłownia / gospodarcze","x":15600,"y":2300,"layer":""},{"id":65,"name":"Wiatrołap","x":16000,"y":4700,"layer":""},{"id":66,"name":"Pokój 2","x":6300,"y":7600,"layer":""},{"id":67,"name":"Sypialnia","x":9300,"y":8300,"layer":""},{"id":68,"name":"Łazienka (wanna)","x":12400,"y":6800,"layer":""},{"id":69,"name":"Garderoba","x":12500,"y":9100,"layer":""},{"id":70,"name":"Gabinet","x":15200,"y":8000,"layer":""}],"furn":[{"id":71,"key":"tall","name":"Słupek, piekarnik, lodówka, blat 40 i narożnik","x":500,"y":1600,"rot":270,"w":2800,"d":600,"layer":"meble","z":[{"s":"front","d":1000,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":600,"rect":null,"off":false}],"notes":["Wentylacja słupków, otwieranie lodówki i zasilanie według kart urządzeń.","Aktualizacja 12.11 — Dodatkowy słupek 60 cm po południowej stronie piekarnika. E3 pozostaje pod tym samym ID jako dolna szafka z blatem 40 cm. Nowy dolny koniec ciągu y=3000 mm."],"equipment":[{"kind":"fridge","x":1200,"y":0,"w":600,"d":600,"label":"LOD","id":1},{"kind":"oven","x":600,"y":0,"w":600,"d":600,"label":"PIEK","id":2},{"kind":"cabinet","x":1800,"y":0,"w":400,"d":600,"label":"BLAT 40","id":3,"height":900},{"id":4,"kind":"filler","x":2200,"y":0,"w":600,"d":600,"label":"BLENDA","height":900},{"id":5,"kind":"cabinet","x":0,"y":0,"w":600,"d":600,"label":"SŁUPEK","height":2340}],"nextEquipmentId":6},{"id":72,"key":"k240","name":"Kuchnia: zlew, zmywarka, blat, płyta","x":2750,"y":500,"rot":0,"w":3900,"d":600,"layer":"meble","z":[{"s":"front","d":1000,"l":"praca, otwarte szafki","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Kosze segregacji pod zlewem; okap nad płytą, bez doprowadzania tłuszczu do rekuperatora.","Ekspres i Thermomix na odcinkach blatu; gniazda przy urządzeniach poza strefą zlewu i płyty.","Aktualizacja 12.11 — E6: słupek 60 cm na końcu ciągu. Pomiędzy płytą i słupkiem otwarty regał dolny 40 cm z blatem; odstawianie przy płycie pozostaje wolne. Ekspres przy lewym odcinku blatu, czajnik na nowym blacie E3."],"equipment":[{"kind":"cabinet","x":0,"y":0,"w":600,"d":600,"label":"BLAT","id":1},{"kind":"sink","x":600,"y":0,"w":800,"d":600,"label":"ZLEW","id":2},{"kind":"dishwasher","x":1400,"y":0,"w":600,"d":600,"label":"ZM","id":3},{"kind":"cabinet","x":2000,"y":0,"w":300,"d":600,"label":"BLAT","id":4},{"kind":"hob","x":2300,"y":0,"w":600,"d":600,"label":"PŁYTA","id":5},{"kind":"cabinet","x":3300,"y":0,"w":600,"d":600,"label":"SŁUPEK","id":6,"height":2340},{"id":7,"kind":"cabinet","x":2900,"y":0,"w":400,"d":600,"label":"BLAT / OTW.","height":900}],"vertical":{"worktop":900},"nextEquipmentId":8},{"id":73,"key":"island","name":"Wyspa 170×100 — blat i 2 hokery","x":2850,"y":2500,"rot":180,"w":1700,"d":1000,"layer":"meble","z":[{"s":"front","d":1000,"l":"praca","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false},{"s":"back","d":1000,"l":"hokery / komunikacja od jadalni","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Wyspa bez zlewu i płyty; szuflady od kuchni, zasilanie w boku.","Aktualizacja 12.11 — Blat 170×100 cm, 120 cm do północnej i zachodniej zabudowy. Korpus głębokości 60 cm od kuchni, podparcie blatu i nawis 40 cm od jadalni. Dwa hokery lub stół: osobne stany, nie założenie wygodnego jednoczesnego używania."],"seating":{"mode":"table","count":2,"overhang":400}},{"id":74,"key":"tableext","name":"Stół 160→280, 4→10 os.","x":2500,"y":4800,"rot":0,"w":1600,"d":900,"layer":"meble","z":[{"s":"front","d":900,"l":"krzesła","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false},{"s":"back","d":900,"l":"krzesła","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false},{"s":"left","d":600,"l":"po rozłożeniu (okazjonalnie)","k":"info","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false},{"s":"right","d":600,"l":"po rozłożeniu (okazjonalnie)","k":"info","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Przycisk w panelu przełącza pełny stan 10 osób: blat 280×90 oraz zajęte krzesła.","Stół obrócony na osi wschód–zachód; środek x=2500, y=4800 mm.","Rozłożenie 280 cm: dziesięć miejsc po pięć na długich bokach, bez krzeseł na końcach; rozstaw 56 cm jest ciasny i przeznaczony na okazjonalne spotkania.","Przy rozłożeniu stół kończy się na x=3900, do lica ściany przy holu pozostaje nominalnie 80 cm. Legowiska bez zmiany położenia."],"arrangements":{"mode":"closed","closed":{"w":1600,"d":900,"parts":[[0,0,1,1]]},"expanded":{"w":2800,"d":900,"parts":[[0,0,1,1],[0.019642857142857142,-0.6666666666666666,0.16071428571428573,0.6666666666666666],[0.019642857142857142,1,0.16071428571428573,0.6666666666666666],[0.21964285714285714,-0.6666666666666666,0.16071428571428573,0.6666666666666666],[0.21964285714285714,1,0.16071428571428573,0.6666666666666666],[0.41964285714285715,-0.6666666666666666,0.16071428571428573,0.6666666666666666],[0.41964285714285715,1,0.16071428571428573,0.6666666666666666],[0.6196428571428572,-0.6666666666666666,0.16071428571428573,0.6666666666666666],[0.6196428571428572,1,0.16071428571428573,0.6666666666666666],[0.8196428571428571,-0.6666666666666666,0.16071428571428573,0.6666666666666666],[0.8196428571428571,1,0.16071428571428573,0.6666666666666666]]},"label":"Stół 280 cm — 10 krzeseł (5+5, ciasny rozstaw 56 cm)"}},{"id":75,"key":"sofabed","name":"Sofa 200×97 — spanie 140×200","x":2100,"y":6435,"rot":0,"w":2000,"d":970,"layer":"meble","z":[{"s":"front","d":430,"l":"po rozłożeniu","k":"unfold","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false},{"s":"right","d":600,"l":"dojście od wschodu","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":[2000,0,600,1400],"off":false}],"notes":["Gabaryt odniesienia: IKEA NYHAMN, 200×97 cm, materac 140×200 cm.","Rezerwa po rozłożeniu: 200×140 cm; ostateczny model i ruch mechanizmu potwierdzić przed zakupem.","Górne ramię układu U otwartego na TV na wschodzie; sofa poprzecznie nad narożnikiem, frontem na południe.","M75 przy większym narożniku — górne ramię U pozostaje skierowane na południe. W ustawieniu domyślnym sofa przesunięta 90 cm w prawo i 32 cm w górę; 3 cm między zamkniętymi obrysami to nie przejście. Rozkładanie obu mebli jednocześnie niepotwierdzone: konserwatywna rezerwa M76 nachodzi na pole spania M75 na 40 cm."]},{"id":76,"key":"corner","name":"Narożnik 305×220 — dłuższy bok przy ścianie zachodniej","x":1300,"y":8475,"rot":90,"w":3050,"d":2200,"layer":"meble","z":[{"s":"front","d":600,"l":"dojście po rozłożeniu","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":[0,-600,3050,600],"off":false},{"s":"front","d":1300,"l":"po rozłożeniu","k":"unfold","st":0,"ex":0,"c0":0,"c1":0,"rect":[0,0,2050,1300]}],"parts":[[0,0.5909090909090909,1,0.4090909090909091],[0.6721311475409836,0,0.32786885245901637,0.5909090909090909]],"notes":["Gabaryt E2-M76 — 305×220 cm: dłuższy bok przy zachodniej ścianie, krótszy przy południowej. Głębokości ramion 90/100 cm poglądowe. Model i funkcja spania niepotwierdzone; strefa rozłożenia zachowawczo rezerwuje cały obrys 220×305 cm, nie oznacza rzeczywistego łóżka. W ustawieniu domyślnym do początku HST 15 cm wzdłuż ściany, otwór dostępny od północy."],"decoMirrorX":true,"sleepingUnverified":true},{"id":77,"key":"coffee","name":"Stolik 110×60","x":3250,"y":8200,"rot":0,"w":1100,"d":600,"layer":"meble","z":[]},{"id":78,"key":"tvwall","name":"TV 55\" (ściana wschodnia)","x":4650,"y":7915,"rot":90,"w":1230,"d":100,"layer":"meble","z":[],"vertical":{"screenCentre":1100}},{"id":79,"key":"shelf","name":"Wnęka 167,5×40 — książki i dokumenty","x":4900,"y":3387.5,"rot":90,"w":1675,"d":400,"layer":"meble","z":[{"s":"front","d":700,"l":"dostęp","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Płytkie półki z frontem; bez standardowego poprzecznego drążka na wieszaki.","Projekt Główny 12.11 — głębokość 40 cm (+5 cm), kosztem szerokości łazienki walk-in; front od salonu bez przesunięcia."]},{"id":80,"key":"steel","name":"Regały 2×90×60 — spiżarnia","x":5750,"y":500,"rot":0,"w":1800,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"dostęp do regałów","k":"use","st":0,"ex":0,"c0":0,"c1":550,"rect":null}],"notes":["Aktualizacja 12.11 — Takie moduły jak M82: 2×90×60, dostęp od południa. Wschodni koniec przy blacie jest narożnikiem o ograniczonym dostępie."]},{"id":81,"key":"bench","name":"Spiżarnia: blat 90×60","x":6400,"y":1350,"rot":90,"w":900,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"praca przy blacie","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null}],"vertical":{"worktop":900},"notes":["Aktualizacja 12.11 — Blat roboczy 90×60 cm zamiast regału; rezerwa na małe AGD, gniazda i odstawianie."]},{"id":82,"key":"steel","name":"Regały 2×90×60 — słoiki i zapasy","x":5750,"y":2100,"rot":180,"w":1800,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"dostęp","k":"use","st":0,"ex":0,"c0":550,"c1":0,"rect":null,"off":false}]},{"id":83,"key":"walkin120","name":"Prysznic 130×90 — kabina zamknięta","x":5900,"y":3000,"rot":0,"w":1300,"d":900,"layer":"meble","z":[{"s":"front","d":750,"l":"wejście do kabiny","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":[0,900,1000,750],"off":false}],"notes":["Głowica na ścianie zachodniej, natrysk na wschód w stronę szyby. Odpływ liniowy przy ścianie północnej.","Spadek projektowy 2% ku odpływowi; rezerwa 12 cm w warstwach podłogi do potwierdzenia kartą syfonu.","Aktualizacja 12.11 — Zwykła kabina zamknięta 130×90 cm; położenie i wymiary bez zmian. Drzwi przesuwne/składane do doboru, bez łuku kolidującego z umywalką; hydroizolacja i odpływ według wybranego brodzika."],"equipment":[{"kind":"drain","x":100,"y":35,"w":1100,"d":50,"label":"ODPŁYW","id":1},{"kind":"glass","x":1270,"y":0,"w":20,"d":900,"label":"","id":2},{"kind":"glass","x":1000,"y":870,"w":300,"d":20,"label":"","id":3},{"kind":"head","x":20,"y":350,"w":70,"d":300,"label":"NATRYSK","id":4}],"nextEquipmentId":5,"enclosedShower":true},{"id":84,"key":"instwall","name":"Ścianka umywalki 20 cm","x":7000,"y":2650,"rot":0,"w":800,"d":200,"layer":"meble","z":[]},{"id":85,"key":"sink80","name":"Umywalka 80 + lustro","x":7000,"y":2980,"rot":0,"w":800,"d":460,"layer":"meble","z":[{"s":"front","d":700,"l":"przed umywalką","k":"use","st":0,"ex":100,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Lustro nad umywalką; oświetlenie po bokach; gniazdo poza strefami natrysku według projektu elektrycznego."],"vertical":{"basinTop":850,"mirrorBottom":1100}},{"id":86,"key":"instwall","name":"Ścianka WC 20 cm — wspólna ściana z umywalką","x":7900,"y":2650,"rot":0,"w":900,"d":200,"layer":"meble","z":[]},{"id":87,"key":"wcw","name":"WC podwieszane — obok umywalki","x":7900,"y":3015,"rot":0,"w":360,"d":530,"layer":"meble","z":[{"s":"front","d":600,"l":"przed WC","k":"use","st":0,"ex":220,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Stelaż przy północnej ścianie, na tej samej ścianie co umywalka. Rewizja od przycisku; kanalizacja do uzgodnienia z projektantem instalacji.","Projekt Główny 12.11 — przy północnej ścianie obok umywalki; strefa stelaża 90 cm, po zwężeniu pomieszczenia do 310 cm."],"vertical":{"seat":430}},{"id":88,"key":"k240","name":"Pralnia: zlew 60 + pralka 60 + suszarka 60","x":8750,"y":550,"rot":0,"w":1800,"d":700,"layer":"meble","z":[{"s":"front","d":900,"l":"załadunek i wyjęcie urządzeń","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Urządzenia pod blatem, nie podniesione: wybrano ciąg roboczy pod jednym oknem.","Głębokość rezerwacji 70 cm z przyłączami; fronty urządzeń otwierane na środek.","Powyżej blatu drążek/suszarka ścienna; deska składana w szafie. Syfony i zawory dostępne."],"equipment":[{"kind":"sink","x":0,"y":0,"w":600,"d":700,"label":"ZLEW","id":1},{"kind":"washer","x":600,"y":0,"w":600,"d":700,"label":"PRALKA","id":2},{"kind":"dryer","x":1200,"y":0,"w":600,"d":700,"label":"SUSZARKA","id":3}],"vertical":{"worktop":920},"nextEquipmentId":4},{"id":89,"key":"ref","name":"Suszarka stojąca — ograniczenie zaakceptowane","x":7750,"y":1300,"rot":0,"w":1700,"d":800,"layer":"meble","z":[],"ref":true,"notes":["Pozostawiona na życzenie inwestora; po rozłożeniu ogranicza dojście do ogrodu. Kontrola jej nie uwzględnia."]},{"id":90,"key":"pax","name":"PAX 100 — chemia, kosze i tekstylia","x":7399,"y":2100,"rot":180,"w":998,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Korpus nominalny 100 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu."],"joinery":{"nominalWidth":1000,"bodyWidth":998,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":91,"key":"pax75","name":"PAX 75 — deska i odkurzacz","x":8274,"y":2100,"rot":180,"w":748,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Korpus nominalny 75 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu."],"joinery":{"nominalWidth":750,"bodyWidth":748,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":92,"key":"paxcorner","name":"PAX narożny 110,2×110,2","x":10249,"y":851,"rot":0,"w":1102,"d":1102,"layer":"meble","z":[{"s":"front","d":1000,"l":"dostęp do narożnika","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":[0,600,502,1000],"off":false},{"s":"left","d":1000,"l":"dostęp do dostawki","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":[-498,600,1000,502],"off":false}],"notes":["Zestaw narożny PAX: korpus 100 + dostawka 53, zawiasy KOMPLEMENT do sekcji narożnej.","Obrys 110,2×110,2 cm według kombinacji producenta; nie dwa zwykłe korpusy wsunięte jeden przed drugi."],"joinery":{"corner":true,"height":2364}},{"id":93,"key":"ref","name":"Blenda / wypełnienie — dystans przy ścianie północnej","x":10249,"y":250,"rot":0,"w":1102,"d":100,"layer":"meble","z":[]},{"id":94,"key":"ref","name":"Blenda / wypełnienie — narożnik pralni","x":9674,"y":600,"rot":0,"w":48,"d":600,"layer":"meble","z":[]},{"id":95,"key":"pax","name":"PAX 100 — pościel","x":10500,"y":1949,"rot":90,"w":998,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Korpus nominalny 100 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu."],"joinery":{"nominalWidth":1000,"bodyWidth":998,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":96,"key":"pax","name":"PAX 100 — ubrania sezonowe","x":10500,"y":2949,"rot":90,"w":998,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Korpus nominalny 100 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu."],"joinery":{"nominalWidth":1000,"bodyWidth":998,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":97,"key":"pax75","name":"PAX 75 — walizki","x":10500,"y":3824,"rot":90,"w":748,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Korpus nominalny 75 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu."],"joinery":{"nominalWidth":750,"bodyWidth":748,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":98,"key":"ref","name":"Blenda / wypełnienie — łączenie narożnika","x":10500,"y":1426,"rot":0,"w":600,"d":48,"layer":"meble","z":[]},{"id":99,"key":"ref","name":"Blenda / wypełnienie — przy drzwiach pralni","x":10500,"y":4211.5,"rot":0,"w":600,"d":27,"layer":"meble","z":[]},{"id":100,"key":"desk","name":"Biurko 140×70 (przy oknie)","x":11650,"y":550,"rot":0,"w":1400,"d":700,"layer":"meble","z":[{"s":"front","d":900,"l":"krzesło","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"vertical":{"worktop":740}},{"id":101,"key":"sofabed","name":"Sofa 200×97 — spanie 140×200","x":13665,"y":1200,"rot":90,"w":2000,"d":970,"layer":"meble","z":[{"s":"front","d":430,"l":"po rozłożeniu","k":"unfold","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false},{"s":"front","d":600,"l":"dojście","k":"use","st":430,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Gabaryt odniesienia: IKEA NYHAMN, 200×97 cm, materac 140×200 cm.","Rezerwa po rozłożeniu: 200×140 cm; ostateczny model i ruch mechanizmu potwierdzić przed zakupem.","Układ E2 11.11 — dosunięta do północnej ściany, przy ścianie wschodniej. Część strefy dojścia od zachodu zajmuje biurko; dostęp od środka pokoju pozostaje."]},{"id":102,"key":"pax","name":"PAX 100 — ubrania","x":11469.75,"y":3925,"rot":180,"w":998,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Korpus nominalny 100 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu.","Review 13.11 — Korpusy łączone bez sztucznych odstępów. Łączny zapas wnęki 4.15 cm, po około 2.08 cm na końcach. Blendy, uchwyty i pełne otwarcie frontu dobrać przed montażem."],"joinery":{"nominalWidth":1000,"bodyWidth":998,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":103,"key":"pax75","name":"PAX 75 — zabawki i książki","x":12342.75,"y":3925,"rot":180,"w":748,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Korpus nominalny 75 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu.","Review 13.11 — Korpusy łączone bez sztucznych odstępów. Łączny zapas wnęki 4.15 cm, po około 2.08 cm na końcach. Blendy, uchwyty i pełne otwarcie frontu dobrać przed montażem."],"joinery":{"nominalWidth":750,"bodyWidth":748,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":104,"key":"pax75","name":"PAX 75 — kurtki gości","x":14399,"y":3775,"rot":0,"w":748,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Korpus nominalny 75 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu."],"joinery":{"nominalWidth":750,"bodyWidth":748,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":105,"key":"round","name":"Urządzenie techniczne Ø59 (pompa / zasobnik / bufor)","x":14597,"y":497,"rot":0,"w":594,"d":594,"layer":"meble","z":[{"s":"front","d":600,"l":"serwis","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null}],"notes":["Rezerwacja gabarytu; konkretny model i wymagania serwisowe do doboru instalatora."]},{"id":106,"key":"round","name":"Urządzenie techniczne Ø59 (pompa / zasobnik / bufor)","x":15211,"y":497,"rot":0,"w":594,"d":594,"layer":"meble","z":[{"s":"front","d":600,"l":"serwis","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null}],"notes":["Rezerwacja gabarytu; konkretny model i wymagania serwisowe do doboru instalatora."]},{"id":107,"key":"round","name":"Urządzenie techniczne Ø59 (pompa / zasobnik / bufor)","x":15825,"y":497,"rot":0,"w":594,"d":594,"layer":"meble","z":[{"s":"front","d":600,"l":"serwis","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null}],"notes":["Rezerwacja gabarytu; konkretny model i wymagania serwisowe do doboru instalatora."]},{"id":108,"key":"ref","name":"Rekuperator 99×59 obok urządzeń","x":16695,"y":494,"rot":0,"w":990,"d":588,"layer":"meble","z":[{"s":"front","d":600,"l":"serwis","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null}],"notes":["Front serwisowy od środka pomieszczenia; wymiana filtrów bez demontażu szaf."]},{"id":109,"key":"steel","name":"Regał stalowy 90×60 — gospodarcze","x":14600,"y":1875,"rot":270,"w":900,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"dostęp","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Aktualizacja 12.11 — Regał 90×60 na zachodzie, od y1425 do2325; wolna rezerwa serwisowa przed urządzeniem na północy."]},{"id":110,"key":"steel","name":"Regał stalowy 90×50 — dolna ściana","x":15100,"y":3075,"rot":180,"w":900,"d":500,"layer":"meble","z":[{"s":"front","d":750,"l":"dostęp do regału","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null}],"notes":["Aktualizacja 12.11 — Zamiast PAX: regał stalowy 90×50 przy południowej ścianie. Dodatkowe regały na zachodzie i wschodzie, bez zastawiania serwisu urządzeń i brodzika. Płytszy regał pozostawia przejście 85 cm w przewężeniu."],"joinery":{"height":2000,"bodyDepth":500}},{"id":111,"key":"dogbath","name":"Brodzik dla psa 100×80","x":16800,"y":1950,"rot":90,"w":1000,"d":800,"layer":"meble","z":[{"s":"front","d":800,"l":"obsługa","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Odpływ z wyjmowanym sitkiem na sierść i rewizją; ręczniki w szafie gospodarczej."]},{"id":112,"key":"hall180","name":"Szafa przesuwna 225 — kurtki i buty","x":16075,"y":5800,"rot":180,"w":2250,"d":650,"layer":"meble","z":[{"s":"front","d":750,"l":"dostęp","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Zabudowa na wymiar; nie oznacza modułu PAX. Wydzielić mokre kurtki i obuwie."]},{"id":113,"key":"bench","name":"Ławka 80×40 — siedzisko","x":15350,"y":3675,"rot":0,"w":800,"d":400,"layer":"meble","z":[{"s":"front","d":600,"l":"siadanie / wyjazd robota","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Stacja robota pod siedziskiem, gniazdo za ławką; wyjazd na środek wiatrołapu.","Aktualizacja 12.11 — Skrócona do 80 cm przy zachowanym lewym końcu; robot przeniesiony do pralni. Do początku otworu O39 pozostaje 10 cm."],"equipment":[],"nextEquipmentId":2},{"id":114,"key":"pax","name":"PAX 100 — ubrania","x":6432.25,"y":6025,"rot":0,"w":998,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Korpus nominalny 100 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu.","Review 13.11 — Korpusy łączone bez sztucznych odstępów. Łączny zapas wnęki 4.15 cm, po około 2.08 cm na końcach. Blendy, uchwyty i pełne otwarcie frontu dobrać przed montażem."],"joinery":{"nominalWidth":1000,"bodyWidth":998,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":115,"key":"pax75","name":"PAX 75 — zabawki","x":7305.25,"y":6025,"rot":0,"w":748,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Korpus nominalny 75 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu.","Review 13.11 — Korpusy łączone bez sztucznych odstępów. Łączny zapas wnęki 4.15 cm, po około 2.08 cm na końcach. Blendy, uchwyty i pełne otwarcie frontu dobrać przed montażem."],"joinery":{"nominalWidth":750,"bodyWidth":748,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":116,"key":"desk","name":"Biurko 140×70 (przy oknie)","x":5200,"y":9300,"rot":270,"w":1400,"d":700,"layer":"meble","z":[{"s":"front","d":900,"l":"krzesło","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"vertical":{"worktop":740},"notes":["Układ E2 11.11 — w południowo-zachodnim rogu pokoju 2, oparciem do ściany zachodniej; krzesło od wschodu. Przy rozłożonej sofie M117 część strefy krzesła jest zajęta."]},{"id":117,"key":"sofabed","name":"Sofa 200×97 — spanie 140×200","x":7215,"y":9000,"rot":90,"w":2000,"d":970,"layer":"meble","z":[{"s":"front","d":430,"l":"po rozłożeniu","k":"unfold","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false},{"s":"front","d":600,"l":"dojście","k":"use","st":430,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Gabaryt odniesienia: IKEA NYHAMN, 200×97 cm, materac 140×200 cm.","Rezerwa po rozłożeniu: 200×140 cm; ostateczny model i ruch mechanizmu potwierdzić przed zakupem.","Układ E2 11.11 — przy przeciwległej, wschodniej ścianie pokoju 2, w południowo-wschodnim rogu; rozłożenie na zachód."]},{"id":118,"key":"pax","name":"PAX 100 — pościel","x":8449,"y":6025,"rot":180,"w":998,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Korpus nominalny 100 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu."],"joinery":{"nominalWidth":1000,"bodyWidth":998,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":119,"key":"pax75","name":"PAX 75 — ręczniki","x":9324,"y":6025,"rot":180,"w":748,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Korpus nominalny 75 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu."],"joinery":{"nominalWidth":750,"bodyWidth":748,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":120,"key":"pax50","name":"PAX 50 — leki i dokumenty","x":9949,"y":6025,"rot":180,"w":498,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Korpus nominalny 50 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu."],"joinery":{"nominalWidth":500,"bodyWidth":498,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":121,"key":"bed180","name":"Łóżko 180×200 — rama 190×210","x":8900,"y":8250,"rot":270,"w":1900,"d":2100,"layer":"meble","z":[{"s":"left","d":800,"l":"dojście","k":"use","st":0,"ex":0,"c0":450,"c1":0,"rect":null,"off":false},{"s":"right","d":800,"l":"dojście","k":"use","st":0,"ex":0,"c0":450,"c1":0,"rect":null,"off":false}]},{"id":122,"key":"night","name":"Szafka nocna","x":8073,"y":7073,"rot":270,"w":446,"d":446,"layer":"meble","z":[]},{"id":123,"key":"night","name":"Szafka nocna","x":8073,"y":9427,"rot":270,"w":446,"d":446,"layer":"meble","z":[]},{"id":124,"key":"crib","name":"Łóżeczko 60×120 — dojście od wschodu","x":10325,"y":8375,"rot":270,"w":1250,"d":650,"layer":"meble","z":[{"s":"front","d":600,"l":"dojście","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}]},{"id":125,"key":"tvwall","name":"TV 55\" — poza łóżeczkiem","x":11500,"y":8235,"rot":90,"w":1230,"d":100,"layer":"meble","z":[],"notes":["Uchwyt zabezpieczony, przewody schowane; ekran nie znajduje się nad łóżeczkiem."],"vertical":{"screenCentre":1100}},{"id":126,"key":"instwall","name":"Ścianka instalacyjna 20 cm","x":13550,"y":6537.5,"rot":90,"w":1625,"d":200,"layer":"meble","z":[]},{"id":127,"key":"sink60","name":"Umywalka 60 + lustro","x":13220,"y":6125,"rot":90,"w":600,"d":460,"layer":"meble","z":[{"s":"front","d":700,"l":"przed umywalką","k":"use","st":0,"ex":100,"c0":0,"c1":0,"rect":null,"off":false}],"vertical":{"basinTop":850,"mirrorBottom":1100},"notes":["Projekt Główny 12.11 — umywalka zmniejszona do 60 cm; między jej krawędzią a wanną 92,5 cm, bez zmniejszania garderoby."]},{"id":128,"key":"wcw","name":"WC podwieszane","x":13185,"y":6875,"rot":90,"w":360,"d":530,"layer":"meble","z":[{"s":"front","d":600,"l":"przed WC","k":"use","st":0,"ex":270,"c0":0,"c1":0,"rect":null,"off":false,"strict":true}],"vertical":{"seat":430},"notes":["Projekt Główny 12.11 — wydzielona strefa szerokości 90 cm (po 45 cm od osi); między umywalką a wanną 92,5 cm. Garderoba i jej przejście 100 cm bez zmian."]},{"id":129,"key":"bath","name":"Wanna 180×80 + półki 2×7,5","x":12675,"y":7850,"rot":180,"w":1800,"d":800,"layer":"meble","z":[{"s":"front","d":750,"l":"wejście do wanny 92,5 cm","k":"use","st":0,"ex":0,"c0":875,"c1":0,"rect":null,"off":false}],"notes":["195 cm to wymiar gotowy: 180 cm wanny + 7,5 cm z każdej strony.","Bateria ścienna na ścianie południowej, nie na wąskiej półce. Syfon od dostępnego końca, rewizja od frontu.","Hydroizolacja pod wanną i na ścianach; wysokość górnej krawędzi ok. 60 cm, według wybranego modelu.","Aktualizacja 12.11 — Wanna przesunięta 10 cm na południe wraz z wydłużeniem łazienki. Do umywalki 102,5 cm; szerokość gotowa wnęki wanny nadal 195 cm."]},{"id":130,"key":"ref","name":"Blenda / wypełnienie — lewa półka wanny","x":11737.5,"y":7850,"rot":0,"w":75,"d":800,"layer":"meble","z":[]},{"id":131,"key":"ref","name":"Blenda / wypełnienie — prawa półka wanny","x":13612.5,"y":7850,"rot":0,"w":75,"d":800,"layer":"meble","z":[]},{"id":132,"key":"pax","name":"PAX 100 — ubrania wiszące","x":12274,"y":8700,"rot":0,"w":998,"d":600,"layer":"meble","z":[{"s":"front","d":1000,"l":"przejście 100 cm","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false,"strict":true}],"notes":["Korpus nominalny 100 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu."],"joinery":{"nominalWidth":1000,"bodyWidth":998,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":133,"key":"paxcorner","name":"PAX narożny 110,2×110,2","x":13399,"y":8951,"rot":0,"w":1102,"d":1102,"layer":"meble","z":[{"s":"front","d":1000,"l":"dostęp do narożnika","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":[0,600,502,1000],"off":false},{"s":"left","d":1000,"l":"dostęp do dostawki","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":[-498,600,1000,502],"off":false}],"notes":["Zestaw narożny PAX: korpus 100 + dostawka 53, zawiasy KOMPLEMENT do sekcji narożnej.","Obrys 110,2×110,2 cm według kombinacji producenta; nie dwa zwykłe korpusy wsunięte jeden przed drugi."],"joinery":{"corner":true,"height":2364}},{"id":134,"key":"shelf","name":"Regał 40 — akcesoria","x":13650,"y":9750,"rot":90,"w":400,"d":600,"layer":"meble","z":[{"s":"front","d":1000,"l":"przejście 100 cm","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false,"strict":true}],"notes":["Korpus nominalny 50 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu.","Aktualizacja 12.11 — Po skróceniu garderoby o 10 cm: regał otwarty 40×60 zamiast PAX 50, z zachowaniem blend i przejścia 100 cm."]},{"id":135,"key":"ref","name":"Blenda / wypełnienie — lewy koniec garderoby","x":11737.5,"y":8700,"rot":0,"w":75,"d":600,"layer":"meble","z":[]},{"id":136,"key":"ref","name":"Blenda / wypełnienie — przy narożniku garderoby","x":12810.5,"y":8700,"rot":0,"w":75,"d":600,"layer":"meble","z":[]},{"id":137,"key":"ref","name":"Blenda / wypełnienie — łączenie narożnika garderoby","x":13650,"y":9526,"rot":0,"w":600,"d":48,"layer":"meble","z":[]},{"id":138,"key":"ref","name":"Blenda / wypełnienie — prawy koniec garderoby","x":13650,"y":9975,"rot":0,"w":600,"d":50,"layer":"meble","z":[]},{"id":139,"key":"pax","name":"PAX 100 — dokumenty","x":15433.25,"y":6575,"rot":0,"w":998,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Korpus nominalny 100 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu.","Review 13.11 — Korpusy łączone bez sztucznych odstępów. Łączny zapas wnęki 4.35 cm, po około 2.17 cm na końcach. Blendy, uchwyty i pełne otwarcie frontu dobrać przed montażem."],"joinery":{"nominalWidth":1000,"bodyWidth":998,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":140,"key":"pax75","name":"PAX 75 — elektronika","x":16306.25,"y":6575,"rot":0,"w":748,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Korpus nominalny 75 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu.","Review 13.11 — Korpusy łączone bez sztucznych odstępów. Łączny zapas wnęki 4.35 cm, po około 2.17 cm na końcach. Blendy, uchwyty i pełne otwarcie frontu dobrać przed montażem."],"joinery":{"nominalWidth":750,"bodyWidth":748,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":141,"key":"pax50","name":"PAX 50 — materiały plastyczne","x":16929.25,"y":6575,"rot":0,"w":498,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Korpus nominalny 50 cm; mocowanie do ściany; front bez wystających uchwytów.","Wysokość pomieszczeń przyjęta 280 cm; montaż według instrukcji wybranego korpusu.","Review 13.11 — Korpusy łączone bez sztucznych odstępów. Łączny zapas wnęki 4.35 cm, po około 2.17 cm na końcach. Blendy, uchwyty i pełne otwarcie frontu dobrać przed montażem."],"joinery":{"nominalWidth":500,"bodyWidth":498,"bodyDepth":580,"frontDepth":20,"height":2364}},{"id":142,"key":"desk","name":"Biurko 140×70 (przy oknie)","x":16850,"y":8350,"rot":90,"w":1400,"d":700,"layer":"meble","z":[{"s":"front","d":900,"l":"krzesło","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"vertical":{"worktop":740}},{"id":143,"key":"sofabed","name":"Sofa 200×97 — spanie 140×200","x":15100,"y":9515,"rot":180,"w":2000,"d":970,"layer":"meble","z":[{"s":"front","d":430,"l":"po rozłożeniu","k":"unfold","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false},{"s":"front","d":600,"l":"dojście","k":"use","st":430,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Gabaryt odniesienia: IKEA NYHAMN, 200×97 cm, materac 140×200 cm.","Rezerwa po rozłożeniu: 200×140 cm; ostateczny model i ruch mechanizmu potwierdzić przed zakupem.","Układ E2 11.11 — w południowo-zachodnim rogu gabinetu, oparciem do ściany zachodniej; rozłożenie na wschód.","Aktualizacja 12.11 — Dłuższy bok 200 cm pod południowym oknem, oparcie przy południowej ścianie; rozłożenie na północ."]},{"id":144,"key":"ref","name":"Legowiska 2×60×80 + miski","x":600,"y":5350,"rot":270,"w":1500,"d":800,"layer":"meble","z":[],"notes":["Dwa legowiska przy zachodnim oknie salonu; miski na zmywalnej macie. Nie zajmują głównego przejścia.","Aktualizacja 12.11 — Przesunięte pod obniżone zachodnie okno, poza łukiem drzwi tarasowych; nadal osobno sprawdzane w audycie."],"equipment":[{"kind":"bed","x":0,"y":0,"w":600,"d":800,"label":"PIES","id":1},{"kind":"bed","x":600,"y":0,"w":600,"d":800,"label":"PIES","id":2},{"kind":"bowls","x":1200,"y":200,"w":300,"d":400,"label":"MISKI","id":3}],"nextEquipmentId":4},{"id":145,"key":"pax","name":"PAX 100×35 + drzwi — kosze i akcesoria","x":8687.5,"y":3049,"rot":270,"w":998,"d":375,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi i dostęp","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null}],"presetTag":"nov12-billy-0","joinery":{"nominalWidth":1000,"bodyWidth":998,"nominalDepth":350,"bodyDepth":355,"frontDepth":20,"doorThickness":18,"doorCount":2,"height":2364},"notes":["PAX nominalnie 100×35×236 cm; rzeczywisty korpus 99.8×35,5×236,4 cm. Drzwi rozwierane po 50 cm, np. FORSAND grubości 1,8 cm; łączna rezerwacja głębokości 37,5 cm obejmuje 2 cm na front.","Korpusy 100 + 50 cm, trzy fronty 50 cm i zawiasy KOMPLEMENT do doboru. Do zabudowy naprzeciw 132,5 cm; po otwarciu jednego frontu około 82,5 cm, bez rezerwy na wystający uchwyt.","Nie otwierać jednocześnie drzwi PAX po obu stronach przejścia ani frontu przy otwartych O29. Przy dwóch przeciwległych frontach pozostaje około 32,5 cm; kontrola rastra nie modeluje ich osobnych łuków.","Sucha część pralni, poza rozbryzgiem. Mocowanie do ściany i montaż zgodnie z instrukcją IKEA; uchwyty i ewentualny cokół zwiększający odsunięcie wymagają uwzględnienia."]},{"id":146,"key":"pax50","name":"PAX 50×35 + drzwi — ręczniki i zapasy","x":8687.5,"y":3799,"rot":270,"w":498,"d":375,"layer":"meble","z":[{"s":"front","d":750,"l":"otwarcie drzwi i dostęp","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null}],"presetTag":"nov12-billy-1","joinery":{"nominalWidth":500,"bodyWidth":498,"nominalDepth":350,"bodyDepth":355,"frontDepth":20,"doorThickness":18,"doorCount":1,"height":2364},"notes":["PAX nominalnie 50×35×236 cm; rzeczywisty korpus 49.8×35,5×236,4 cm. Drzwi rozwierane po 50 cm, np. FORSAND grubości 1,8 cm; łączna rezerwacja głębokości 37,5 cm obejmuje 2 cm na front.","Korpusy 100 + 50 cm, trzy fronty 50 cm i zawiasy KOMPLEMENT do doboru. Do zabudowy naprzeciw 132,5 cm; po otwarciu jednego frontu około 82,5 cm, bez rezerwy na wystający uchwyt.","Nie otwierać jednocześnie drzwi PAX po obu stronach przejścia ani frontu przy otwartych O29. Przy dwóch przeciwległych frontach pozostaje około 32,5 cm; kontrola rastra nie modeluje ich osobnych łuków.","Sucha część pralni, poza rozbryzgiem. Mocowanie do ściany i montaż zgodnie z instrukcją IKEA; uchwyty i ewentualny cokół zwiększający odsunięcie wymagają uwzględnienia."]},{"id":147,"key":"robotdock","name":"Robot ze stacją — pralnia, rezerwa 40×45","x":8873,"y":2050,"rot":270,"w":400,"d":450,"layer":"meble","z":[{"s":"front","d":1000,"l":"wyjazd i obsługa robota","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"relocatedFrom":"E2-M113-E1","equipment":[{"id":1,"kind":"robot","x":25,"y":50,"w":350,"d":350,"label":"ROBOT"}],"notes":["Przy bocznej ściance M91, w suchej części pralni; front na wschód. Do zabudowy po przeciwnej stronie 110,2 cm.","Rezerwa pod kompaktową stację; dopasować rzeczywiste gabaryty, wysokość i wymagane pole wyjazdu. Gniazdo przy boku zabudowy, przewód poza przejściem.","Przeniesiony element E2-M113-E1; ławka M113 ma teraz 80 cm."],"presetTag":"nov12-robot-laundry","nextEquipmentId":2},{"id":148,"key":"steel","name":"Regał stalowy 50×60 — zachód","x":14600,"y":2575,"rot":270,"w":500,"d":600,"layer":"meble","z":[{"s":"front","d":750,"l":"dostęp","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Rezerwacja regału do doboru; front od środka kotłowni. Nie skalować półek ani nośności konkretnego zestawu."],"presetTag":"nov12-tech-west"},{"id":149,"key":"steel","name":"Regał stalowy 40×35 — przy wejściu","x":17025,"y":2925,"rot":90,"w":400,"d":350,"layer":"meble","z":[{"s":"front","d":750,"l":"dostęp","k":"use","st":0,"ex":0,"c0":0,"c1":0,"rect":null,"off":false}],"notes":["Płytki regał na wschodzie, poniżej brodzika i poza łukiem O39. Rezerwacja do potwierdzenia dostępnym korpusem i mocowaniem."],"presetTag":"nov12-tech-east"}],"nextId":151,"construction":{"wallLayers":[{"name":"Tynk gipsowy","t":15},{"name":"Silikat","t":180},{"name":"Klej EPS","t":10},{"name":"EPS grafit λ 0,031","t":200},{"name":"Warstwa zbrojona","t":5},{"name":"Tynk elewacyjny","t":2}],"finishedInterior":true,"partition":"150 mm łącznie z wykończeniem; materiał i nośność do projektu","roomHeight":2800,"uIndicative":0.15,"note":"U orientacyjne, nie obliczenie projektowe. Silikat 18 cm i klasa 15/20 wymagają potwierdzenia konstruktora."},"acceptedLimitations":["Rozstawiona suszarka stojąca ogranicza wyjście pralni.","Otwarte drzwi łazienek lokalnie zwężają korytarz."],"storagePlan":["Robot sprzątający: stacja pod ławką wiatrołapu z gniazdem.","Legowiska i miski: oznaczona strefa przy zachodnim oknie salonu.","Sprzęt ogrodowy, rowery i opony: magazyn poza bryłą — do osobnego zagospodarowania."],"set":{"grid":50,"pitch":30,"overhang":1000,"rate":"","newT":120,"newExt":false,"minPass":750},"hidden":[],"ui":{"under":true,"underOp":0.35,"dims":false,"rooms":true,"roof":true,"zones":true,"pass":true,"ids":false},"projectRevision":35,"reviewDecisions":{"date":"2026-11-13","drying":"Akceptacja: suszarki przenośne ustawiane w korytarzu. Dokładne miejsce i prześwit wymagają wymiarów; brak potwierdzenia wolnych 75 cm.","sleeping":"Akceptacja: na dodatkowe spanie sofa będzie przestawiana. Stały układ nie zapewnia jednoczesnego rozłożenia M75/M76.","oven":"Akceptacja: gorące blachy odkładane na wyspę przez przejście 120 cm.","island":"Rezerwacja miejsca zaakceptowana; podparcie i produkt do doboru przy zakupie.","technical":"Do dyskusji i uzgodnienia przed aktualizacją urządzeń na rysunku.","bathDoors":"Zaakceptowane lokalne zwężenie korytarza przez otwarte drzwi.","laundryFronts":"Zaakceptowane naprzemienne otwieranie frontów."},"variant":"E2REF20261116","reference":{"date":"2026-11-16","source":"zamrożona wersja opublikowana","sourceVariant":"E2"}};
+function isReference(){return S?.variant===REFERENCE_VARIANT;}
+let referenceMemory=null;
+function preserveReference(state){
+  if(referenceMemory)return;
+  try{
+    if(localStorage.getItem(REFERENCE_LS))return;
+    const copy=JSON.parse(JSON.stringify(state));delete copy.installations;delete copy.installationRevision;
+    copy.variant=REFERENCE_VARIANT;copy.reference=state.reference||{date:'2026-11-16',source:'zapis tego urządzenia przed dodaniem instalacji'};
+    referenceMemory=copy;
+    localStorage.setItem(REFERENCE_LS,JSON.stringify(copy));
+  }catch{if(referenceMemory)referenceMemory.reference.persistence='Nie udało się utrwalić kopii w tej przeglądarce. Wyeksportuj JSON przed zamknięciem strony.';}
+}
+function referenceState(){
+  let s;
+  try{s=JSON.parse(localStorage.getItem(REFERENCE_LS));}catch{}
+  if(!s&&referenceMemory)s=JSON.parse(JSON.stringify(referenceMemory));
+  if(!s||!Array.isArray(s.walls)||!Array.isArray(s.furn)){
+    s=JSON.parse(JSON.stringify(E2_REFERENCE_20261116));
+    s.reference={date:'2026-11-16',source:'zamrożona wersja opublikowana'};
+  }
+  s.variant=REFERENCE_VARIANT;delete s.installations;delete s.installationRevision;return s;
+}
+
+/* ---------- instalacje: schemat koordynacyjny, bez doboru wykonawczego ---------- */
+const INSTALLATION_LAYER='Instalacje';
+const INSTALLATION_SYSTEMS={
+  ventilation:{name:'Wentylacja i okap',color:'#087f8c',short:'W'},
+  water:{name:'Woda i uzdatnianie',color:'#1261b0',short:'H₂O'},
+  sewage:{name:'Kanalizacja i POŚ',color:'#845339',short:'KAN'},
+  heating:{name:'Ogrzewanie i CWU',color:'#cc3d2d',short:'CO'},
+  power:{name:'Elektryka i oświetlenie',color:'#9b6600',short:'EL'},
+  data:{name:'LAN, sterowanie i czujniki',color:'#7350a2',short:'LAN'},
+  reserves:{name:'Rezerwy: PV, AC, LPG, rolety',color:'#b12478',short:'REZ'},
+};
+function installationDefaults(s){
+  s.installations=Array.isArray(s.installations)?s.installations.filter(i=>i&&Number.isInteger(i.id)&&i.id>0&&Array.isArray(i.points)):[];
+  for(const i of s.installations){i.layer=i.layer||INSTALLATION_LAYER;i.notes=Array.isArray(i.notes)?i.notes:[];}
+  s.nextId=Math.max(s.nextId,1+Math.max(0,...s.installations.map(i=>Number(i.id)||0)));
+  if(s.installations.length)s.ui.serviceSystems={ventilation:true,water:false,sewage:false,heating:false,power:false,data:false,reserves:false,...s.ui.serviceSystems};
+  return s;
+}
+function addE2Installations(s){
+  if(s.variant!=='E2'||s.installationRevision>=1)return s;
+  installationDefaults(s);
+  const add=(system,tag,name,points,level,notes=[],kind='point')=>{
+    const item={id:s.nextId++,system,tag,name,points,level,notes,kind,layer:INSTALLATION_LAYER,offsetX:0,offsetY:0,status:'koncepcja'};
+    s.installations.push(item);return item;
+  };
+  const p=(system,tag,name,at,level,notes=[])=>add(system,tag,name,[at],level,notes);
+  const route=(system,tag,name,points,level,notes=[])=>add(system,tag,name,points,level,notes,'route');
+  const F=(id,dx=0,dy=0,e)=>({f:id,dx,dy,...(e?{e}:{})}),R=(id,dx=0,dy=0)=>({r:id,dx,dy});
+  const technical=R(64,300,200),waterHub=R(64,-100,350),heatHub=R(64,-450,600),powerHub=R(65,0,-800);
+  const schematic='Przebieg schematyczny do koordynacji. Poziom, przekrój, przejścia i kolizje 3D wymagają projektu branżowego.';
+  p('ventilation','REK','Rekuperator — istniejąca rezerwa M108',F(108),'pomieszczenie techniczne',[
+    'Model i pozycja montażu niezatwierdzone. Sprawdzić króćce, tłumiki, filtry, wymianę urządzenia i odpływ zgodnie z instrukcją.',
+    'Kanały nad stropem skoordynować z izolacją i więźbą. Centrala na zimnym strychu wymaga warunków dopuszczonych przez producenta.'
+  ]);
+  p('ventilation','CZ/WY','Dwie trasy: czerpnia i wyrzutnia',technical,'do elewacji lub ponad dach',[
+    'Symbol oznacza potrzebę dwóch wyprowadzeń, nie wybrane miejsca zakończeń. Ustalić odległości od okien, kanalizacji, spalin i zanieczyszczeń.'
+  ]);
+  const ventBus=[F(108),[16200,1250],[16200,4900],[5200,4900]];
+  route('ventilation','W0','Główna strefa prowadzenia kanałów',ventBus,'nad stropem / w strefie izolowanej',[schematic,'Nawiew i wywiew są osobnymi sieciami. Wspólna linia na rzucie oznacza tylko korytarz prowadzenia. Nie wykonywać bruzdy w stropie według tej linii.']);
+  const terminals=[
+    [59,'N1','Nawiew — salon',R(59,1800,700),[5200,4900]],
+    [63,'N2','Nawiew — pokój 3',R(63,0,200),[12000,4900]],
+    [66,'N3','Nawiew — pokój 2',R(66,0,-500),[6300,4900]],
+    [67,'N4','Nawiew — sypialnia',R(67,400,-800),[9700,4900]],
+    [70,'N5','Nawiew — gabinet',R(70,600,0),[15800,4900]],
+    [59,'W1','Wywiew ogólny — kuchnia',[3400,1400],[5200,4900]],
+    [61,'W2','Wywiew — łazienka z prysznicem',R(61,0,-250),[6900,4900]],
+    [62,'W3','Wywiew — pralnia',R(62,-300,300),[9500,4900]],
+    [68,'W4','Wywiew — łazienka z wanną',R(68,0,-300),[12400,4900]],
+    [69,'W5','Wywiew — garderoba',R(69,0,400),[12500,4900]],
+    [60,'W6','Wentylacja spiżarni — do bilansu',R(60,0,-250),[5600,4900]],
+    [64,'W7','Wywiew — techniczne, wariant pompy',R(64,-100,400),[15600,4900]],
+  ];
+  for(const [room,tag,name,at,bus] of terminals){
+    p('ventilation',tag,name,at,'sufit',[
+      'Wstępny punkt do projektu. Liczbę anemostatów, strumienie, rozdział kanałów, akustykę i odległości od zabudowy dobrać obliczeniowo.',
+      room===64?'Przyszły LPG wymaga odrębnej oceny wentylacji pomieszczenia; wywiew sufitowy nie wystarcza jako potwierdzenie.':'Zapewnić przepływ między pomieszczeniami przez dobrane podcięcia lub kratki transferowe; uwzględnić akustykę.'
+    ]);
+    route('ventilation',tag+'T','Strefa trasy — '+name,[bus,at],'nad stropem',[schematic]);
+  }
+  p('ventilation','OK','Okap — decyzja: wyciąg / pochłaniacz',F(72,0,0,5),'nad płytą',[
+    'Wyciąg: osobny kanał na zewnątrz i powietrze uzupełniające. Nie wpinać do zwykłych przewodów rekuperacji.',
+    'Pochłaniacz: obieg zamknięty, bez osobnego wyrzutu; ogólny wywiew kuchni pozostaje. Trasa i średnica po wyborze okapu.'
+  ]);
+  p('water','WOD','Wodociąg — wejście, odcięcie, filtr',waterHub,'techniczne / trasa wejścia do ustalenia',[
+    'Lokalizacja zestawu jest rezerwą koordynacyjną, nie potwierdzonym wolnym miejscem między regałami. Dostęp do zaworów, filtra i zabezpieczeń przed zalaniem.'
+  ]);
+  p('water','UZD','Zmiękczacz / filtr — rezerwa',R(64,0,-700),'techniczne',[
+    'Wymiary, miejsce serwisowe i zużycie soli po doborze do badania wody. POŚ musi akceptować rzeczywistą dawkę i objętość popłuczyn.',
+    'Nie projektowano automatycznego zrzutu solanki do POŚ, gruntu ani kanalizacji deszczowej.'
+  ]);
+  p('water','CWU','Zasobnik CWU — rezerwa M106',F(106),'techniczne',[
+    '4 osoby, częsta wanna: klasa 300 l do porównania ofert, nie zatwierdzona pojemność. Obliczyć pobór, straty i czas odtworzenia; rozważyć sterowaną cyrkulację.',
+    'Współpraca z przyszłym kotłem LPG wymaga potwierdzenia wymiennika i hydrauliki.'
+  ]);
+  const wet=[
+    ['KZ','Zlew kuchenny',F(72,0,0,2),true],['ZM','Zmywarka',F(72,0,0,3),false],
+    ['PZ','Zlew pralni',F(88,0,0,1),true],['PR','Pralka',F(88,0,0,2),false],
+    ['U1','Umywalka — prysznic',F(85),true],['WC1','WC — prysznic',F(87),false],['PS','Prysznic zamknięty',F(83),true],
+    ['U2','Umywalka — wanna',F(127),true],['WC2','WC — wanna',F(128),false],['WA','Wanna',F(129),true],['PIES','Brodzik psa',F(111),true]
+  ];
+  for(const [tag,name,at,hot] of wet){
+    p('water',tag,name+' — '+(hot?'ZW + CWU':'ZW'),at,'przyłącze przy urządzeniu',[
+      'Wysokości i odsunięcia według wybranego urządzenia. Zawory odcinające i dostęp bez demontażu trwałej zabudowy.'
+    ]);
+    const north=['KZ','ZM','PZ','PR','U1','WC1','PS'].includes(tag),busY=north?2450:5500;
+    route('water',tag+'T','Trasa ZW'+(hot?'/CWU':'')+' — '+name,[waterHub,[14000,2450],[14000,busY],at],'warstwy podłogi / strefa instalacyjna',[schematic,'Izolacja, cyrkulacja i ewentualne rozdzielacze do doboru. Linie nie wyznaczają nacięć w ścianach ani płycie.']);
+    p('sewage',tag,name+' — odpływ',at,'podejście kanalizacyjne',[
+      'Średnica, spadek, syfon, długość podejścia i rewizja wymagają przekroju oraz projektu. Nie potwierdzono spadków na podstawie rzutu 2D.'
+    ]);
+  }
+  p('water','OGR','Kran ogrodowy — propozycja przy technicznym',R(64,1550,0),'ściana zewnętrzna',[
+    'Dokładną pozycję, ochronę przed zamarzaniem i zabezpieczenie przed przepływem zwrotnym ustalić w projekcie.'
+  ]);
+  p('sewage','P1','Pion wentylujący — kuchnia / pralnia / prysznic',[8250,2500],'od kanalizacji ponad dach',[
+    'Wstępna strefa do uzgodnienia. Nie jest wyciętym otworem ani potwierdzeniem wystarczającej przestrzeni w ścianie. Wylot odsunąć od czerpni i okien.'
+  ]);
+  p('sewage','P2','Pion wentylujący — łazienka z wanną',F(126),'od kanalizacji ponad dach',[
+    'Przekrój i przebieg w zabudowie instalacyjnej do doboru; nie łączyć z rekuperacją ani spalinami.'
+  ]);
+  route('sewage','KAN0','Główna strefa kanalizacji — wyjście do POŚ',[[8250,2500],[14000,2500],[14000,6500],[17406,6500]],'pod posadzką / wyjście przez obwód',[
+    schematic,'Wyjście wschodnie jest propozycją koordynacyjną. Geotechnika, rzędne, fundament i lokalizacja POŚ mogą wymusić inną trasę. Nie wyznaczono miejsca zbiorników na działce.'
+  ]);
+  route('sewage','KAN2','Strefa połączenia łazienki z wanną',[F(126),[14000,6500]],'pod posadzką',[schematic]);
+  p('sewage','POŚ','POŚ — dalszy projekt poza obrysem',[17100,6500],'działka — lokalizacja nieustalona',[
+    'Dobór dla 4 osób z uwzględnieniem zrzutu wanny, pralki i brodzika psa. Model, grunt, wody gruntowe, odbiornik i dostęp serwisowy do sprawdzenia.',
+    'Przygotować trasę elektryczną / alarm, jeśli technologia wymaga pompy lub dmuchawy. Skoordynować ze zbiornikiem LPG i innymi sieciami.'
+  ]);
+  p('sewage','SKR','Skropliny i kondensat — warunki odbioru',R(64,1000,450),'techniczne',[
+    'Oddzielnie sprawdzić odpływ rekuperatora, ewentualnych urządzeń AC i przyszłego kotła. Zabezpieczenia syfonowe i ochrona przed zamarzaniem według urządzenia.',
+    'Kondensat kotła LPG: sprawdzić neutralizację oraz dopuszczenie do wybranej POŚ.'
+  ]);
+  p('heating','PC','Pompa ciepła — rezerwa M105',F(105),'moduł wewnętrzny',[
+    'M105/M106/M107 są symbolami, nie dobranym zestawem. Moc po OZC, bufor tylko jeśli wynika z hydrauliki. Strefy serwisowe do rozrysowania po doborze.'
+  ]);
+  p('heating','PC-Z','Trasa do jednostki zewnętrznej PC',R(64,1500,-900),'wyjście z pomieszczenia technicznego',[
+    'Nie wskazano lokalizacji jednostki na działce. Sprawdzić akustykę, odszranianie, odprowadzenie wody i wymagania bezpieczeństwa czynnika wybranego modelu.'
+  ]);
+  p('heating','ROZ','Rozdzielacz CO — strefa do uzgodnienia',heatHub,'techniczne / dostępna szafka',[
+    'Nie potwierdzono wolnego miejsca na obudowę. Nie zabudowywać regałem. Obwody, przepływy, moc i grubości podłogi po OZC i projekcie.'
+  ]);
+  route('heating','CO0','Strefa zasilania rozdziału podłogówki',[F(105),heatHub,[14000,4900],[5200,4900]],'warstwy podłogi',[schematic,'To schemat zasilania stref, bez pętli i rozstawu rur. Zachowuje możliwość przyszłej zmiany źródła na LPG po dostosowaniu hydrauliki.']);
+  for(const room of s.rooms){
+    p('heating','CO'+room.id,'Podłogówka — '+room.name,R(room.id,150,350),'podłoga',[
+      room.id===60?'Spiżarnia: decyzja o ogrzewaniu i temperaturze, nie założono automatycznie pętli.':'Strefa do obliczeń; liczba i rozstaw pętli nieustalone.',
+      'Rury z dala od odpływów i zgodnie z planem stałej zabudowy. Dylatacje, posadzki i temperatury do projektu.'
+    ]);
+  }
+  p('power','RG','Rozdzielnica — propozycja strefy montażu',powerHub,'ściana / obudowa do uzgodnienia',[
+    'Potrzebna dostępna, sucha strefa: nie w szafie z odzieżą ani za regałem. Model, gabaryt, zabezpieczenia i moc przyłączeniowa do projektu.',
+    'Uwzględnić pompę, CWU, AGD, rolety, POŚ, PV, AC oraz rezerwę modułów. Pozycja symbolu nie potwierdza wolnej ściany.'
+  ]);
+  route('power','EL0','Strefa głównych tras elektrycznych',[powerHub,[14000,4900],[5200,4900]],'trasy do koordynacji',[schematic,'Nie dobrano przekrojów, zabezpieczeń, obwodów ani tras kabli w przegrodach. Uziemienie i połączenia wyrównawcze wymagają projektu.']);
+  for(const room of s.rooms){
+    p('power','L'+room.id,'Oświetlenie — '+room.name,R(room.id,-250,-250),'sufit / punkty do rozplanowania',[
+      'Symbol programu, nie komplet opraw. Dobrać sceny, łączniki przy wejściach, sterowanie z kilku miejsc i brak kolizji z anemostatami.'
+    ]);
+    p('power','G'+room.id,'Gniazda użytkowe — '+room.name,R(room.id,400,-250),'ściany / wysokości do projektu',[
+      'Symbol grupy potrzeb, nie pełna liczba gniazd. Rozmieścić przy łóżkach, biurkach i urządzeniach; sprawdzić fronty mebli oraz strefy łazienek.'
+    ]);
+  }
+  for(const [tag,name,at] of [
+    ['LOD','Lodówka',F(71,0,0,1)],['PIEK','Piekarnik',F(71,0,0,2)],['PŁ','Płyta',F(72,0,0,5)],['ZM','Zmywarka',F(72,0,0,3)],
+    ['PR','Pralka',F(88,0,0,2)],['SU','Suszarka',F(88,0,0,3)],['ROB','Stacja robota',F(147)],['REK','Rekuperator',F(108)]
+  ])p('power',tag,'Zasilanie — '+name,at,'przy urządzeniu',['Obwód i punkt przyłącza według mocy oraz instrukcji. Gniazda i odcięcia dostępne serwisowo.']);
+  p('power','BLAT','Gniazda blatowe — codzienne AGD',F(72,0,350),'nad blatem / poza strefą zlewu i płyty',[
+    'Ekspres, Thermomix, czajnik oraz rezerwa airfryer/toster. Dzbanek i noże zajmują blat, lecz nie wymagają zasilania.',
+    'Rozłożyć obciążenia i przewody, uwzględnić zasilanie wyspy bez przedłużacza przez przejście; dokładne punkty po projekcie zabudowy.'
+  ]);
+  p('data','LAN','Szafka LAN / automatyka — rezerwa',R(65,600,-800),'dostępna sucha strefa do ustalenia',[
+    'Nie potwierdzono miejsca w istniejącej zabudowie. Doprowadzić operatora, LAN, zasilanie, miejsce na router/switch i sterownik; oddzielić trasy od energetycznych zgodnie z projektem.'
+  ]);
+  for(const id of [100,116,142,78,125])p('data','RJ','LAN + gniazda — biurko / TV',F(id),'za stanowiskiem / przy ścianie',['Przewodowe połączenia do szafki LAN, zapas przewodów i dostępność po ustawieniu mebli.']);
+  p('data','AP','Punkt Wi-Fi / PoE — propozycja',[10500,4900],'sufit',['Pokrycie zweryfikować po projekcie przegród. Dodatkowy punkt, jeśli jeden nie zapewni zasięgu.']);
+  p('data','DOM','Domofon, brama i sieć zewnętrzna',[17100,4900],'trasy od wejścia na działkę',['Lokalizacja bramy nieustalona. Rezerwy zasilania i transmisji na etapie robót ziemnych; bez oznaczania prywatnych danych działki.']);
+  for(const id of [61,62,64,68])p('data','ZAL','Czujnik zalania — strefa mokra',R(id,-350,200),'przy podłodze',['Dokładny punkt po instalacjach; rozważyć odcięcie wody i alarm lokalny bez zależności od internetu.']);
+  p('data','DYM','Czujniki dymu — program do rozmieszczenia',[10500,5200],'sufit',['Rozmieścić zgodnie z wymaganiami i instrukcją, uwzględniając drogi komunikacji, sypialnie i wentylację. Symbol nie oznacza kompletnej ochrony.']);
+  p('reserves','PV','PV — trasa dach → falownik → RG',R(64,650,500),'poddasze / techniczne / rozdzielnica',[
+    'Rezerwa dostępnych przepustów i tras, nie gotowa instalacja DC. Połacie i przejścia skoordynować z wywiewkami, spalinami i konstrukcją.',
+    'Falownik: suche, wentylowane i dostępne miejsce, poza brodzikiem oraz regałami; jego zmieszczenia nie potwierdzono. Magazyn energii wymaga osobnego doboru i miejsca.'
+  ]);
+  route('reserves','PV-T','Rezerwa pionowej trasy PV',[R(64,650,500),R(64,650,-500)],'pion do poddasza / dachu',[schematic,'Zostawić dostęp i pilot; rozdział tras DC/AC/komunikacji, uszczelnienia i ochrona według projektu.']);
+  for(const [id,tag] of [[59,'AC1'],[63,'AC2'],[66,'AC3'],[67,'AC4'],[70,'AC5']])p('reserves',tag,'Klimatyzacja — możliwa strefa',R(id,500,750),'wysoka ściana / lokalizacja do decyzji',[
+    'To rezerwa możliwości, nie decyzja o montażu wszystkich jednostek. Wybrać pomieszczenia i miejsca bez nawiewu na łóżko/biurko.',
+    'Przygotować dostępne trasy, zasilanie, sterowanie i odpływ skroplin. Średnice chłodnicze po wskazaniu urządzeń; nie zakładać uniwersalnych rur. Jednostki zewnętrzne na osobnym planie.'
+  ]);
+  p('reserves','LPG','Przyszły LPG — rezerwa kotła i tras',R(64,650,-600),'techniczne / pion do dachu',[
+    'Nie instalujemy obecnie drugiego źródła. Zarezerwować możliwą trasę gazu, powietrza/spalin i kondensatu; ewentualne wyjście przez ścianę zależy od doboru i przepisów.',
+    'Wentylacja LPG, poziom podłogi, brodzik i niskie zagłębienia wymagają oceny. Czujniki LPG/CO po doborze instalacji; rekuperacja nie zastępuje wymagań dla gazu.',
+    'Duży zbiornik na działce: lokalizacja wspólnie z POŚ, studzienkami i innymi sieciami. Brak potwierdzenia odległości na tym rzucie.'
+  ]);
+  route('reserves','LPG-T','Rezerwa pionu powietrzno-spalinowego',[R(64,650,-600),R(64,650,-1200)],'od przyszłego kotła do dachu',[schematic,'Rezerwa trasy bez wybranego przekroju, materiału ani wykonanego otworu. Skoordynować z PV i czerpnią.']);
+  for(const w of s.walls.filter(w=>w.ext))for(const o of w.op.filter(o=>['window','slide'].includes(o.type)))
+    p('reserves','RO'+o.id,'Roleta zewnętrzna — O'+o.id,{o:o.id,dx:0,dy:0},'nadproże / skrzynka rolety',[
+      'Skoordynować skrzynkę, izolację, nadproże i dostęp rewizyjny. Zasilanie, lokalny przycisk, sterowanie i trasa do automatyki według napędu; bez narzucania przekroju kabla.',
+      'Dla dużych przeszkleń wybrać system osłon i dopuszczalne wymiary. Symbol nie potwierdza miejsca na konkretną skrzynkę.'
+    ]);
+  s.installationRevision=1;
+  s.ui.serviceSystems={ventilation:true,water:false,sewage:false,heating:false,power:false,data:false,reserves:false,...s.ui.serviceSystems};
+  return s;
+}
+function installationPoints(i,state=S){
+  const number=value=>Number.isFinite(Number(value))?Number(value):0;
+  const points=(i.points||[]).map(p=>{
+    if(!p)return null;
+    let x,y,valid=true;
+    if(Array.isArray(p)){[x,y]=p;}
+    else if(p.f){const f=state.furn.find(f=>f.id===p.f);if(!f)return null;const e=p.e&&(f.equipment||[]).find(e=>e.id===p.e);if(p.e&&!e)return null;const c=e?fT(f)(e.x+e.w/2,e.y+e.d/2):f;x=c.x;y=c.y;}
+    else if(p.r){const r=state.rooms.find(r=>r.id===p.r);if(!r)return null;x=r.x;y=r.y;}
+    else if(p.o){const w=state.walls.find(w=>w.op.some(o=>o.id===p.o));if(!w)return null;const o=w.op.find(o=>o.id===p.o),g=geom(w);x=g.a.x+g.d.x*o.pos;y=g.a.y+g.d.y*o.pos;}
+    else valid=false;
+    if(!valid||!Number.isFinite(x)||!Number.isFinite(y))return null;
+    return {x:x+number(p.dx)+number(i.offsetX),y:y+number(p.dy)+number(i.offsetY)};
+  });
+  // Usunięcie urządzenia nie może przenieść symbolu trasy na jej drugi koniec.
+  return points.some(p=>!p)?[]:points;
+}
+function installationVisible(i){return vis(i)&&S.ui.serviceSystems?.[i.system]!==false;}
+function drawInstallations(){
+  let h='';const occupied=[];
+  for(const i of [...(S.installations||[])].sort((a,b)=>(a.kind==='route'?0:1)-(b.kind==='route'?0:1))){
+    if(!installationVisible(i))continue;const ps=installationPoints(i),col=INSTALLATION_SYSTEMS[i.system]?.color||'#555',key='i'+i.id,selected=sel.has(key);
+    if(!ps.length)continue;const data=`data-i="${i.id}"`,title=`<title>${esc(elementId(key))} · ${esc(i.name)} · ${esc(i.level)} · koncepcja</title>`;
+    if(i.kind==='route'&&ps.length>1){const points=ps.map(p=>p.x+','+p.y).join(' ');h+=`<polyline ${data} points="${points}" fill="none" stroke="${col}" stroke-width="${px(selected?4:2)}" stroke-opacity="${selected?1:.65}" stroke-dasharray="${px(7)} ${px(4)}"/>`;
+      h+=`<polyline ${data} points="${points}" fill="none" stroke="transparent" stroke-width="${px(12)}" pointer-events="stroke">${title}</polyline>`;
+    }else{const p=ps[0],r=px(selected?9:6);h+=`<circle ${data} cx="${p.x}" cy="${p.y}" r="${r}" fill="#fff" stroke="${col}" stroke-width="${px(selected?3:2)}">${title}</circle>`;
+      const code=i.tag,fs=px(10),bw=fs*(code.length*.65+1),b={x1:p.x-bw/2,x2:p.x+bw/2,y1:p.y-px(24),y2:p.y-px(9)};
+      if(selected||!occupied.some(q=>b.x1<q.x2&&b.x2>q.x1&&b.y1<q.y2&&b.y2>q.y1)){occupied.push(b);h+=`<text ${data} x="${p.x}" y="${p.y-px(11)}" font-size="${fs}" text-anchor="middle" font-weight="700" fill="${col}" stroke="#fff" stroke-width="${px(3)}" paint-order="stroke">${title}${esc(code)}</text>`;}
+    }
+  }
+  $('#gInstallations').innerHTML=h;
+}
+function renderInstallationPanel(){
+  const el=$('#installationPanel'),items=S.installations||[];
+  $('#bInstallations').hidden=!items.length;
+  $('#bInstallations').classList.toggle('on',items.length>0&&!S.hidden.includes(INSTALLATION_LAYER));
+  if(!items.length){el.innerHTML='';return;}
+  const selected=items.find(i=>sel.has('i'+i.id));
+  let h='<h2>Instalacje — koncepcja</h2><p class="hint">Trasy i punkty do koordynacji. Przerywane linie nie oznaczają gotowych przewodów ani potwierdzonych spadków. Wybierz branżę, potem punkt na rzucie lub na liście.</p>';
+  h+='<div class="service-actions"><button id="servicesAll">Wszystkie</button><button id="servicesVent">Tylko wentylacja</button></div>';
+  for(const [key,sys] of Object.entries(INSTALLATION_SYSTEMS)){
+    const subset=items.filter(i=>i.system===key),shown=S.ui.serviceSystems?.[key]!==false;
+    h+=`<label class="service-filter"><input type="checkbox" data-system="${key}" ${shown?'checked':''}><span style="color:${sys.color}">●</span> ${esc(sys.name)} (${subset.length})</label>`;
+    if(shown)h+=`<details class="service-list" ${selected?.system===key?'open':''}><summary>Lista elementów</summary>${subset.map(i=>`<button data-service-select="${i.id}" title="${esc(i.name)}">${esc(i.tag)} · ${esc(i.name)}</button>`).join('')}</details>`;
+  }
+  if(selected)h+=`<div class="service-selected"><h2>${esc(elementId('i'+selected.id))} · ${esc(selected.tag)}</h2><b>${esc(selected.name)}</b><p>${esc(selected.level)}</p><ul>${selected.notes.map(n=>'<li>'+esc(n)+'</li>').join('')}</ul></div>`;
+  el.innerHTML=h;
+  const update=()=>{S.hidden=S.hidden.filter(n=>n!==INSTALLATION_LAYER);changed();};
+  el.querySelectorAll('[data-system]').forEach(cb=>cb.onchange=()=>{checkpoint();S.ui.serviceSystems[cb.dataset.system]=cb.checked;update();});
+  el.querySelector('#servicesAll').onclick=()=>{checkpoint();for(const key of Object.keys(INSTALLATION_SYSTEMS))S.ui.serviceSystems[key]=true;update();};
+  el.querySelector('#servicesVent').onclick=()=>{checkpoint();for(const key of Object.keys(INSTALLATION_SYSTEMS))S.ui.serviceSystems[key]=key==='ventilation';update();};
+  el.querySelectorAll('[data-service-select]').forEach(b=>b.onclick=()=>findElement('I'+b.dataset.serviceSelect));
+}
+
 const VARIANTS = {
   base: {name:'Rzut z PDF (zmieniony) 17,70 × 10,20', build: () => buildBase()},
   A: {name:'A — prawie kwadrat 13,85 × 13,15', build: variantA},
@@ -2296,6 +2568,7 @@ const VARIANTS = {
   E: {name:'E — D z poprawkami 17,40 × 10,20', build: () => variantE()},
   E1: {name:'E1 — E kompakt 16,95 × 10,20', build: variantE1},
   E2: {name:'Projekt Główny — domyślny', build: variantE2},
+  E2REF20261116: {name:'Projekt główny 2026-11-16', build:referenceState},
   E2S: {name:'E2S — kopia E2, kuchnia na południu', build: variantE2South},
   E3: {name:'E3 — E + prysznic przy salonie, wanna przy sypialniach', build: () => variantE({baths:true})},
   E4: {name:'E4 — E2 + E3 + gabinet od północy', build: () => variantE({exit:true, baths:true, office:true})},
@@ -2303,7 +2576,7 @@ const VARIANTS = {
   R2: {name:'R2 — wejście blisko środka północy, salon SW', build: variantR2},
   R3: {name:'R3 — wejście przy narożniku NE, salon SE', build: variantR3},
 };
-function freshState(v){ const s = defaults(VARIANTS[v].build()); s.variant = v; return s; }
+function freshState(v){ const s = defaults(VARIANTS[v].build()); s.variant = v; if(v==='E2')addE2Installations(s);return s; }
 
 function defaults(s){
   s.walls = s.walls || [];
@@ -2322,12 +2595,20 @@ function defaults(s){
   });
   s.set = Object.assign({grid:50, pitch:30, overhang:600, rate:'', newT:120, newExt:false, minPass:750}, s.set||{});
   s.ui = Object.assign({under:true, underOp:0.35, dims:false, rooms:true, roof:true, zones:true, pass:true, ids:false}, s.ui||{});
-  return s;
+  return installationDefaults(s);
 }
 
-// V35: luzy wnęk, O43 i decyzje audytu. Starsze migracje tylko dla należnych kluczy.
+// V36: luzy wnęk, O43 i decyzje audytu. Starsze migracje tylko dla należnych kluczy.
 function loadSavedVariant(v){
-  for(const key of [LS,PAX_LS,LAYOUT_LS,UTILITY_LS,CORNER_LS,KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
+  if(v===REFERENCE_VARIANT){
+    // Pierwsze otwarcie kopii także zachowuje zapis E2 z tego urządzenia.
+    let exists=false;try{exists=!!localStorage.getItem(REFERENCE_LS);}catch{}
+    if(!exists)loadSavedVariant('E2');
+    const s=defaults(referenceState());
+    try{const view=JSON.parse(localStorage.getItem(LS+':'+v));if(view){s.ui={...s.ui,...view.ui};s.hidden=view.hidden||s.hidden;}}catch{}
+    return s;
+  }
+  for(const key of [LS,NICHE_LS,PAX_LS,LAYOUT_LS,UTILITY_LS,CORNER_LS,KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
     try{
       const raw=localStorage.getItem(key+':'+v);if(!raw)continue;
       const s=defaults(JSON.parse(raw));s.variant=v;
@@ -2352,10 +2633,11 @@ function loadSavedVariant(v){
       if([ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')enlargeE2Window5(s);
       if([WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')optimizeE2Kitchen(s);
       if([KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')resizeE2Corner(s);
-      if(![LS,PAX_LS,LAYOUT_LS,UTILITY_LS].includes(key)&&v==='E2')reviseE2UtilityRooms(s);
-      if(![LS,PAX_LS,LAYOUT_LS].includes(key)&&v==='E2')reviseE2KitchenAndDoors(s);
-      if(![LS,PAX_LS].includes(key)&&v==='E2')replaceLaundryBillyWithPax(s);
-      if(key!==LS&&v==='E2')fixE2NicheMounting(s);
+      if(![LS,NICHE_LS,PAX_LS,LAYOUT_LS,UTILITY_LS].includes(key)&&v==='E2')reviseE2UtilityRooms(s);
+      if(![LS,NICHE_LS,PAX_LS,LAYOUT_LS].includes(key)&&v==='E2')reviseE2KitchenAndDoors(s);
+      if(![LS,NICHE_LS,PAX_LS].includes(key)&&v==='E2')replaceLaundryBillyWithPax(s);
+      if(![LS,NICHE_LS].includes(key)&&v==='E2')fixE2NicheMounting(s);
+      if(v==='E2'){preserveReference(s);addE2Installations(s);}
       return s;
     }catch(e){}
   }
@@ -2368,8 +2650,12 @@ function variantFromUrl(){
   return Object.hasOwn(VARIANTS,v)?v:DEFAULT_VARIANT;
 }
 let S = null, curV = variantFromUrl();
+if(curV!=='E2'&&curV!==REFERENCE_VARIANT){
+  // Także wejście linkiem do innego wariantu zamraża wcześniejsze E2 tego urządzenia.
+  const previous=loadSavedVariant('E2');if(!previous)preserveReference(referenceState());
+}
 S = loadSavedVariant(curV);
-if (!S) S = freshState(curV);
+if (!S) {if(curV==='E2')preserveReference(referenceState());S = freshState(curV);}
 S.variant = curV;
 
 let hist = [], redoSt = [];
@@ -2395,8 +2681,8 @@ const fmtA = mm2 => nf1(mm2/1e6) + ' m²';
 
 function snapshot(){ return JSON.stringify(S); }
 function checkpoint(){ hist.push(snapshot()); if (hist.length > 300) hist.shift(); redoSt = []; }
-function doUndo(){ if (!hist.length) return; redoSt.push(snapshot()); S = defaults(JSON.parse(hist.pop())); sel.clear(); focusedEquipment=null; syncInputs(); syncVariant(); updateVariantUrl(); changed(); }
-function doRedo(){ if (!redoSt.length) return; hist.push(snapshot()); S = defaults(JSON.parse(redoSt.pop())); sel.clear(); focusedEquipment=null; syncInputs(); syncVariant(); updateVariantUrl(); changed(); }
+function doUndo(){ if(isReference())return; if (!hist.length) return; redoSt.push(snapshot()); S = defaults(JSON.parse(hist.pop())); sel.clear(); focusedEquipment=null; syncInputs(); syncVariant(); updateVariantUrl(); changed(); }
+function doRedo(){ if(isReference())return; if (!redoSt.length) return; hist.push(snapshot()); S = defaults(JSON.parse(redoSt.pop())); sel.clear(); focusedEquipment=null; syncInputs(); syncVariant(); updateVariantUrl(); changed(); }
 function save(){ try { localStorage.setItem(LS+':'+S.variant, snapshot()); } catch(e) {} }
 function setArrangement(f,mode){
   const a=f.arrangements && f.arrangements[mode];
@@ -2917,6 +3203,7 @@ function buildMovers(){
   const selW = S.walls.filter(w => sel.has('w'+w.id));
   const selR = S.rooms.filter(r => sel.has('r'+r.id));
   const selF = S.furn.filter(f => sel.has('f'+f.id));
+  const services=(S.installations||[]).filter(i=>sel.has('i'+i.id)).map(i=>({i,x:i.offsetX||0,y:i.offsetY||0}));
   const full = [], perp = [], ends = [];
   for (const w of selW) {
     full.push({w,i:0,x:w.x1,y:w.y1}, {w,i:1,x:w.x2,y:w.y2});
@@ -2932,11 +3219,13 @@ function buildMovers(){
       }
     }
   }
-  return {full, perp, rooms:selR.map(r => ({r,x:r.x,y:r.y})), furn:selF.map(f => ({f,x:f.x,y:f.y})),
+  return {full, perp, services, rooms:selR.map(r => ({r,x:r.x,y:r.y})), furn:selF.map(f => ({f,x:f.x,y:f.y})),
           onlyFurn: selF.length > 0 && !selW.length && !selR.length,
           single: selW.length === 1 && sel.size === 1 ? geom(selW[0]) : null};
 }
 function applyMovers(M,dx,dy){
+  if(isReference())return;
+  for(const m of M.services||[]){m.i.offsetX=m.x+dx;m.i.offsetY=m.y+dy;}
   for (const m of M.full) setEnd(m.w, m.i, m.x+dx, m.y+dy);
   for (const m of M.perp) { const k = dx*m.n.x + dy*m.n.y; setEnd(m.w, m.i, m.x+m.n.x*k, m.y+m.n.y*k); }
   for (const m of M.rooms) { m.r.x = m.x+dx; m.r.y = m.y+dy; }
@@ -3210,7 +3499,7 @@ function drawDims(){
 }
 function drawHandles(){
   let s = '';
-  if (tool === 'select') for (const w of S.walls) {
+  if (tool === 'select'&&!isReference()) for (const w of S.walls) {
     if (!vis(w) || !sel.has('w'+w.id)) continue;
     for (const [i,x,y] of [[0,w.x1,w.y1],[1,w.x2,w.y2]])
       s += `<circle class="ui" data-h="${w.id}:${i}" cx="${x}" cy="${y}" r="${px(6)}" fill="#fff" stroke="#1f6feb" stroke-width="${px(2)}" style="cursor:crosshair"/>`;
@@ -3323,20 +3612,22 @@ function status(){
     measure:'Miarka: stuknij/kliknij punkt A i B · palcem przesuń widok · dwa palce = zoom · Shift – prosto · Alt – bez przyciągania',
     furn:'Meble: wybierz w panelu, klik – postaw (Shift – kolejny) · R – obrót · dosuwa do ścian · Alt – bez przyciągania',
   };
-  $('#sTool').textContent = hints[tool];
+  $('#sTool').textContent = isReference()&&tool==='select'?'Snapshot tylko do odczytu · wybierz element lub przesuń widok · miarka L':hints[tool];
   $('#sZoom').textContent = `1 px = ${Math.round(px(1))} mm`;
 }
 function render(){
   syncAspect();
   svg.setAttribute('viewBox', `${view.x} ${view.y} ${view.w} ${view.h}`);
-  drawGrid(); drawUnder(); drawRooms(); drawPass(); drawWalls(); drawOps(); drawFurn(); drawRoof(); drawDims(); drawIds(); drawHandles(); drawOver();
+  drawGrid(); drawUnder(); drawRooms(); drawPass(); drawWalls(); drawOps(); drawFurn(); drawRoof(); drawDims(); drawInstallations(); drawIds(); drawHandles(); drawOver();
   renderStats(); status(); renderMeasureUI();
 }
 function live(){ normalize(); A = analyse(); render(); }
-function changed(){ normalize(); A = analyse(); render(); renderPanel(); renderLayers(); save(); }
+function changed(){
+  if(isReference()){const ui=S.ui,hidden=S.hidden,grid=S.set.grid;S=defaults(referenceState());S.ui=ui;S.hidden=hidden;S.set.grid=grid;}
+  normalize(); A = analyse(); render(); renderPanel(); renderLayers(); renderInstallationPanel(); save(); }
 
 /* Trwałe identyfikatory: numer obiektu nie zależy od jego geometrii ani nazwy. */
-const ID_KIND={w:'S',o:'O',f:'M',r:'P'};
+const ID_KIND={w:'S',o:'O',f:'M',r:'P',i:'I'};
 function elementId(key,v=S.variant){return v+'-'+ID_KIND[key[0]]+key.slice(1);}
 function equipmentId(f,e,v=S.variant){return v+'-M'+f.id+'-E'+e.id;}
 function elementRecords(state=S){
@@ -3354,15 +3645,20 @@ function elementRecords(state=S){
     for(const e of f.equipment||[]){const c=fT(f)(e.x+e.w/2,e.y+e.d/2);out.push({key:'f'+f.id,eq:e,obj:f,...c,b:lbox(fT(f),e.x,e.y,e.w,e.d)});}
   }
   for(const r of state.rooms)out.push({key:'r'+r.id,obj:r,x:r.x,y:r.y,b:{x1:r.x-1200,y1:r.y-1000,x2:r.x+1200,y2:r.y+1000}});
+  for(const i of state.installations||[]){
+    const ps=installationPoints(i,state);if(!ps.length)continue;
+    const xs=ps.map(p=>p.x),ys=ps.map(p=>p.y),b={x1:Math.min(...xs),y1:Math.min(...ys),x2:Math.max(...xs),y2:Math.max(...ys)};
+    out.push({key:'i'+i.id,obj:i,x:(b.x1+b.x2)/2,y:(b.y1+b.y2)/2,b});
+  }
   return out;
 }
 function drawIds(){
   let h='';const occupied=[];
-  const records=elementRecords().filter(it=>vis(it.obj));
+  const records=elementRecords().filter(it=>vis(it.obj)&&(it.key[0]!=='i'||installationVisible(it.obj)));
   const focused=records.find(it=>it.eq&&equipmentId(it.obj,it.eq)===focusedEquipment&&sel.has(it.key));
   if(focused){const b=focused.b;h+=`<rect x="${b.x1}" y="${b.y1}" width="${b.x2-b.x1}" height="${b.y2-b.y1}" fill="#1f6feb" fill-opacity=".15" stroke="#1f6feb" stroke-width="${px(3)}"/>`;}
   // Przy oddaleniu unikamy nakładania podpisów. Przybliżenie odsłania kolejne ID.
-  const priority=it=>it===focused?0:sel.has(it.key)?1:it.eq?6:({r:2,f:3,o:4,w:5})[it.key[0]];
+  const priority=it=>it===focused?0:sel.has(it.key)?1:it.eq?6:({r:2,i:3,f:3,o:4,w:5})[it.key[0]];
   records.sort((a,b)=>priority(a)-priority(b));
   if(S.ui.ids)for(const it of records){
     const code=it.eq?'M'+it.obj.id+'-E'+it.eq.id:ID_KIND[it.key[0]]+it.key.slice(1);
@@ -3387,13 +3683,13 @@ function switchVariant(v,mode='push'){
   if(mode)updateVariantUrl(mode);
 }
 function findElement(query){
-  const match=query.trim().match(/^(?:([a-z][a-z0-9]*)-)?([SOMP])(\d+)(?:-E(\d+))?$/i);
+  const match=query.trim().match(/^(?:([a-z][a-z0-9]*)-)?([SOMPI])(\d+)(?:-E(\d+))?$/i);
   if(!match)return 'Nieprawidłowy format ID. Przykład: E2-M75 lub M75.';
   const [,prefix,kind,number,equipment]=match;
   const v=prefix?Object.keys(VARIANTS).find(v=>v.toLowerCase()===prefix.toLowerCase()):S.variant;
   if(!v)return 'Nieznany wariant w ID.';
   if(equipment&&kind.toUpperCase()!=='M')return 'Wyposażenie należy do mebla (M).';
-  const key=({S:'w',O:'o',M:'f',P:'r'})[kind.toUpperCase()]+Number(number);
+  const key=({S:'w',O:'o',M:'f',P:'r',I:'i'})[kind.toUpperCase()]+Number(number);
   const candidate=elementRecords(variantStateFor(v)).find(it=>it.key===key&&(equipment?it.eq?.id===Number(equipment):!it.eq));
   if(!candidate){
     const previous=v+'-'+kind.toUpperCase()+Number(number)+(equipment?'-E'+Number(equipment):'');
@@ -3405,6 +3701,7 @@ function findElement(query){
   const target=elementRecords().find(it=>it.key===key&&(equipment?it.eq?.id===Number(equipment):!it.eq));
   // Szukanie odkrywa warstwę, aby zaznaczenie było widoczne także po wczytaniu zapisu.
   S.hidden=S.hidden.filter(layer=>layer!==(target.obj.layer||''));
+  if(key[0]==='i')S.ui.serviceSystems={...S.ui.serviceSystems,[target.obj.system]:true};
   sel=new Set([key]);focusedEquipment=equipment?equipmentId(target.obj,target.eq):null;
   setTool('select');document.body.classList.remove('nopanel');
   A=analyse();renderPanel();renderLayers();
@@ -3437,6 +3734,21 @@ function renderPanel(){
     if(f?.equipment?.length){
       h+='<h2>Wyposażenie zabudowy</h2>'+f.equipment.map(e=>{const id=equipmentId(f,e);return `<div class="row"><span class="id-code" ${focusedEquipment===id?'style="color:#1f6feb;font-weight:700"':''}>${esc(id)}</span><span>${esc(e.label||e.kind)}</span><button data-copy-id="${esc(id)}">Kopiuj</button><button data-find-id="${esc(id)}">Pokaż</button></div>`;}).join('');
     }
+  }
+  if(isReference()&&tool!=='measure'){
+    h+=`<h2>Snapshot 2026-11-16</h2><p>Kopia referencyjna — tylko odczyt.</p><p class="hint">Źródło: ${esc(S.reference?.source||'zamrożona wersja opublikowana')}. Kolejne zmiany Projektu Głównego nie zmieniają tej kopii. Możesz mierzyć, wyszukiwać ID i eksportować.</p>${S.reference?.persistence?'<p class="warn">'+esc(S.reference.persistence)+'</p>':''}`;
+    el.innerHTML=h;el.querySelectorAll('[data-copy-id]').forEach(b=>b.onclick=()=>copyElementId(b.dataset.copyId,b));
+    el.querySelectorAll('[data-find-id]').forEach(b=>b.onclick=()=>findElement(b.dataset.findId));return;
+  }
+  if(items.length===1&&items[0][0]==='i'){
+    const i=S.installations.find(i=>i.id===+items[0].slice(1));
+    if(i)h+=`<h2>${esc(i.tag)} · ${esc(INSTALLATION_SYSTEMS[i.system]?.name||i.system)}</h2><div class="row"><span>Nazwa</span><input id="pIName" value="${esc(i.name)}"></div><p><b>Poziom:</b> ${esc(i.level)}</p><p class="hint">Koncepcja do koordynacji — bez doboru wykonawczego.</p><ul>${i.notes.map(n=>'<li>'+esc(n)+'</li>').join('')}</ul><label>Własne uwagi<textarea id="pINotes" rows="4" style="width:100%">${esc(i.userNotes||'')}</textarea></label><div class="row"><span>Przesunięcie X</span><input type="number" id="pIX" value="${i.offsetX||0}" step="50"> mm</div><div class="row"><span>Przesunięcie Y</span><input type="number" id="pIY" value="${i.offsetY||0}" step="50"> mm</div><p class="hint">Przesunięcie dotyczy symbolu/trasy. Nie zmienia położenia urządzeń ani budynku.</p>`;
+    el.innerHTML=h;
+    el.querySelectorAll('[data-copy-id]').forEach(b=>b.onclick=()=>copyElementId(b.dataset.copyId,b));
+    on('pIName','change',e=>{checkpoint();i.name=e.target.value||i.name;changed();});
+    on('pINotes','change',e=>{checkpoint();i.userNotes=e.target.value;changed();});
+    for(const [id,field] of [['pIX','offsetX'],['pIY','offsetY']])on(id,'change',e=>{const n=+e.target.value;if(Number.isFinite(n)){checkpoint();i[field]=n;changed();}});
+    renderInstallationPanel();return;
   }
   if (tool === 'wall') {
     h += `<h2>Nowa ściana</h2>
@@ -3624,13 +3936,14 @@ function renderPanel(){
 }
 function renderLayers(){
   const names = new Set(['']);
+  (S.installations||[]).forEach(i=>names.add(i.layer));
   S.walls.forEach(w => names.add(w.layer)); S.rooms.forEach(r => names.add(r.layer)); S.furn.forEach(f => names.add(f.layer)); S.hidden.forEach(n => names.add(n));
   let h = '<h2>Warstwy</h2>';
   for (const n of names) {
-    const cnt = S.walls.filter(w => w.layer === n).length, cntF = S.furn.filter(f => f.layer === n).length;
-    h += `<div class="layer"><input type="checkbox" data-lv="${esc(n)}" ${S.hidden.includes(n)?'':'checked'}><span>${n ? esc(n) : 'główna'} <span class="hint">(${cnt} ścian${cntF ? `, ${cntF} mebli` : ''})</span></span>${n ? `<button data-ld="${esc(n)}">Usuń</button>` : ''}</div>`;
+    const cnt = S.walls.filter(w => w.layer === n).length, cntF = S.furn.filter(f => f.layer === n).length, cntI=(S.installations||[]).filter(i=>i.layer===n).length;
+    h += `<div class="layer"><input type="checkbox" data-lv="${esc(n)}" ${S.hidden.includes(n)?'':'checked'}><span>${n ? esc(n) : 'główna'} <span class="hint">(${cnt} ścian${cntF ? `, ${cntF} mebli` : ''}${cntI ? `, ${cntI} instalacji` : ''})</span></span>${n&&!isReference() ? `<button data-ld="${esc(n)}">Usuń</button>` : ''}</div>`;
   }
-  h += '<div class="hint">Ukryta warstwa nie liczy się do bryły, powierzchni ani dachu.</div>';
+  h += '<div class="hint">Instalacje są nakładką i nie zmieniają obrysu ani kontroli przejść. Ukryte ściany pozostałych warstw nie liczą się do bryły i dachu.</div>';
   const el = $('#layers'); el.innerHTML = h;
   el.querySelectorAll('[data-lv]').forEach(cb => cb.addEventListener('change', () => {
     const n = cb.dataset.lv; checkpoint();
@@ -3642,10 +3955,12 @@ function renderLayers(){
     if (!confirm(`Usunąć warstwę „${n}” razem ze wszystkimi ścianami, pomieszczeniami i meblami? (Ctrl+Z cofa)`)) return;
     checkpoint();
     S.walls = S.walls.filter(w => w.layer !== n); S.rooms = S.rooms.filter(r => r.layer !== n); S.furn = S.furn.filter(f => f.layer !== n);
+    S.installations=(S.installations||[]).filter(i=>i.layer!==n);
     S.hidden = S.hidden.filter(x => x !== n); sel.clear(); changed();
   }));
 }
 function delSel(){
+  if(isReference())return;
   if (!sel.size) return;
   checkpoint();
   for (const k of sel) {
@@ -3653,17 +3968,20 @@ function delSel(){
     if (k[0] === 'w') S.walls = S.walls.filter(w => w.id !== id);
     else if (k[0] === 'r') S.rooms = S.rooms.filter(r => r.id !== id);
     else if (k[0] === 'f') S.furn = S.furn.filter(f => f.id !== id);
+    else if(k[0]==='i')S.installations=S.installations.filter(i=>i.id!==id);
     else if (k[0] === 'o') { const f = findOp(id); if (f) f.w.op = f.w.op.filter(o => o.id !== id); }
   }
   sel.clear(); changed();
 }
 function rotSel(dir){
+  if(isReference())return false;
   const fs = S.furn.filter(f => sel.has('f'+f.id));
   if (!fs.length) return false;
   checkpoint(); fs.forEach(f => { f.rot = (((f.rot + 90*dir) % 360) + 360) % 360; }); changed();
   return true;
 }
 function dupSel(){
+  if(isReference())return;
   const fs = S.furn.filter(f => sel.has('f'+f.id));
   if (!fs.length) return;
   checkpoint(); sel = new Set();
@@ -3671,6 +3989,7 @@ function dupSel(){
   changed();
 }
 function setTool(t){
+  if(isReference()&&!(['select','measure'].includes(t)))t='select';
   tool = t; drawSt = null; numBuf = ''; showNum(); hoverOp = null; curSnap = null; mA = null; mHover = null;
   ghost = t === 'furn' && placeKey ? makeFurn(-1, placeKey, lastP.x, lastP.y, placeRot) : null;
   document.querySelectorAll('#tools button').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
@@ -3745,8 +4064,8 @@ svg.addEventListener('pointerdown', e => {
     ptr={type:'pan',measureTap:true,sx:e.clientX,sy:e.clientY,vx:view.x,vy:view.y};
     e.preventDefault();return;
   }
-  if (viewOnly && e.pointerType === 'touch') {
-    const key = ds.w ? 'w'+ds.w : ds.r ? 'r'+ds.r : ds.f ? 'f'+ds.f : ds.o ? 'o'+ds.o.split(':')[1] : null;
+  if ((viewOnly && e.pointerType === 'touch')||(isReference()&&tool!=='measure')) {
+    const key = ds.w ? 'w'+ds.w : ds.r ? 'r'+ds.r : ds.f ? 'f'+ds.f : ds.o ? 'o'+ds.o.split(':')[1] : ds.i ? 'i'+ds.i : null;
     ptr = {type:'pan', sx:e.clientX, sy:e.clientY, vx:view.x, vy:view.y, tap:true, tapKey:key};
     return;
   }
@@ -3802,7 +4121,7 @@ svg.addEventListener('pointerdown', e => {
     ptr = {type:'op', oid, sx:e.clientX, sy:e.clientY, moved:false};
     render(); renderPanel(); return;
   }
-  const key = ds.w ? 'w'+ds.w : ds.r ? 'r'+ds.r : ds.f ? 'f'+ds.f : null;
+  const key = ds.w ? 'w'+ds.w : ds.r ? 'r'+ds.r : ds.f ? 'f'+ds.f : ds.i ? 'i'+ds.i : null;
   if (key) {
     if (e.shiftKey) { if (sel.has(key)) sel.delete(key); else sel.add(key); }
     else if (!sel.has(key)) sel = new Set([key]);
@@ -3934,7 +4253,7 @@ window.addEventListener('keydown', e => {
     sel.clear(); render(); renderPanel(); return;
   }
   if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); delSel(); return; }
-  if (e.key.startsWith('Arrow') && sel.size) {
+  if (e.key.startsWith('Arrow') && sel.size&&!isReference()) {
     e.preventDefault();
     const G = S.set.grid * (e.shiftKey ? 10 : 1);
     const d = {ArrowLeft:[-G,0], ArrowRight:[G,0], ArrowUp:[0,-G], ArrowDown:[0,G]}[e.key];
@@ -4010,7 +4329,10 @@ function closeThumbs(){ $('#thumbs').classList.remove('open'); render(); }
 
 /* ---------- pasek górny ---------- */
 document.querySelectorAll('#tools button').forEach(b => b.addEventListener('click', () => setTool(b.dataset.tool)));
-function syncVariant(){ $('#sVar').value = S.variant; document.title = 'Rzut Ogrodniki — ' + VARIANTS[S.variant].name; $('#kitchen3dLink').hidden = S.variant !== 'E2'; }
+function syncVariant(){
+  for(const id of ['bImp','bReset','bUndo','bRedo','iPass','iPitch','iOver','iRate'])$('#'+id).disabled=isReference();
+  for(const b of document.querySelectorAll('#tools button'))b.disabled=isReference()&&!['select','measure'].includes(b.dataset.tool);
+  $('#sVar').value = S.variant; document.title = 'Rzut Ogrodniki — ' + VARIANTS[S.variant].name; $('#kitchen3dLink').hidden = S.variant !== 'E2'; }
 $('#sVar').innerHTML = Object.entries(VARIANTS).map(([k,v]) => `<option value="${k}">${esc(v.name)}</option>`).join('');
 $('#sVar').onchange = e => switchVariant(e.target.value);
 window.addEventListener('popstate',()=>switchVariant(variantFromUrl(),null));
@@ -4020,6 +4342,7 @@ $('#idForm').onsubmit=e=>{
   e.preventDefault();const error=findElement($('#idQuery').value);$('#idError').textContent=error;
   if(!error)$('#idDialog').close();
 };
+$('#bInstallations').onclick=()=>{checkpoint();S.hidden=S.hidden.includes(INSTALLATION_LAYER)?S.hidden.filter(n=>n!==INSTALLATION_LAYER):[...S.hidden,INSTALLATION_LAYER];document.body.classList.remove('nopanel');changed();};
 $('#tIds').onchange=e=>{S.ui.ids=e.target.checked;render();save();};
 $('#mCancel').onclick=cancelMeasurePoint;$('#mClear').onclick=clearMeasures;
 $('#bThumbs').onclick = openThumbs; $('#bThumbsClose').onclick = closeThumbs;
@@ -4053,18 +4376,19 @@ function download(name, blob){
 }
 $('#bExp').onclick = () => {
   const d = new Date(), stamp = d.toISOString().slice(0,16).replace(/[T:]/g,'-');
-  download(`rzut-ogrodniki-${S.variant}-${stamp}.json`, new Blob([JSON.stringify({variant:S.variant, walls:S.walls, rooms:S.rooms, furn:S.furn, hidden:S.hidden, nextId:S.nextId, set:S.set}, null, 1)], {type:'application/json'}));
+  download(`rzut-ogrodniki-${S.variant}-${stamp}.json`, new Blob([JSON.stringify({...S}, null, 1)], {type:'application/json'}));
 };
 $('#bImp').onclick = () => $('#fImp').click();
 $('#fImp').onchange = e => {
   const f = e.target.files[0]; if (!f) return;
   f.text().then(t => {
-    try { const o = JSON.parse(t); if (!Array.isArray(o.walls)) throw 0; checkpoint(); o.ui = S.ui; o.variant = VARIANTS[o.variant] ? o.variant : S.variant; S = defaults(o); syncVariant(); updateVariantUrl(); focusedEquipment=null; sel.clear(); syncInputs(); changed(); fit(); }
+    try { const o = JSON.parse(t); if (!Array.isArray(o.walls)) throw 0; if(isReference()||o.variant===REFERENCE_VARIANT){alert('Kopia referencyjna jest tylko do odczytu. Wczytaj edycje do Projektu Głównego lub innego wariantu.');return;}checkpoint(); o.ui = S.ui; o.variant = VARIANTS[o.variant] ? o.variant : S.variant; S = defaults(o); if(S.variant==='E2')addE2Installations(S);syncVariant(); updateVariantUrl(); focusedEquipment=null; sel.clear(); syncInputs(); changed(); fit(); }
     catch(err) { alert('To nie jest plik rzutu z tego edytora.'); }
   });
   e.target.value = '';
 };
 $('#bReset').onclick = () => {
+  if(isReference())return;
   if (!confirm('Przywrócić wariant „' + VARIANTS[S.variant].name + '” do stanu początkowego? Bieżące zmiany można cofnąć Ctrl+Z.')) return;
   checkpoint(); const ui = S.ui, set = S.set, v = S.variant; S = freshState(v); S.ui = ui; S.set = set; sel.clear(); changed(); fit();
 };
