@@ -17,7 +17,7 @@ Wariant **Projekt główny 2026-11-16** (`E2REF20261116`) jest kopią sprzed dod
 Nad rzutem jest stale widoczny pasek **Widok**, również na telefonie:
 
 - **Meble** — pokazuje lub ukrywa meble, ich opisy, ID i strefy. To ustawienie widoku; meble pozostają w kontroli kolizji i dojść.
-- **Instalacje** — włącza lub wyłącza nakładkę, zachowując wybór branż.
+- **Wentylacja**, **Hydraulika**, **Podłogówka**, **Elektryka**, **Sieć i rezerwy** — niezależne przełączniki. Nie ma nadrzędnego przycisku „Instalacje”. Lista **Widok** pozwala wybrać np. **Tylko hydraulika**.
 - **Tylko instalacje** — pokazuje wszystkie branże na tle ścian, ukrywa meble, nazwy/kolory pomieszczeń, dach, strefy, podkład i wizualizację przejść.
 - **Pokaż wszystko** — odsłania wszystkie warstwy, meble i branże oraz przywraca nazwy/kolory pomieszczeń, dach, strefy i przejścia.
 - **Branże…** — otwiera panel i przewija do filtrów instalacji.

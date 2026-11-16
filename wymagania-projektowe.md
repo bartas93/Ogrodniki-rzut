@@ -318,4 +318,10 @@ Zapis **v35** migruje v34 wyłącznie przez `fixE2NicheMounting`, zachowując in
 - Podłogówka: strefy cieplne, rozdział i propozycje czujników; nie projekt pętli. Spiżarnia nadal do decyzji. Moc, rozstawy, długości, przepływy i miejsce/liczba rozdzielaczy po OZC i projekcie posadzki.
 - Zapis v37 odczytuje v36 bez zmian geometrii, numerów, własnych nazw, uwag i przesunięć. Nie kasuje starych kluczy ani nie aktualizuje kopii referencyjnej. Nowe elementy otrzymują wolne numery. Własne przypisania i usunięcia chroni `installationRevision:2`.
 
+## 29. Niezależność warstw i legenda elektryki
+
+- **[DECYZJA]** Umożliwić widok samej hydrauliki bez pozostałych instalacji. Zastąpić mylący nadrzędny przycisk niezależnymi przełącznikami Wentylacja/Hydraulika/Podłogówka/Elektryka/Sieć i rezerwy. Gotowe widoki na liście Widok, zachować Pokaż wszystko i ręczne łączenie branż.
+- **[DECYZJA]** Różne kolory typów włączników, gniazd i innych elementów elektryki oraz widoczna legenda.10 kategorii według liczby sterowanych grup, liczby gniazd i funkcji. Legenda pod rzutem oraz w PNG. [Kolory i obsługa](instalacje-hydraulika-elektryka.md).
+- Zmiana widoku w v37, bez migracji ani zmian elementów, przypisań, geometrii i kopii referencyjnej. Oryginalna nazwa Instalacje pozostaje tylko w danych starszej warstwy, z czytelną nazwą w interfejsie.
+
 [Przygotowania instalacyjne, zależności, źródła i zakres rezerwy LPG](instalacje-przygotowanie.md). To aktualizacja programu i dokumentacji; geometria rzutu oraz zapis v35 bez zmian. Obecny audyt geometryczny nie potwierdza zmieszczenia wszystkich nowych urządzeń i ich obsługi w technicznym.

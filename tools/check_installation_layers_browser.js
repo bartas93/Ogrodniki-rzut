@@ -17,7 +17,7 @@ const mobile=process.argv.includes('mobile');
   const initial=await state(),geometry=s=>JSON.stringify([s.walls,s.rooms,s.furn]),original=geometry(initial),reference=await page.evaluate(()=>localStorage.getItem('ogrodniki-reference-2026-11-16'));
   assert.equal(initial.installationRevision,2);assert.equal(initial.furn[0].name,'Własna kuchnia');assert.equal(initial.installations.find(i=>i.tag==='KZ').userNotes,'Zachować filtr');
   for(const id of ['bHydraulics','bUnderfloor','bElectrical']){const b=await page.locator('#'+id).boundingBox();assert.ok(b.x>=0&&b.x+b.width<=await page.evaluate(()=>innerWidth));}
-  await page.locator('#bOnlyInstallations').click();await page.locator('#bInstallations').click();
+  await page.locator('#bOnlyInstallations').click();await page.locator('#serviceView').selectOption('none');
   await page.locator('#bHydraulics').click();assert.ok(await page.locator('#gInstallations [data-i]').count());assert.equal(await page.locator('#bHydraulics').getAttribute('aria-pressed'),'true');
   await page.locator('#bHydraulics').click();assert.equal(await page.locator('#gInstallations [data-i]').count(),0);
   await page.locator('#bUnderfloor').click();assert.equal(await page.locator('[data-heat-zone]').count(),12);

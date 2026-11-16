@@ -116,6 +116,15 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 .control-channel{border:1px solid var(--line);border-radius:7px;margin:10px 0;padding:8px;overflow-wrap:anywhere}
 .control-channel legend{font-weight:600;font-size:12px}.control-channel button{font-size:11px;margin:4px 0}.light-picker{margin-top:8px;font-size:12px}.light-picker summary{cursor:pointer;padding:6px 0}
 .service-coverage{font-size:12px;margin:12px 0}.service-coverage summary{cursor:pointer;font-weight:600}
+#stage{display:flex;flex-direction:column}
+#cv{flex:1 1 0;min-height:0;height:0}
+#electricalLegend{flex:none;padding:7px 10px;border-top:1px solid var(--line);background:var(--panel);font-size:11px}
+#electricalLegend[hidden]{display:none}#electricalLegend summary{font-weight:700;cursor:pointer;min-height:20px}
+.electrical-legend-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:3px 12px;margin:3px 0}
+.electrical-legend-items>span{display:flex;align-items:center;gap:5px;min-width:0}.electrical-legend-items svg{flex:none}
+.legend-note{font-size:10px;color:#713aa3;margin-top:3px}.service-view-label{display:flex;align-items:center;gap:5px;font-size:12px}
+#serviceView{max-width:180px;min-height:34px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);padding:5px}
+@media(max-width:800px){#serviceView{min-height:40px}.electrical-legend-items{grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 6px}#electricalLegend{font-size:10px;padding:5px 8px}}
 </style>
 </head>
 <body>
@@ -152,10 +161,12 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
   <div id="visibilityBar" role="group" aria-label="Widoczność warstw">
     <span>Widok:</span>
     <button id="bFurniture" aria-pressed="true" title="Pokaż lub ukryj meble i ich strefy">Meble</button>
-    <button id="bInstallations" hidden aria-pressed="true" title="Pokaż lub ukryj instalacje">Instalacje</button>
+    <button id="bInstallations" hidden aria-pressed="true" title="Pokaż lub ukryj wentylację">Wentylacja</button>
     <button id="bHydraulics" hidden aria-pressed="false">Hydraulika</button>
     <button id="bUnderfloor" hidden aria-pressed="false">Podłogówka</button>
     <button id="bElectrical" hidden aria-pressed="false">Elektryka</button>
+    <button id="bOtherServices" hidden aria-pressed="false" title="Sieć, monitoring, automatyka i przyszłe przygotowania">Sieć i rezerwy</button>
+    <label class="service-view-label">Widok <select id="serviceView" aria-label="Gotowy widok"><option value="custom">Ręcznie</option><option value="hydraulics">Tylko hydraulika</option><option value="underfloor">Tylko podłogówka</option><option value="electrical">Tylko elektryka</option><option value="ventilation">Tylko wentylacja</option><option value="other">Tylko sieć i rezerwy</option><option value="installations">Wszystkie instalacje</option><option value="none">Bez instalacji</option><option value="all">Pokaż wszystko</option></select></label>
     <button id="bOnlyInstallations" title="Ściany i wszystkie branże instalacji, bez mebli i nakładek">Tylko instalacje</button>
     <button id="bShowAll" title="Pokaż wszystkie warstwy, meble i branże instalacji">Pokaż wszystko</button>
     <button id="bInstallationFilters" hidden title="Otwórz filtry branż instalacji">Branże…</button>
@@ -189,6 +200,7 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
       <g id="gHandles"></g>
       <g id="gOver"></g>
     </svg>
+    <details id="electricalLegend" open hidden aria-label="Legenda elektryki"></details>
     <div id="numbuf"></div>
     <div id="measureBar" class="ui" hidden>
       <output id="mStatus" aria-live="polite"></output>
@@ -2563,7 +2575,7 @@ function installationVisible(i){return vis(i)&&S.ui.serviceSystems?.[i.system]!=
 function drawInstallations(){
   let h='';const occupied=[],related=relatedLightingIds();
   for(const i of [...(S.installations||[])].sort((a,b)=>(a.kind==='route'?0:1)-(b.kind==='route'?0:1))){
-    if(!installationVisible(i))continue;const ps=installationPoints(i),col=INSTALLATION_SYSTEMS[i.system]?.color||'#555',key='i'+i.id,selected=sel.has(key)||related.has(i.id);
+    if(!installationVisible(i))continue;const ps=installationPoints(i),col=installationColor(i),key='i'+i.id,selected=sel.has(key)||related.has(i.id);
     if(!ps.length)continue;const data=`data-i="${i.id}"`,title=`<title>${esc(elementId(key))} · ${esc(i.name)} · ${esc(i.level)} · koncepcja</title>`;
     if(i.kind==='route'&&ps.length>1){const points=ps.map(p=>p.x+','+p.y).join(' ');h+=`<polyline ${data} points="${points}" fill="none" stroke="${col}" stroke-width="${px(selected?4:2)}" stroke-opacity="${selected?1:.65}" stroke-dasharray="${px(7)} ${px(4)}"/>`;
       h+=`<polyline ${data} points="${points}" fill="none" stroke="transparent" stroke-width="${px(12)}" pointer-events="stroke">${title}</polyline>`;
@@ -2905,10 +2917,107 @@ function bindLightingPanel(el,i){
   });
 }
 function toggleServiceLayer(layer){
-  const items=(S.installations||[]).filter(i=>i.layer===layer),shown=items.some(installationVisible);
-  checkpoint();S.hidden=shown?[...new Set([...S.hidden,layer])]:S.hidden.filter(n=>n!==layer);
-  if(!shown)for(const i of items)S.ui.serviceSystems[i.system]=true;
+  const key=Object.keys(SERVICE_LAYERS).find(key=>SERVICE_LAYERS[key]===layer);if(key)toggleServiceGroup(key);
+}
+
+const SERVICE_GROUPS={
+  ventilation:{name:'Wentylacja',systems:['ventilation']},
+  hydraulics:{name:'Hydraulika',systems:['water','sewage','heating']},
+  underfloor:{name:'Podłogówka',systems:['underfloor']},
+  electrical:{name:'Elektryka',systems:['power']},
+  other:{name:'Sieć i rezerwy',systems:['data','reserves']},
+};
+function groupItems(group){return (S.installations||[]).filter(i=>SERVICE_GROUPS[group].systems.includes(i.system));}
+function groupVisible(group){return groupItems(group).some(installationVisible);}
+function revealServiceSystems(keys){
+  const items=S.installations||[],layers=new Set(items.filter(i=>keys.includes(i.system)).map(i=>i.layer));
+  // Odkrycie wspólnej starej warstwy nie może włączyć innej ukrytej branży.
+  for(const key of Object.keys(INSTALLATION_SYSTEMS))if(!keys.includes(key)){
+    const others=items.filter(i=>i.system===key);
+    if(others.length&&!others.some(installationVisible)&&others.some(i=>layers.has(i.layer)&&S.hidden.includes(i.layer)))S.ui.serviceSystems[key]=false;
+  }
+  S.hidden=S.hidden.filter(n=>!layers.has(n));
+  for(const key of keys)S.ui.serviceSystems[key]=true;
+}
+function toggleServiceGroup(group){
+  checkpoint();const keys=SERVICE_GROUPS[group].systems;
+  if(groupVisible(group))for(const key of keys)S.ui.serviceSystems[key]=false;
+  else revealServiceSystems(keys);
   sel.clear();focusedEquipment=null;changed();
+}
+function selectServiceView(value){
+  if(value==='custom')return;
+  if(value==='all'){changeVisibility('all');return;}
+  if(value==='installations'){changeVisibility('only-installations');return;}
+  checkpoint();
+  const keys=SERVICE_GROUPS[value]?.systems||[];
+  for(const key of Object.keys(INSTALLATION_SYSTEMS))S.ui.serviceSystems[key]=keys.includes(key);
+  if(keys.length){
+    S.ui.furniture=false;S.ui.rooms=false;S.ui.roomLabels=false;S.ui.roof=false;S.ui.zones=false;S.ui.pass=false;S.ui.under=false;S.ui.dims=false;
+    revealServiceSystems(keys);
+    const walls=new Set(S.walls.map(w=>w.layer||''));S.hidden=S.hidden.filter(n=>!walls.has(n));
+    if(tool==='furn')setTool('select');
+  }
+  sel.clear();focusedEquipment=null;syncInputs();changed();
+}
+function activeServiceView(){
+  const active=Object.keys(INSTALLATION_SYSTEMS).filter(key=>(S.installations||[]).some(i=>i.system===key&&installationVisible(i)));
+  if(!active.length)return 'none';
+  if(S.ui.furniture===false){
+    for(const [key,group] of Object.entries(SERVICE_GROUPS))if(active.length===group.systems.length&&active.every(s=>group.systems.includes(s)))return key;
+    if(active.length===Object.keys(INSTALLATION_SYSTEMS).length)return 'installations';
+  }else if(active.length===Object.keys(INSTALLATION_SYSTEMS).length&&S.furn.some(furnitureVisible))return 'all';
+  return 'custom';
+}
+function displayLayerName(layer){return layer===INSTALLATION_LAYER?'Wentylacja, sieć i rezerwy':layer;}
+const ELECTRICAL_STYLES={
+  light:{name:'Lampa / grupa',color:'#a56800'},
+  switch1:{name:'Włącznik: 1 grupa',color:'#1769aa'},
+  switch2:{name:'Włącznik: 2 grupy',color:'#7b2cbf'},
+  switch3:{name:'Włącznik: 3+ grup',color:'#bd1854'},
+  socket1:{name:'Gniazdo pojedyncze',color:'#237a3b'},
+  socket2:{name:'Zestaw 2 gniazd',color:'#00818b'},
+  socket3:{name:'Zestaw 3+ gniazd',color:'#455bc0'},
+  shutter:{name:'Sterowanie roletą',color:'#79512b'},
+  connection:{name:'Przyłącze / zasilanie',color:'#bb3425'},
+  route:{name:'Trasa elektryczna',color:'#57616d'},
+};
+function electricalType(i){
+  if(i.kind==='light')return 'light';
+  if(i.kind==='switch')return 'switch'+Math.max(1,Math.min(3,i.channels?.length||1));
+  if(i.kind==='socket')return 'socket'+Math.max(1,Math.min(3,i.socketCount||1));
+  if(i.kind==='shutter-control')return 'shutter';
+  return i.kind==='route'?'route':'connection';
+}
+function installationColor(i){return i.system==='power'?ELECTRICAL_STYLES[electricalType(i)].color:INSTALLATION_SYSTEMS[i.system]?.color||'#555';}
+function legendExample(key){return {id:0,kind:key==='light'?'light':key.startsWith('switch')?'switch':key.startsWith('socket')?'socket':key==='shutter'?'shutter-control':'point'};}
+function legendSymbol(key,p,color){
+  if(key==='route')return `<path d="M${p.x-px(8)} ${p.y}H${p.x+px(8)}" fill="none" stroke="${color}" stroke-width="${px(2)}" stroke-dasharray="${px(3)} ${px(2)}"/>`;
+  return installationGlyph(legendExample(key),p,color,false,'').replaceAll('data-i="0"','');
+}
+function electricalLegendActive(){return (S.installations||[]).some(i=>i.system==='power'&&installationVisible(i));}
+function renderElectricalLegend(){
+  const el=$('#electricalLegend'),active=electricalLegendActive();el.hidden=!active;
+  if(active){
+    let h='<summary>Elektryka — legenda</summary><div class="electrical-legend-items">';
+    for(const [key,type] of Object.entries(ELECTRICAL_STYLES)){
+      const glyph=legendSymbol(key,{x:0,y:0},type.color);
+      h+=`<span data-legend-type="${key}" data-legend-color="${type.color}"><svg width="18" height="18" viewBox="${-px(10)} ${-px(10)} ${px(20)} ${px(20)}" aria-hidden="true">${glyph}</svg>${esc(type.name)}</span>`;
+    }
+    h+='</div><div class="legend-note">Fioletowa linia: powiązanie włącznik–lampa.</div>';
+    el.innerHTML=h;
+  }
+  $('#measureBar').style.bottom=((active?el.getBoundingClientRect().height:0)+10)+'px';
+}
+function electricalLegendSvg(x,y){
+  const width=Math.min(360,Math.max(240,rect().width-24)),height=158,fs=rect().width<420?10:11,colWidth=(width-20)/2;
+  let h=`<g data-electrical-legend="true"><rect x="${x}" y="${y}" width="${px(width)}" height="${px(height)}" rx="${px(7)}" fill="#fff" stroke="#c7c3b8" stroke-width="${px(1)}"/><text x="${x+px(10)}" y="${y+px(18)}" font-family="system-ui,sans-serif" font-size="${px(12)}" font-weight="700" fill="#272522">Elektryka — legenda</text>`;
+  for(const [index,[key,type]] of Object.entries(ELECTRICAL_STYLES).entries()){
+    const row=Math.floor(index/2),col=index%2,cx=x+px(17+col*colWidth),cy=y+px(36+row*21);
+    h+=`<g data-legend-type="${key}" data-legend-color="${type.color}">${legendSymbol(key,{x:cx,y:cy},type.color)}`;
+    h+=`<text x="${cx+px(13)}" y="${cy+px(4)}" font-family="system-ui,sans-serif" font-size="${px(fs)}" fill="#272522">${esc(type.name)}</text></g>`;
+  }
+  return h+`<text x="${x+px(10)}" y="${y+px(148)}" font-family="system-ui,sans-serif" font-size="${px(9)}" fill="#713aa3">Fioletowa linia: powiązanie włącznik–lampa.</text></g>`;
 }
 
 const VARIANTS = {
@@ -3030,16 +3139,16 @@ function setInstallationsVisible(show){
   S.hidden=show?S.hidden.filter(n=>!layers.has(n)):[...new Set([...S.hidden,...layers])];
 }
 function syncVisibilityButtons(){
-  const hasInstallations=!!S.installations?.length,shown=hasInstallations&&S.installations.some(vis);
-  for(const id of ['bInstallations','bInstallationFilters','bHydraulics','bUnderfloor','bElectrical'])$('#'+id).hidden=!hasInstallations;
-  $('#bOnlyInstallations').disabled=!hasInstallations;
-  for(const [id,layer] of [['bHydraulics',SERVICE_LAYERS.hydraulics],['bUnderfloor',SERVICE_LAYERS.underfloor],['bElectrical',SERVICE_LAYERS.electrical]]){
-    const button=$('#'+id),on=(S.installations||[]).some(i=>i.layer===layer&&installationVisible(i));button.classList.toggle('on',on);button.setAttribute('aria-pressed',String(on));
+  const hasInstallations=!!S.installations?.length;
+  for(const id of ['bInstallations','bInstallationFilters','bHydraulics','bUnderfloor','bElectrical','bOtherServices'])$('#'+id).hidden=!hasInstallations;
+  $('#bOnlyInstallations').disabled=!hasInstallations;$('#serviceView').disabled=!hasInstallations;
+  $('#serviceView').value=hasInstallations?activeServiceView():'custom';
+  for(const [id,key] of [['bInstallations','ventilation'],['bHydraulics','hydraulics'],['bUnderfloor','underfloor'],['bElectrical','electrical'],['bOtherServices','other']]){
+    const button=$('#'+id),on=hasInstallations&&groupVisible(key);button.classList.toggle('on',on);button.setAttribute('aria-pressed',String(on));
   }
-  for(const [id,on] of [['bFurniture',S.ui.furniture!==false&&S.furn.some(vis)],['bInstallations',shown]]){
-    const button=$('#'+id);button.classList.toggle('on',on);button.setAttribute('aria-pressed',String(on));
-  }
+  const on=S.ui.furniture!==false&&S.furn.some(vis),button=$('#bFurniture');button.classList.toggle('on',on);button.setAttribute('aria-pressed',String(on));
 }
+
 function changeVisibility(action){
   checkpoint();
   if(action==='furniture'){
@@ -4006,7 +4115,7 @@ function status(){
   $('#sZoom').textContent = `1 px = ${Math.round(px(1))} mm`;
 }
 function render(){
-  syncVisibilityButtons();
+  renderElectricalLegend();syncVisibilityButtons();
   syncAspect();
   svg.setAttribute('viewBox', `${view.x} ${view.y} ${view.w} ${view.h}`);
   drawGrid(); drawUnder(); drawRooms(); drawPass(); drawWalls(); drawOps(); drawFurn(); drawRoof(); drawDims(); drawInstallations(); drawIds(); drawHandles(); drawOver();
@@ -4143,7 +4252,7 @@ function renderPanel(){
   }
   if(items.length===1&&items[0][0]==='i'){
     const i=S.installations.find(i=>i.id===+items[0].slice(1));
-    if(i)h+=`<h2>${esc(i.tag)} · ${esc(INSTALLATION_SYSTEMS[i.system]?.name||i.system)}</h2><p class="hint">Warstwa: ${esc(i.layer)}${i.media?' · '+esc(i.media.join(' + ')):''}${i.kind==='socket'?' · propozycja '+(i.socketCount||1)+' gniazd':''}</p>${lightingPanelMarkup(i)}`+`<div class="row"><span>Nazwa</span><input id="pIName" value="${esc(i.name)}"></div><p><b>Poziom:</b> ${esc(i.level)}</p><p class="hint">Koncepcja do koordynacji — bez doboru wykonawczego.</p><ul>${i.notes.map(n=>'<li>'+esc(n)+'</li>').join('')}</ul><label>Własne uwagi<textarea id="pINotes" rows="4" style="width:100%">${esc(i.userNotes||'')}</textarea></label><div class="row"><span>Przesunięcie X</span><input type="number" id="pIX" value="${i.offsetX||0}" step="50"> mm</div><div class="row"><span>Przesunięcie Y</span><input type="number" id="pIY" value="${i.offsetY||0}" step="50"> mm</div><p class="hint">Przesunięcie dotyczy symbolu/trasy. Nie zmienia położenia urządzeń ani budynku.</p>`;
+    if(i)h+=`<h2>${esc(i.tag)} · ${esc(INSTALLATION_SYSTEMS[i.system]?.name||i.system)}</h2><p class="hint">Warstwa: ${esc(displayLayerName(i.layer))}${i.media?' · '+esc(i.media.join(' + ')):''}${i.kind==='socket'?' · propozycja '+(i.socketCount||1)+' gniazd':''}</p>${lightingPanelMarkup(i)}`+`<div class="row"><span>Nazwa</span><input id="pIName" value="${esc(i.name)}"></div><p><b>Poziom:</b> ${esc(i.level)}</p><p class="hint">Koncepcja do koordynacji — bez doboru wykonawczego.</p><ul>${i.notes.map(n=>'<li>'+esc(n)+'</li>').join('')}</ul><label>Własne uwagi<textarea id="pINotes" rows="4" style="width:100%">${esc(i.userNotes||'')}</textarea></label><div class="row"><span>Przesunięcie X</span><input type="number" id="pIX" value="${i.offsetX||0}" step="50"> mm</div><div class="row"><span>Przesunięcie Y</span><input type="number" id="pIY" value="${i.offsetY||0}" step="50"> mm</div><p class="hint">Przesunięcie dotyczy symbolu/trasy. Nie zmienia położenia urządzeń ani budynku.</p>`;
     el.innerHTML=h;
     el.querySelectorAll('[data-copy-id]').forEach(b=>b.onclick=()=>copyElementId(b.dataset.copyId,b));
     bindLightingPanel(el,i);
@@ -4344,7 +4453,8 @@ function renderLayers(){
   for (const n of names) {
     const cnt = S.walls.filter(w => w.layer === n).length, cntF = S.furn.filter(f => f.layer === n).length, cntI=(S.installations||[]).filter(i=>i.layer===n).length;
     const furnitureOnly=cntF>0&&!cnt&&!cntI&&!S.rooms.some(r=>r.layer===n);
-    h += `<div class="layer"><input type="checkbox" data-lv="${esc(n)}" ${(S.hidden.includes(n)||(furnitureOnly&&S.ui.furniture===false))?'':'checked'}><span>${n ? esc(n) : 'główna'} <span class="hint">(${cnt} ścian${cntF ? `, ${cntF} mebli` : ''}${cntI ? `, ${cntI} instalacji` : ''})</span></span>${n&&!isReference() ? `<button data-ld="${esc(n)}">Usuń</button>` : ''}</div>`;
+    const installationsOnly=cntI>0&&!cnt&&!cntF&&!S.rooms.some(r=>r.layer===n),anyInstallationVisible=(S.installations||[]).some(i=>i.layer===n&&installationVisible(i));
+    h += `<div class="layer"><input type="checkbox" data-lv="${esc(n)}" ${(S.hidden.includes(n)||(furnitureOnly&&S.ui.furniture===false)||(installationsOnly&&!anyInstallationVisible))?'':'checked'}><span>${n ? esc(displayLayerName(n)) : 'główna'} <span class="hint">(${cnt} ścian${cntF ? `, ${cntF} mebli` : ''}${cntI ? `, ${cntI} instalacji` : ''})</span></span>${n&&!isReference() ? `<button data-ld="${esc(n)}">Usuń</button>` : ''}</div>`;
   }
   h += '<div class="hint">Instalacje są nakładką i nie zmieniają obrysu ani kontroli przejść. Ukryte ściany pozostałych warstw nie liczą się do bryły i dachu.</div>';
   const el = $('#layers'); el.innerHTML = h;
@@ -4752,7 +4862,10 @@ $('#bHydraulics').onclick=()=>toggleServiceLayer(SERVICE_LAYERS.hydraulics);
 $('#bUnderfloor').onclick=()=>toggleServiceLayer(SERVICE_LAYERS.underfloor);
 $('#bElectrical').onclick=()=>toggleServiceLayer(SERVICE_LAYERS.electrical);
 $('#bFurniture').onclick=()=>changeVisibility('furniture');
-$('#bInstallations').onclick=()=>changeVisibility('installations');
+$('#bInstallations').onclick=()=>toggleServiceGroup('ventilation');
+$('#bOtherServices').onclick=()=>toggleServiceGroup('other');
+$('#serviceView').onchange=e=>selectServiceView(e.target.value);
+$('#electricalLegend').addEventListener('toggle',()=>{if(S)render();});
 $('#bOnlyInstallations').onclick=()=>changeVisibility('only-installations');
 $('#bShowAll').onclick=()=>changeVisibility('all');
 $('#bInstallationFilters').onclick=()=>{document.body.classList.remove('nopanel');render();$('#installationPanel').scrollIntoView({block:'start'});};
@@ -4810,7 +4923,11 @@ $('#bPng').onclick = () => {
   fit();
   const clone = svg.cloneNode(true);
   clone.querySelectorAll('.ui').forEach(n => n.remove());
-  const r = rect(), W = 2400, H = Math.round(W*r.height/r.width);
+  const r = rect(), W = 2400,extra=electricalLegendActive()?px(178):0,H=Math.round(W*(view.h+extra)/view.w);
+  if(extra){
+    clone.setAttribute('viewBox',`${view.x} ${view.y} ${view.w} ${view.h+extra}`);
+    const legend=document.createElementNS('http://www.w3.org/2000/svg','g');legend.innerHTML=electricalLegendSvg(view.x+px(10),view.y+view.h+px(10));clone.append(legend);
+  }
   clone.setAttribute('width', W); clone.setAttribute('height', H);
   const src = new XMLSerializer().serializeToString(clone);
   const img = new Image();

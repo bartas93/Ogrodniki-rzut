@@ -35,9 +35,28 @@ Aktualny bazowy stan zawiera **247 elementów instalacyjnych**:
 | Podłogówka | 19 | 12 stref pomieszczeń, rozdzielacz/strefa zasilania i 5 propozycji sterowania temperaturą |
 | Elektryka | 101 | Lampy, włączniki, zestawy gniazd, przyłącza urządzeń i lokalne sterowanie rolet |
 
-Przyciski **Hydraulika**, **Podłogówka** i **Elektryka** pokazują lub ukrywają wskazaną warstwę. Włączenie przyciskiem odkrywa jej branże. **Instalacje** pozostaje zbiorczym przełącznikiem całej nakładki. **Tylko instalacje** pokazuje wszystkie branże bez mebli, a **Pokaż wszystko** dodaje meble i pozostałe nakładki. Każdą warstwę można także przełączyć w panelu Warstwy. Własne warstwy z wcześniejszego zapisu nie są przenoszone pod inne nazwy.
+Przyciski **Wentylacja**, **Hydraulika**, **Podłogówka**, **Elektryka** oraz **Sieć i rezerwy** działają niezależnie i pozwalają łączyć branże. Nie ma nadrzędnego przycisku „Instalacje”. Z listy **Widok** można wybrać np. **Tylko hydraulika**, **Tylko elektryka**, **Wszystkie instalacje** albo **Bez instalacji**. **Tylko instalacje** pokazuje wszystkie branże bez mebli, a **Pokaż wszystko** dodaje meble i pozostałe nakładki. W panelu Warstwy stara techniczna warstwa Instalacje jest opisana jako „Wentylacja, sieć i rezerwy”; nie jest rodzicem hydrauliki. Dane i własne nazwy warstw są zachowane.
 
 Podłogówka ma przezroczyste pola stref cieplnych i oznaczenia CO…; **nie narysowano fikcyjnych pętli rur**. Kolor całego pomieszczenia nie wyznacza prowadzenia rur pod stałą zabudową, wanną lub urządzeniami. Spiżarnia ma delikatniejsze oznaczenie i nadal wymaga decyzji o ogrzewaniu. Liczba rzeczywistych pętli może być większa niż liczba stref; wynika z obliczeń i geometrii podłogi.
+
+## Kolory i legenda elektryki
+
+Legenda jest automatycznie widoczna pod rzutem, gdy włączona jest elektryka. Nie zasłania planu; można ją zwinąć. Pełna legenda jest dodawana także do PNG, w osobnym pasie poniżej rysunku.
+
+| Typ | Kolor |
+|---|---|
+| Lampa / grupa światła | Ochra |
+| Włącznik jednej grupy | Niebieski |
+| Włącznik dwóch grup | Fioletowy |
+| Włącznik trzech lub więcej grup | Różowy |
+| Gniazdo pojedyncze | Zielony |
+| Zestaw dwóch gniazd | Turkusowy |
+| Zestaw trzech lub więcej gniazd | Granatowy |
+| Sterowanie roletą | Brązowy |
+| Przyłącze / zasilanie | Czerwony |
+| Trasa elektryczna | Szary |
+
+Fioletowe linie powiązań włącznik–lampa zachowują osobne oznaczenie. Liczba grup i gniazd opisuje propozycję funkcjonalną, nie dobrany model osprzętu ani napięcie obwodu. Ta zmiana jest wyłącznie zmianą widoku w v37; identyfikatory, przypisania, geometria i snapshot pozostają.
 
 ## Który włącznik steruje którą lampą?
 

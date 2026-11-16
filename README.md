@@ -6,7 +6,7 @@ Edytor rzutu parterowego domu z kontrolą ustawienia mebli, przejść i statysty
 
 **16.11.2026:** [Projekt główny 2026-11-16 — kopia referencyjna](https://bartas93.github.io/Ogrodniki-rzut/?variant=E2REF20261116) jest niezależny i tylko do odczytu. Bieżący Projekt Główny otrzymał warstwę **Instalacje** z siedmioma filtrami branżowymi, punktami, schematami tras, trwałymi ID i własnymi uwagami. Domyślnie widoczna wentylacja; pozostałe branże w panelu. [Obsługa, zakres i ograniczenia](instalacje-warstwa.md). Zapis v36 zachowuje wcześniejsze edycje; obrys i wyposażenie bez zmian.
 
-Pasek **Widok** nad rzutem: **Meble**, **Instalacje**, **Tylko instalacje**, **Pokaż wszystko** oraz **Branże…**. Przyciski mieszczą się na telefonie bez przewijania w poziomie. Ukrywanie mebli przyciskiem nie wyłącza ich z kontroli kolizji; wybór widoku jest zapamiętywany i uwzględniany w PNG.
+Nad rzutem: niezależne przyciski **Meble**, **Wentylacja**, **Hydraulika**, **Podłogówka**, **Elektryka**, **Sieć i rezerwy** oraz lista **Widok**, np. **Tylko hydraulika**. **Pokaż wszystko** odsłania całość. Elektryka ma10 kolorów typów i legendę pod rzutem oraz w PNG. Przyciski mieszczą się na telefonie bez przewijania w poziomie; wybór widoku jest zapamiętywany. Ukrywanie mebli przyciskiem nie wyłącza ich z kontroli kolizji.
 
 - **Uruchomienie:** otwórz `edytor-rzutu.html` w przeglądarce (Chrome / Edge). Nie wymaga instalacji ani serwera.
 - **Warianty:** lista „Wariant” na górze albo przycisk „▦ Warianty” (miniatury wszystkich naraz) — rzut z PDF (zmieniony), A–E oraz udoskonalenia E1–E4. Każdy wariant zapisuje się osobno w przeglądarce.
