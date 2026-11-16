@@ -1,5 +1,7 @@
 # Projekt Główny — snapshot i warstwa instalacji, 16.11.2026
 
+**Aktualny zakres v37:** [Hydraulika, Podłogówka, Elektryka i przypisania włącznik–lampa](instalacje-hydraulika-elektryka.md). Nakładka ma obecnie247 elementów w4 warstwach i8 branżach. Poniższy pierwotny zakres157 elementów opisuje bazę v36; nowy dokument aktualizuje liczbę elementów, filtry, zasilanie, monitoring i automatykę. Obsługa kopii referencyjnej pozostaje bez zmian.
+
 ## Kopia referencyjna
 
 Wariant **Projekt główny 2026-11-16** (`E2REF20261116`) jest kopią sprzed dodania instalacji. Pozostaje tylko do odczytu: wybór elementów, ID, pomiary i eksport są dostępne; przesuwanie, usuwanie i zmiany wymiarów są zablokowane. Nie wywołuje aktualnego konstruktora E2 i nie synchronizuje się z nim.

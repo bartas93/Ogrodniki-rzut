@@ -4,6 +4,8 @@
 
 **16.11.2026:** dodano [snapshot i koncepcyjną warstwę instalacji](instalacje-warstwa.md), bez zmian geometrii domu. Poniższy audyt nadal dotyczy układu v35; nowy zapis aplikacji to v36. Kontrola mebli i drzwi nie jest audytem instalacji. JSON odświeżono dla aktualnego SHA256 źródła.
 
+**Rozszerzenie instalacji v37:** osobne warstwy hydrauliki, podłogówki i elektryki oraz edytowalne przypisania włącznik–lampa. [Zakres, otwarte decyzje i tabela sterowania](instalacje-hydraulika-elektryka.md). Geometria, wyniki audytu i wcześniejsze ograniczenia bez zmian; kontrola mebli nie potwierdza poprawności wykonawczej instalacji.
+
 ## Aktualny stan v35 — poprawione punkty1 i2
 
 **Trzy penetracje PAX usunięte; poprawione miejsce na opaski O43.** Pełne szerokości korpusów100/75/50cm i ich identyfikatory zachowane. Krótkie ścianki zamykające wnęki w pokojach i gabinecie zmieniono na lekkie nienośne75mm; nie zmniejszano przegród oddzielających pokoje. System odniesienia: [Rigips3.40.01, CW50+2×12,5mm](https://www.rigips.pl/system/sciany-dzialowe/3_40_01). Dla S40 pozostaje główna ściana150mm do poprzecznej S57, a tylko dolny powrót w gabinecie jest osobnym odcinkiem75mm, domyślnie nowy S150. Mocowania i detal ścianki do projektu wykonawczego.

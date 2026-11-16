@@ -2,6 +2,8 @@
 
 Edytor rzutu parterowego domu z kontrolą ustawienia mebli, przejść i statystykami bryły oraz dachu kopertowego.
 
+**Aktualizacja instalacji v37:** osobne warstwy **Hydraulika**, **Podłogówka** i **Elektryka**. Wybierz włącznik, aby zobaczyć przypisane lampy i zmienić ich przypisanie. Publiczna baza ma26 punktów/grup oświetlenia,20 punktów sterowania światłem i30 powiązań. Uzupełniono program bramy, furtki, monitoringu PoE/UPS i smart home. [Zakres, otwarte decyzje, obsługa i tabela sterowania](instalacje-hydraulika-elektryka.md). Obrys domu i kopia referencyjna bez zmian.
+
 **16.11.2026:** [Projekt główny 2026-11-16 — kopia referencyjna](https://bartas93.github.io/Ogrodniki-rzut/?variant=E2REF20261116) jest niezależny i tylko do odczytu. Bieżący Projekt Główny otrzymał warstwę **Instalacje** z siedmioma filtrami branżowymi, punktami, schematami tras, trwałymi ID i własnymi uwagami. Domyślnie widoczna wentylacja; pozostałe branże w panelu. [Obsługa, zakres i ograniczenia](instalacje-warstwa.md). Zapis v36 zachowuje wcześniejsze edycje; obrys i wyposażenie bez zmian.
 
 Pasek **Widok** nad rzutem: **Meble**, **Instalacje**, **Tylko instalacje**, **Pokaż wszystko** oraz **Branże…**. Przyciski mieszczą się na telefonie bez przewijania w poziomie. Ukrywanie mebli przyciskiem nie wyłącza ich z kontroli kolizji; wybór widoku jest zapamiętywany i uwzględniany w PNG.

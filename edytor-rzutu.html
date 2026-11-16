@@ -113,6 +113,9 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 .service-list button{display:block;width:100%;text-align:left;font-size:11px;margin:3px 0;white-space:normal}
 .service-selected{border-top:1px solid var(--line);margin-top:12px;font-size:12px}
 #props li,.service-selected li{margin:7px 0}#installationPanel ul,#props ul{padding-left:18px}
+.control-channel{border:1px solid var(--line);border-radius:7px;margin:10px 0;padding:8px;overflow-wrap:anywhere}
+.control-channel legend{font-weight:600;font-size:12px}.control-channel button{font-size:11px;margin:4px 0}.light-picker{margin-top:8px;font-size:12px}.light-picker summary{cursor:pointer;padding:6px 0}
+.service-coverage{font-size:12px;margin:12px 0}.service-coverage summary{cursor:pointer;font-weight:600}
 </style>
 </head>
 <body>
@@ -150,6 +153,9 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
     <span>Widok:</span>
     <button id="bFurniture" aria-pressed="true" title="Pokaż lub ukryj meble i ich strefy">Meble</button>
     <button id="bInstallations" hidden aria-pressed="true" title="Pokaż lub ukryj instalacje">Instalacje</button>
+    <button id="bHydraulics" hidden aria-pressed="false">Hydraulika</button>
+    <button id="bUnderfloor" hidden aria-pressed="false">Podłogówka</button>
+    <button id="bElectrical" hidden aria-pressed="false">Elektryka</button>
     <button id="bOnlyInstallations" title="Ściany i wszystkie branże instalacji, bez mebli i nakładek">Tylko instalacje</button>
     <button id="bShowAll" title="Pokaż wszystkie warstwy, meble i branże instalacji">Pokaż wszystko</button>
     <button id="bInstallationFilters" hidden title="Otwórz filtry branż instalacji">Branże…</button>
@@ -247,7 +253,8 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 'use strict';
 const $ = s => document.querySelector(s);
 const svg = $('#cv');
-const LS = 'ogrodniki-rzut-v36';
+const LS = 'ogrodniki-rzut-v37';
+const SERVICES_LS = 'ogrodniki-rzut-v36';
 const NICHE_LS = 'ogrodniki-rzut-v35';
 const REFERENCE_VARIANT='E2REF20261116';
 const REFERENCE_LS='ogrodniki-reference-2026-11-16';
@@ -2346,16 +2353,22 @@ const INSTALLATION_SYSTEMS={
   ventilation:{name:'Wentylacja i okap',color:'#087f8c',short:'W'},
   water:{name:'Woda i uzdatnianie',color:'#1261b0',short:'H₂O'},
   sewage:{name:'Kanalizacja i POŚ',color:'#845339',short:'KAN'},
-  heating:{name:'Ogrzewanie i CWU',color:'#cc3d2d',short:'CO'},
+  heating:{name:'Pompa ciepła i CWU',color:'#cc3d2d',short:'CO'},
+  underfloor:{name:'Podłogówka — strefy i sterowanie',color:'#d46219',short:'OP'},
   power:{name:'Elektryka i oświetlenie',color:'#9b6600',short:'EL'},
   data:{name:'LAN, sterowanie i czujniki',color:'#7350a2',short:'LAN'},
   reserves:{name:'Rezerwy: PV, AC, LPG, rolety',color:'#b12478',short:'REZ'},
 };
 function installationDefaults(s){
   s.installations=Array.isArray(s.installations)?s.installations.filter(i=>i&&Number.isInteger(i.id)&&i.id>0&&Array.isArray(i.points)):[];
-  for(const i of s.installations){i.layer=i.layer||INSTALLATION_LAYER;i.notes=Array.isArray(i.notes)?i.notes:[];}
+  for(const i of s.installations){
+    i.layer=i.layer||INSTALLATION_LAYER;i.notes=Array.isArray(i.notes)?i.notes:[];
+    if(i.kind==='switch')i.channels=(Array.isArray(i.channels)?i.channels:[]).filter(ch=>ch&&typeof ch==='object').map(ch=>({...ch,label:String(ch.label||'Kanał'),lightIds:[...new Set((Array.isArray(ch.lightIds)?ch.lightIds:[]).filter(id=>Number.isInteger(id)&&id>0))]}));
+    if(i.kind==='socket')i.socketCount=Number.isInteger(i.socketCount)&&i.socketCount>0&&i.socketCount<=16?i.socketCount:1;
+    if(i.media&&!Array.isArray(i.media))delete i.media;
+  }
   s.nextId=Math.max(s.nextId,1+Math.max(0,...s.installations.map(i=>Number(i.id)||0)));
-  if(s.installations.length)s.ui.serviceSystems={ventilation:true,water:false,sewage:false,heating:false,power:false,data:false,reserves:false,...s.ui.serviceSystems};
+  if(s.installations.length)s.ui.serviceSystems={ventilation:true,water:false,sewage:false,heating:false,underfloor:s.ui.serviceSystems?.heating??false,power:false,data:false,reserves:false,...s.ui.serviceSystems};
   return s;
 }
 function addE2Installations(s){
@@ -2518,7 +2531,7 @@ function addE2Installations(s){
       'Dla dużych przeszkleń wybrać system osłon i dopuszczalne wymiary. Symbol nie potwierdza miejsca na konkretną skrzynkę.'
     ]);
   s.installationRevision=1;
-  s.ui.serviceSystems={ventilation:true,water:false,sewage:false,heating:false,power:false,data:false,reserves:false,...s.ui.serviceSystems};
+  s.ui.serviceSystems={ventilation:true,water:false,sewage:false,heating:false,underfloor:s.ui.serviceSystems?.heating??false,power:false,data:false,reserves:false,...s.ui.serviceSystems};
   return s;
 }
 function installationPoints(i,state=S){
@@ -2527,9 +2540,18 @@ function installationPoints(i,state=S){
     if(!p)return null;
     let x,y,valid=true;
     if(Array.isArray(p)){[x,y]=p;}
-    else if(p.f){const f=state.furn.find(f=>f.id===p.f);if(!f)return null;const e=p.e&&(f.equipment||[]).find(e=>e.id===p.e);if(p.e&&!e)return null;const c=e?fT(f)(e.x+e.w/2,e.y+e.d/2):f;x=c.x;y=c.y;}
+    else if(p.f){const f=state.furn.find(f=>f.id===p.f);if(!f)return null;const e=p.e&&(f.equipment||[]).find(e=>e.id===p.e);if(p.e&&!e)return null;const c=e?fT(f)(e.x+e.w/2,e.y+e.d/2):p.at==='back'?fT(f)(f.w/2,0):f;x=c.x;y=c.y;}
     else if(p.r){const r=state.rooms.find(r=>r.id===p.r);if(!r)return null;x=r.x;y=r.y;}
-    else if(p.o){const w=state.walls.find(w=>w.op.some(o=>o.id===p.o));if(!w)return null;const o=w.op.find(o=>o.id===p.o),g=geom(w);x=g.a.x+g.d.x*o.pos;y=g.a.y+g.d.y*o.pos;}
+    else if(p.o){
+      const w=state.walls.find(w=>w.op.some(o=>o.id===p.o));if(!w)return null;
+      const o=w.op.find(o=>o.id===p.o),g=geom(w);
+      const along=p.edge==='latch'?(o.hinge?-1:1)*(o.w/2+number(p.clearance)):number(p.along);
+      const u=Math.max(100,Math.min(g.L-100,o.pos+along)),v=p.side?number(p.side)*(w.t/2+number(p.standOff)):0;
+      x=g.a.x+g.d.x*u+g.n.x*v;y=g.a.y+g.d.y*u+g.n.y*v;
+    }else if(p.w){
+      const w=state.walls.find(w=>w.id===p.w);if(!w)return null;const g=geom(w),u=Number.isFinite(p.u)?p.u:g.L*number(p.t),v=number(p.side)*(w.t/2+number(p.standOff));
+      x=g.a.x+g.d.x*u+g.n.x*v;y=g.a.y+g.d.y*u+g.n.y*v;
+    }
     else valid=false;
     if(!valid||!Number.isFinite(x)||!Number.isFinite(y))return null;
     return {x:x+number(p.dx)+number(i.offsetX),y:y+number(p.dy)+number(i.offsetY)};
@@ -2539,18 +2561,18 @@ function installationPoints(i,state=S){
 }
 function installationVisible(i){return vis(i)&&S.ui.serviceSystems?.[i.system]!==false;}
 function drawInstallations(){
-  let h='';const occupied=[];
+  let h='';const occupied=[],related=relatedLightingIds();
   for(const i of [...(S.installations||[])].sort((a,b)=>(a.kind==='route'?0:1)-(b.kind==='route'?0:1))){
-    if(!installationVisible(i))continue;const ps=installationPoints(i),col=INSTALLATION_SYSTEMS[i.system]?.color||'#555',key='i'+i.id,selected=sel.has(key);
+    if(!installationVisible(i))continue;const ps=installationPoints(i),col=INSTALLATION_SYSTEMS[i.system]?.color||'#555',key='i'+i.id,selected=sel.has(key)||related.has(i.id);
     if(!ps.length)continue;const data=`data-i="${i.id}"`,title=`<title>${esc(elementId(key))} · ${esc(i.name)} · ${esc(i.level)} · koncepcja</title>`;
     if(i.kind==='route'&&ps.length>1){const points=ps.map(p=>p.x+','+p.y).join(' ');h+=`<polyline ${data} points="${points}" fill="none" stroke="${col}" stroke-width="${px(selected?4:2)}" stroke-opacity="${selected?1:.65}" stroke-dasharray="${px(7)} ${px(4)}"/>`;
       h+=`<polyline ${data} points="${points}" fill="none" stroke="transparent" stroke-width="${px(12)}" pointer-events="stroke">${title}</polyline>`;
-    }else{const p=ps[0],r=px(selected?9:6);h+=`<circle ${data} cx="${p.x}" cy="${p.y}" r="${r}" fill="#fff" stroke="${col}" stroke-width="${px(selected?3:2)}">${title}</circle>`;
+    }else{const p=ps[0];h+=installationGlyph(i,p,col,selected,title);
       const code=i.tag,fs=px(10),bw=fs*(code.length*.65+1),b={x1:p.x-bw/2,x2:p.x+bw/2,y1:p.y-px(24),y2:p.y-px(9)};
       if(selected||!occupied.some(q=>b.x1<q.x2&&b.x2>q.x1&&b.y1<q.y2&&b.y2>q.y1)){occupied.push(b);h+=`<text ${data} x="${p.x}" y="${p.y-px(11)}" font-size="${fs}" text-anchor="middle" font-weight="700" fill="${col}" stroke="#fff" stroke-width="${px(3)}" paint-order="stroke">${title}${esc(code)}</text>`;}
     }
   }
-  $('#gInstallations').innerHTML=h;
+  $('#gInstallations').innerHTML=floorZoneMarkup()+lightingMarkup()+h;
 }
 function renderInstallationPanel(){
   const el=$('#installationPanel'),items=S.installations||[];
@@ -2564,13 +2586,329 @@ function renderInstallationPanel(){
     h+=`<label class="service-filter"><input type="checkbox" data-system="${key}" ${shown?'checked':''}><span style="color:${sys.color}">●</span> ${esc(sys.name)} (${subset.length})</label>`;
     if(shown)h+=`<details class="service-list" ${selected?.system===key?'open':''}><summary>Lista elementów</summary>${subset.map(i=>`<button data-service-select="${i.id}" title="${esc(i.name)}">${esc(i.tag)} · ${esc(i.name)}</button>`).join('')}</details>`;
   }
+  h+='<p class="hint">Elektryka: ⊗ lampa, kwadrat włącznik, symbol z dwiema kreskami gniazda. Wybierz włącznik lub lampę, aby zobaczyć sterowanie. Podłogówka: kolor oznacza strefę, nie ułożenie rur.</p>';
+  h+='<details class="service-coverage"><summary>Zakres instalacji i otwarte decyzje</summary>'+serviceCoverage().map(row=>'<p><b>'+esc(row.name)+'</b><br>'+esc(row.pending)+(row.missing.length?'<br><span class="warn">Brak symboli: '+esc(row.missing.join(', '))+'</span>':'')+'</p>').join('')+'</details>';
   if(selected)h+=`<div class="service-selected"><h2>${esc(elementId('i'+selected.id))} · ${esc(selected.tag)}</h2><b>${esc(selected.name)}</b><p>${esc(selected.level)}</p><ul>${selected.notes.map(n=>'<li>'+esc(n)+'</li>').join('')}</ul></div>`;
   el.innerHTML=h;
-  const update=()=>{S.hidden=S.hidden.filter(n=>n!==INSTALLATION_LAYER);changed();};
-  el.querySelectorAll('[data-system]').forEach(cb=>cb.onchange=()=>{checkpoint();S.ui.serviceSystems[cb.dataset.system]=cb.checked;update();});
+  const update=(system='all')=>{const layers=new Set(items.filter(i=>system==='all'||i.system===system).map(i=>i.layer));S.hidden=S.hidden.filter(n=>!layers.has(n));changed();};
+  el.querySelectorAll('[data-system]').forEach(cb=>cb.onchange=()=>{checkpoint();S.ui.serviceSystems[cb.dataset.system]=cb.checked;update(cb.checked?cb.dataset.system:false);});
   el.querySelector('#servicesAll').onclick=()=>{checkpoint();for(const key of Object.keys(INSTALLATION_SYSTEMS))S.ui.serviceSystems[key]=true;update();};
-  el.querySelector('#servicesVent').onclick=()=>{checkpoint();for(const key of Object.keys(INSTALLATION_SYSTEMS))S.ui.serviceSystems[key]=key==='ventilation';update();};
+  el.querySelector('#servicesVent').onclick=()=>{checkpoint();for(const key of Object.keys(INSTALLATION_SYSTEMS))S.ui.serviceSystems[key]=key==='ventilation';update('ventilation');};
   el.querySelectorAll('[data-service-select]').forEach(b=>b.onclick=()=>findElement('I'+b.dataset.serviceSelect));
+}
+
+/* Rozdzielenie branż i powiązania sterowania. Bez zmian geometrii domu. */
+const SERVICE_LAYERS={hydraulics:'Hydraulika',underfloor:'Podłogówka',electrical:'Elektryka'};
+function switchAnchor(state,doorId,roomId,outside=false){
+  const w=state.walls.find(w=>w.op.some(o=>o.id===doorId)),r=state.rooms.find(r=>r.id===roomId);
+  if(!w||!r)return {r:roomId};
+  const o=w.op.find(o=>o.id===doorId),g=geom(w),x=g.a.x+g.d.x*o.pos,y=g.a.y+g.d.y*o.pos;
+  const sign=((r.x-x)*g.n.x+(r.y-y)*g.n.y>=0?1:-1)*(outside?-1:1);
+  return {o:doorId,edge:'latch',clearance:200,side:sign,standOff:30};
+}
+function wallSocketAnchor(state,roomId){
+  const r=state.rooms.find(r=>r.id===roomId);if(!r)return {r:roomId};
+  const candidates=[];
+  for(const w of state.walls){
+    const g=geom(w),u=(r.x-g.a.x)*g.d.x+(r.y-g.a.y)*g.d.y;
+    if(u<100||u>g.L-100||w.op.some(o=>Math.abs(o.pos-u)<o.w/2+150))continue;
+    const q={x:g.a.x+u*g.d.x,y:g.a.y+u*g.d.y},distance=Math.hypot(q.x-r.x,q.y-r.y);
+    // Odcinek do ściany nie może przechodzić przez inną przegrodę.
+    const blocked=state.walls.some(other=>{
+      if(other===w)return false;const h=geom(other),den=(q.x-r.x)*h.d.y-(q.y-r.y)*h.d.x;
+      if(Math.abs(den)<1e-6)return false;
+      const t=((h.a.x-r.x)*h.d.y-(h.a.y-r.y)*h.d.x)/den;
+      const v=((h.a.x-r.x)*(q.y-r.y)-(h.a.y-r.y)*(q.x-r.x))/den;
+      return t>0.001&&t<.999&&v>=0&&v<=h.L;
+    });
+    if(!blocked)candidates.push({w,u,distance,side:(r.x-q.x)*g.n.x+(r.y-q.y)*g.n.y>=0?1:-1});
+  }
+  candidates.sort((a,b)=>a.distance-b.distance);const best=candidates[0];
+  return best?{w:best.w.id,u:best.u,side:best.side,standOff:20}:{r:roomId};
+}
+function upgradeE2Installations(s){
+  if(s.variant!=='E2'||s.installationRevision>=2)return s;
+  const previouslyHidden=s.hidden.includes(INSTALLATION_LAYER);
+  installationDefaults(s);
+  const F=(id,dx=0,dy=0,e)=>({f:id,dx,dy,...(e?{e}:{})}),R=(id,dx=0,dy=0)=>({r:id,dx,dy});
+  const add=(system,tag,name,points,level,notes=[],kind='point',extra={})=>{
+    const i={id:s.nextId++,system,tag,name,points,level,notes,kind,layer:system==='power'?SERVICE_LAYERS.electrical:system==='underfloor'?SERVICE_LAYERS.underfloor:INSTALLATION_LAYER,offsetX:0,offsetY:0,status:'propozycja',...extra};
+    s.installations.push(i);return i;
+  };
+  const p=(system,tag,name,at,level,notes=[],kind='point',extra={})=>add(system,tag,name,[at],level,notes,kind,extra);
+  const find=(system,tag)=>s.installations.find(i=>i.system===system&&i.tag===tag);
+  for(const i of s.installations){
+    if(i.system==='heating'&&(i.tag==='CO0'||i.tag==='ROZ'||/^CO\d+$/.test(i.tag))){
+      i.system='underfloor';if(/^CO\d+$/.test(i.tag)&&i.tag!=='CO0'){i.roomId=Number(i.tag.slice(2));i.kind='zone';}
+    }
+    const layer=['water','sewage','heating'].includes(i.system)?SERVICE_LAYERS.hydraulics:i.system==='underfloor'?SERVICE_LAYERS.underfloor:i.system==='power'?SERVICE_LAYERS.electrical:INSTALLATION_LAYER;
+    if(i.layer===INSTALLATION_LAYER)i.layer=layer;
+    if(i.system==='water')i.media=/CWU/.test(i.name)||['KZ','PZ','U1','PS','U2','WA','PIES','CWU'].includes(i.tag)?['ZW','CWU']:['ZW'];
+    if(i.system==='power'&&/^L\d+$/.test(i.tag)){
+      i.kind='light';i.roomId=Number(i.tag.slice(1));i.lightingGroup=i.tag;
+      if(i.tag==='L59'&&!i.offsetX&&!i.offsetY&&JSON.stringify(i.points)===JSON.stringify([R(59,-250,-250)]))i.points=[F(77)];
+    }
+    if(i.system==='power'&&/^G\d+$/.test(i.tag)){
+      i.kind='socket';i.roomId=Number(i.tag.slice(1));i.socketCount=2;
+      if(!i.offsetX&&!i.offsetY&&JSON.stringify(i.points)===JSON.stringify([R(i.roomId,400,-250)]))i.points=[i.roomId===59?{f:78,at:'back'}:wallSocketAnchor(s,i.roomId)];
+      i.notes=[...i.notes,'Propozycja zestawu 2 gniazd przy ścianie. Dostępność, wysokość, okładziny i kolizje z zabudową wymagają sprawdzenia dla wybranego osprzętu.'];
+    }
+    if(i.system==='power'&&['LOD','PIEK','PŁ','ZM','PR','SU','ROB','REK','BLAT'].includes(i.tag))i.kind='socket';
+    if(i.system==='power'&&i.tag==='PŁ')i.kind='connection';
+  }
+  const light=(tag,name,at,roomId,level='sufit / miejsce do uzgodnienia')=>p('power',tag,name,at,level,[
+    'Proponowany punkt lub grupa opraw. Moc, liczba opraw, zasilacze, możliwość ściemniania i montaż do doboru.',
+    'Linie sterowania pokazują powiązanie włącznika z lampą, nie trasę przewodu ani schemat połączeń elektrycznych.'
+  ],'light',{roomId,lightingGroup:tag});
+  const extraLights={
+    kitchen:light('L-KUCH','Kuchnia — oświetlenie ogólne',[3000,1550],59),
+    counter:light('L-BLAT','Kuchnia — oświetlenie blatu',F(72,0,0,4),59,'pod szafkami / profil LED do projektu'),
+    island:light('L-WYSPA','Kuchnia — lampa nad wyspą',F(73),59),
+    dining:light('L-STOL','Jadalnia — lampa nad stołem',F(74),59),
+    hall:light('L-HOL','Korytarz — grupa oświetlenia',[10500,4900],59),
+    mirror1:light('L-LUST1','Łazienka z prysznicem — lustro',F(85),61,'przy lustrze; strefy mokre do sprawdzenia'),
+    mirror2:light('L-LUST2','Łazienka z wanną — lustro',F(127),68,'przy lustrze; strefy mokre do sprawdzenia'),
+    bedside1:light('L-NOC1','Sypialnia — lampka lewa',F(122),67,'przy łóżku / kinkiet lub gniazdo sterowane'),
+    bedside2:light('L-NOC2','Sypialnia — lampka prawa',F(123),67,'przy łóżku / kinkiet lub gniazdo sterowane'),
+    entry:light('L-WEJ','Wejście — lampa zewnętrzna',{o:10},65,'elewacja / zadaszenie'),
+    patioW:light('L-TARW','Taras zachodni — grupa opraw',{o:21},59,'elewacja / zadaszenie'),
+    patioS:light('L-TARS','Taras południowy — grupa opraw',{o:14},59,'elewacja / zadaszenie'),
+    laundryExit:light('L-OGR','Wyjście z pralni — lampa zewnętrzna',{o:4},62,'elewacja / zadaszenie'),
+    attic:light('L-STR','Strych — rezerwa oświetlenia',R(64,250,-600),64,'poddasze; symbol programu, nie ustalone miejsce oprawy')
+  };
+  const channel=(label,lights)=>({label,lightIds:lights.filter(Boolean).map(i=>i.id)});
+  const sw=(tag,name,at,channels,roomId,notes=[])=>p('power',tag,name,at,'ściana przy wejściu / wysokość do projektu',[
+    'Przy drzwiach przyjęto stronę klamki i odsunięcie od otworu. Sprawdzić ościeżnicę, skrzydło, zabudowę i dostęp ręką.',
+    'Przewidzieć głęboką puszkę i trasę sterowania. Sterowanie lokalne ma działać bez chmury; topologia tradycyjna lub automatyka do wyboru.',...notes
+  ],'switch',{roomId,channels});
+  const entryDoors={59:26,60:23,61:28,62:29,63:30,64:39,65:10,66:43,67:45,68:46,69:52,70:58};
+  for(const room of s.rooms){
+    const main=find('power','L'+room.id);if(!main)continue;
+    const channels=[channel('Światło główne',[main])];
+    if(room.id===59)channels.push(channel('Jadalnia',[extraLights.dining]),channel('Wyspa',[extraLights.island]));
+    if(room.id===61)channels.push(channel('Lustro',[extraLights.mirror1]));
+    if(room.id===68)channels.push(channel('Lustro',[extraLights.mirror2]));
+    if(room.id===62)channels.push(channel('Lampa przy wyjściu ogrodowym',[extraLights.laundryExit]));
+    if(room.id===65)channels.push(channel('Lampa przed wejściem',[extraLights.entry]));
+    sw('W'+room.id,'Włącznik — '+room.name,switchAnchor(s,entryDoors[room.id],room.id,[61,68].includes(room.id)),channels,room.id,
+      [61,68].includes(room.id)?['Propozycja sterowania z korytarza. Ostateczne miejsce i zasilanie osprzętu według projektu łazienki.']:[]);
+  }
+  sw('W-KUCH','Kuchnia i taras zachodni',switchAnchor(s,21,59),[
+    channel('Kuchnia',[extraLights.kitchen]),channel('Blat',[extraLights.counter]),channel('Taras zachodni',[extraLights.patioW])
+  ],59);
+  sw('W-TARS','Taras południowy',switchAnchor(s,14,59),[channel('Taras południowy',[extraLights.patioS])],59);
+  for(const [tag,door,room] of [['W-HOL1',41,65],['W-HOL2',26,59],['W-HOL3',44,67]])
+    sw(tag,'Korytarz — sterowanie z kilku miejsc',switchAnchor(s,door,room),[channel('Oświetlenie korytarza',[extraLights.hall])],room,[
+      'Wszystkie trzy punkty sterują tą samą grupą. Układ schodowy/krzyżowy lub przyciski z automatyką do zaprojektowania; to nie schemat zacisków.'
+    ]);
+  for(const [tag,fid,own] of [['W-NOC1',122,extraLights.bedside1],['W-NOC2',123,extraLights.bedside2]])
+    sw(tag,'Sterowanie przy łóżku',F(fid,-190),[channel('Główne w sypialni',[find('power','L67')]),channel('Własna lampka',[own])],67);
+  sw('W-STR','Oświetlenie strychu — rezerwa przy dostępie',R(64,-250,-600),[channel('Strych',[extraLights.attic])],64,[
+    'Pozycję włącznika ustalić przy projektowanym włazie; symbol oznacza potrzebę sterowania, nie wybrane miejsce włazu.'
+  ]);
+  // Dodatkowe zestawy gniazd w konkretnych strefach wyposażenia.
+  for(const [tag,name,fid,count] of [
+    ['G-BIU1','Biurko pokój 3',100,4],['G-BIU2','Biurko pokój 2',116,4],['G-BIU3','Biurko gabinet',142,6],
+    ['G-TV1','TV salon',78,4],['G-TV2','TV sypialnia',125,4],['G-NOC1','Łóżko lewa strona',122,2],['G-NOC2','Łóżko prawa strona',123,2],
+    ['G-KAWA','Ekspres / czajnik / Thermomix — strefa blatu',72,4],['G-WYSPA','Wyspa — rezerwa gniazd',73,2],['G-SPI','Małe AGD w spiżarni',81,2]
+  ])p('power',tag,'Gniazda — '+name,{f:fid,at:'back'},'przy zabudowie; wysokość i dostęp do doboru',[
+    'Liczba to propozycja zestawu gniazd, nie liczba niezależnych obwodów. Rozdział obciążeń, położenie przewodów i dostęp serwisowy do projektu.',
+    tag==='G-WYSPA'?'Zasilanie wyspy przygotować w podłodze bez przedłużacza przez przejście. Typ gniazd i stelaż wyspy pozostają do doboru.':'Sprawdzić wysokość blatu, okna, szuflady i fronty. Nie lokalizować osprzętu za niedostępnym urządzeniem.'
+  ],'socket',{socketCount:count});
+  for(const [tag,name,at] of [
+    ['Z-PC','Pompa ciepła i sterowanie',F(105)],['Z-CWU','CWU / ewentualna grzałka',F(106)],['Z-UZD','Uzdatnianie wody',R(64,0,-700)],
+    ['Z-POS','POŚ — zasilanie i alarm',[17100,6500]],['Z-AC','Przyszła klimatyzacja — trasa',R(64,900,800)],
+    ['Z-OGR','Gniazda ogrodowe / taras',{o:21,dx:150}],['Z-FUR','Brama, furtka i wideodomofon — wyjście tras',{o:10,dx:-200}]
+  ])p('power',tag,'Zasilanie — '+name,at,'rezerwa do projektu instalacji',[
+    'Moc, napięcie, przekrój, zabezpieczenia i sposób odłączania według dobranego urządzenia. Symbol nie oznacza zwykłego gniazda dla każdego odbiornika.',
+    tag==='Z-FUR'?'Napęd, fotokomórki, listwy bezpieczeństwa i sterowanie wymagają instrukcji dobranej bramy; lokalizacja na działce nie jest wyznaczona.':'Uwzględnić odrębność obwodów i pracę serwisową.'
+  ]);
+  for(const roomId of [59,63,66,67,70])p('underfloor','T'+roomId,'Sterowanie temperaturą — '+s.rooms.find(r=>r.id===roomId).name,R(roomId,-500,300),'ściana reprezentatywna; propozycja strefy',[
+    'Czujnik/termostat i trasa do rozdzielacza. Dokładne miejsce z dala od słońca, źródeł ciepła i nawiewu; nie dobrano sterowania ani napięcia.',
+    'Kolorowany obszar oznacza strefę ogrzewania, nie pętlę rur. Liczba pętli, rozstaw, długości i przepływy po OZC oraz projekcie podłogi.'
+  ],'thermostat');
+  p('water','CYR','CWU — decyzja o cyrkulacji',F(106,300,350),'techniczne / trasy do poborów',[
+    'Porównać czas oczekiwania na ciepłą wodę i straty. Jeśli potrzebna: izolowane przewody, powrót, pompa i sterowanie; nie narysowano fikcyjnego zatwierdzonego obiegu.'
+  ]).layer=SERVICE_LAYERS.hydraulics;
+  p('sewage','SOL','Popłuczyny uzdatniania — odbiornik do decyzji',R(64,-400,-800),'techniczne',[
+    'Nie łączyć automatycznie z POŚ. Wymagana zgodność dawki soli i objętości regeneracji z konkretną oczyszczalnią; sposób odprowadzania do uzgodnienia.'
+  ]).layer=SERVICE_LAYERS.hydraulics;
+  // Uzupełnienie infrastruktury zewnętrznej i automatyki.
+  const infrastructure=[
+    ['BRAMA','Brama wjazdowa — napęd i bezpieczeństwo',{o:10,dx:-400,dy:550},'trasy na działkę — punkt programu',[
+      'Doprowadzenie zasilania, sterowania, fotokomórek/listwy i komunikacji. Osobne dostępne przepusty i zapas przy napędzie; długości i przekroje po planie działki.',
+      'Lokalne otwieranie oraz sygnał stanu bramy do automatyki. Model napędu, geometria wjazdu i funkcje bezpieczeństwa do wyboru.'
+    ]],
+    ['FURT','Furtka i wideodomofon IP',{o:10,dx:-400,dy:1000},'trasy na działkę — lokalizacja furtki nieustalona',[
+      'LAN/PoE lub magistrala według wideodomofonu, elektrozaczep/zamek, przycisk wyjścia i kontaktron furtki. Zasilanie i awaryjne otwarcie do projektu.'
+    ]],
+    ['NVR','Monitoring — rejestrator, PoE i UPS',R(65,650,-650),'sucha dostępna szafka sieciowa do doboru',[
+      'Przewody od kamer do szafki; budżet PoE, pojemność dysku, wentylacja i miejsce serwisowe. Rozważyć podtrzymanie routera, PoE i rejestratora.',
+      'Nie wybrano modeli ani pełnego pokrycia kamerami. Miejsce szafki i rozdzielenie tras wymagają sprawdzenia.'
+    ]],
+    ['SMART','Smart home — centrala i sterowanie lokalne',R(65,300,-400),'rezerwa automatyki / rozdzielnicy',[
+      'Nie wybrano systemu. Przewidzieć przewodowe trasy do istotnych przycisków, czujników, rolet i urządzeń; głębokie puszki, miejsce modułów i zapas.',
+      'Światło, rolety, ogrzewanie, rekuperacja i brama mają zachować sterowanie lokalne przy awarii internetu lub centrali.'
+    ]],
+    ['ALARM','Alarm — centrala, czujniki i sygnalizacja',R(65,-450,0),'program ochrony do projektu',[
+      'Trasy do drzwi/okien, ruchu i sygnalizatora oraz zasilanie awaryjne. Zakres detekcji, lokalizacja i system niezatwierdzone.'
+    ]],
+    ['ODC','Zalanie — zawór odcinający i powiadomienie',R(64,-150,600),'przy wejściu wody',[
+      'Powiązać czujniki mokrych stref z odcięciem i alarmem; zapewnić ręczne sterowanie oraz odpowiedni zawór i zasilanie.'
+    ]],
+    ['PC-INT','Pompa / rekuperacja — przewody sterowania',R(64,400,650),'techniczne — trasy lokalne',[
+      'Czujniki, sterowanie pokojowe, jednostka zewnętrzna, ewentualne sygnały taryfowe i współpraca PV po wyborze urządzeń. Protokół nie jest z góry gwarantowany.'
+    ]],
+    ['PV-INT','PV — komunikacja, pomiar i rezerwa magazynu',R(64,800,600),'techniczne / rozdzielnica / dach',[
+      'Trasy PV i falownika uzupełnić o komunikację LAN, pomiar energii i ewentualne sterowanie odbiorami. Magazyn energii wymaga osobnego miejsca i doboru.',
+      'To przygotowanie, bez doboru mocy PV, przewodów DC, zabezpieczeń, falownika i magazynu.'
+    ]],
+    ['OGR-INT','Ogród — przyszłe trasy sterowania i zasilania',{o:10,dx:-400,dy:1500},'punkt programu; plan terenu do uzgodnienia',[
+      'Uwzględnić oświetlenie wjazdu/ogrodu i ewentualne podlewanie. Osobne wymagania odbiorników, przepusty i punkty serwisowe po planie zagospodarowania.'
+    ]],
+    ['EV-REZ','Opcjonalna rezerwa ładowania samochodu',{o:10,dx:-400,dy:1950},'do decyzji; nie zlecono montażu ładowarki',[
+      'Rozważyć jedynie dostępną trasę do miejsca parkowania. Zapotrzebowanie mocy, zarządzanie obciążeniem i zabezpieczenia wymagają doboru, jeśli opcja zostanie przyjęta.'
+    ]]
+  ];
+  for(const [tag,name,at,level,notes] of infrastructure)p('data',tag,name,at,level,notes);
+  for(const [tag,wall,t] of [['CAM1',1,.025],['CAM2',1,.975],['CAM3',12,.025],['CAM4',12,.975]])
+    p('data',tag,'Kamera PoE — propozycja narożnika',{w:wall,t,side:-1,standOff:30},'pod okapem / elewacja — propozycja',[
+      'Doprowadzić LAN/PoE do rejestratora/switcha i zostawić dostępne zakończenie. Kąt, ogniskowa, nocne doświetlenie i pole widzenia po planie działki.',
+      'Cztery punkty nie potwierdzają pełnego pokrycia domu, bramy ani braku martwych pól. Liczba i lokalizacje do uzgodnienia.'
+    ],'camera');
+  p('data','CAM-BR','Kamera bramy — rezerwa trasy',{o:10,dx:-500,dy:2100},'program dla działki, nie wybrana lokalizacja kamery',[
+    'LAN/PoE od rejestratora do rejonu wjazdu. Rzeczywisty punkt, pole widzenia i ewentualne odczytywanie tablic po ustaleniu bramy i planu terenu.'
+  ],'camera');
+  p('power','UZ-GND','Uziemienie i połączenia wyrównawcze',R(64,-750,500),'fundament / wejścia instalacji / rozdzielnica',[
+    'Uziom i przejścia skoordynować z projektem fundamentu przed robotami. Główne połączenia wyrównawcze, pomiary i potrzeba instalacji odgromowej wymagają projektu.'
+  ]);
+  p('power','Z-PRZ','Przyłącze elektryczne — rezerwa wejścia tras',{o:10,dx:-500,dy:2600},'lokalizacja złącza na działce nieustalona',[
+    'Warunki przyłączenia, moc, złącze, trasa do RG i rozdział innych sieci do projektu. Symbol nie wyznacza położenia złącza ani trasy w gruncie.'
+  ]);
+  for(const [tag,name,dx] of [['CO-REZ','Detekcja CO — przyszły wariant spalania',200],['LPG-CZ','Detekcja LPG — rezerwa',600]])
+    p('reserves',tag,name,R(64,dx,0),'miejsce i wysokość dopiero według projektu i instrukcji czujnika',[
+      'Rezerwa dla ewentualnego przyszłego LPG, nie potwierdzenie gotowości pomieszczenia. Dobór czujnika, sygnalizacji, zasilania i ewentualnego odcięcia do projektu.'
+    ]);
+  for(const i of [...s.installations].filter(i=>i.system==='reserves'&&/^RO\d+$/.test(i.tag))){
+    const opening=Number(i.tag.slice(2));
+    p('power','W-RO'+opening,'Sterowanie lokalne rolety O'+opening,{o:opening,edge:'latch',clearance:200,side:1,standOff:35},'ściana przy przeszkleniu — do sprawdzenia',[
+      'Przycisk góra/stop/dół oraz trasa napędu i automatyki. Zapewnić blokadę przeciwnych kierunków według napędu; to nie schemat elektryczny.',
+      'Stronę i pozycję przycisku dopasować do zabudowy, okna, dostępności i wybranego systemu rolet.'
+    ],'shutter-control',{shutterOpeningId:opening});
+  }
+  s.installationRevision=2;
+  if(previouslyHidden)s.hidden=[...new Set([...s.hidden,...Object.values(SERVICE_LAYERS)])];
+  s.ui.serviceSystems.underfloor=s.ui.serviceSystems.underfloor??false;
+  s.ui.controlLinks=s.ui.controlLinks||'selected';
+  return installationDefaults(s);
+}
+function lightingRelations(state=S){
+  const items=state.installations||[],lights=new Map(items.filter(i=>i.kind==='light').map(i=>[i.id,i]));
+  return items.filter(i=>i.kind==='switch').flatMap(sw=>(sw.channels||[]).flatMap((ch,index)=>(ch.lightIds||[]).map(id=>({sw,channel:ch,index,light:lights.get(id)||null,lightId:id}))));
+}
+function serviceCoverage(state=S){
+  const rows=[
+    ['Pompa ciepła i CWU',['PC','PC-Z','CWU','Z-PC','Z-CWU','PC-INT'],'OZC, model, hydraulika, jednostka zewnętrzna i serwis do doboru.'],
+    ['Hydraulika i uzdatnianie',['WOD','UZD','SOL','CYR'],'Wymiary, trasy, cyrkulacja i zgodność z POŚ do uzgodnienia.'],
+    ['Podłogówka',['ROZ','CO0','CO59','T59'],'Strefy i sterowanie; pętle, rozstawy, przepływy i rozdzielacze po OZC.'],
+    ['Rekuperacja i okap',['REK','CZ/WY','OK'],'Bilans, kanały, wyloty i wybór okapu do projektu.'],
+    ['Rolety zewnętrzne',['RO2','W-RO2'],'Punkty przy przeszkleniach i lokalne sterowanie; skrzynki i napędy do doboru.'],
+    ['Przyszła PV i magazyn',['PV','PV-T','PV-INT'],'Rezerwy tras i komunikacji; moc, urządzenia i miejsce magazynu nieustalone.'],
+    ['Brama, furtka i wideodomofon',['BRAMA','FURT','Z-FUR'],'Program zasilania, komunikacji i bezpieczeństwa; brak lokalizacji na działce.'],
+    ['Monitoring',['CAM1','CAM2','CAM3','CAM4','NVR'],'Propozycje kamer/PoE, rejestrator i UPS; bez potwierdzenia pełnego pokrycia.'],
+    ['Smart home i alarmy',['SMART','ALARM','ODC','DYM'],'Rezerwy sterowania i czujników; system, topologia i pełne rozmieszczenie do decyzji.'],
+    ['Przygotowanie klimatyzacji',['AC1','Z-AC'],'Rezerwy stref i odpływów; jednostki i średnice nieustalone.'],
+    ['POŚ i kanalizacja',['POŚ','Z-POS','P1','P2'],'Trasy i piony wstępne; technologia, spadki, rzędne i odbiornik do projektu.'],
+    ['Przyszły LPG',['LPG','LPG-T'],'Rezerwa kotła/spalin; zbiornik, wentylacja i zgodność pomieszczenia niepotwierdzone.'],
+    ['Ogród i opcjonalne ładowanie auta',['OGR-INT','EV-REZ'],'Tylko program możliwych przygotowań, nie zlecenie zakupu lub montażu.']
+  ];
+  return rows.map(([name,tags,pending])=>({name,pending,missing:tags.filter(tag=>!state.installations.some(i=>i.tag===tag)),items:tags.map(tag=>state.installations.find(i=>i.tag===tag)).filter(Boolean)}));
+}
+
+let lightingExportFocus=null;
+function lightingSelection(){return lightingExportFocus||new Set([...sel].filter(k=>k[0]==='i').map(k=>+k.slice(1)));}
+function relatedLightingIds(){
+  const selected=lightingSelection(),ids=new Set();
+  for(const e of lightingRelations())if(selected.has(e.sw.id)||selected.has(e.lightId)){ids.add(e.sw.id);ids.add(e.lightId);}
+  return ids;
+}
+function lightingMarkup(){
+  const mode=S.ui.controlLinks||'selected';if(mode==='off')return '';
+  const selected=lightingSelection();let h='';
+  for(const e of lightingRelations()){
+    if(!e.light||!installationVisible(e.sw)||!installationVisible(e.light))continue;
+    if(mode!=='all'&&!selected.has(e.sw.id)&&!selected.has(e.lightId))continue;
+    const a=installationPoints(e.sw)[0],b=installationPoints(e.light)[0];if(!a||!b)continue;
+    const label=e.sw.tag+'·'+String.fromCharCode(65+e.index);
+    h+=`<path data-control-link="${e.sw.id}:${e.index}:${e.lightId}" d="M${a.x} ${a.y}L${b.x} ${b.y}" fill="none" stroke="#713aa3" stroke-width="${px(2.4)}" stroke-dasharray="${px(3)} ${px(3)}" pointer-events="none"><title>${esc(e.sw.tag)} — ${esc(e.channel.label)} → ${esc(e.light.tag)} (powiązanie sterowania)</title></path>`;
+    h+=`<text x="${(a.x+b.x)/2}" y="${(a.y+b.y)/2-px(5)}" text-anchor="middle" fill="#713aa3" font-size="${px(9)}" stroke="#fff" stroke-width="${px(3)}" paint-order="stroke" pointer-events="none">${esc(label)}</text>`;
+  }
+  return h;
+}
+function installationGlyph(i,p,col,selected,title){
+  const data=`data-i="${i.id}"`,r=px(selected?9:6),stroke=px(selected?3:2),inner='pointer-events="none"';
+  if(i.kind==='switch'||i.kind==='shutter-control')return `<rect ${data} x="${p.x-r}" y="${p.y-r}" width="${r*2}" height="${r*2}" rx="${px(1)}" fill="${selected?'#f1e5ff':'#fff'}" stroke="${col}" stroke-width="${stroke}">${title}</rect><path d="M${p.x-r*.5} ${p.y+r*.4}L${p.x+r*.5} ${p.y-r*.4}" stroke="${col}" stroke-width="${px(1.7)}" ${inner}/>`;
+  const base=`<circle ${data} cx="${p.x}" cy="${p.y}" r="${r}" fill="${selected&&i.kind==='light'?'#fff2a8':'#fff'}" stroke="${col}" stroke-width="${stroke}">${title}</circle>`;
+  if(i.kind==='light')return base+`<path d="M${p.x-r*.65} ${p.y-r*.65}L${p.x+r*.65} ${p.y+r*.65}M${p.x-r*.65} ${p.y+r*.65}L${p.x+r*.65} ${p.y-r*.65}" stroke="${col}" stroke-width="${px(1.4)}" ${inner}/>`;
+  if(i.kind==='socket')return base+`<path d="M${p.x-r*.35} ${p.y-r*.4}V${p.y+r*.4}M${p.x+r*.35} ${p.y-r*.4}V${p.y+r*.4}" stroke="${col}" stroke-width="${px(1.6)}" ${inner}/>`;
+  if(i.kind==='camera')return base+`<path d="M${p.x-r*.5} ${p.y-r*.35}H${p.x+r*.2}V${p.y+r*.35}H${p.x-r*.5}ZM${p.x+r*.2} ${p.y}L${p.x+r*.6} ${p.y-r*.3}V${p.y+r*.3}Z" fill="${col}" ${inner}/>`;
+  return base;
+}
+function floorZoneMarkup(){
+  if(!A)return '';let h='';
+  for(const i of S.installations||[]){
+    if(i.kind!=='zone'||i.system!=='underfloor'||!installationVisible(i))continue;
+    const reg=A.rooms.get(i.roomId)?.reg;if(!reg)continue;
+    // Ścieżka regionu składa się z pasków rastra. Nie obrysowujemy ich jak rur.
+    h+=`<path data-heat-zone="${i.id}" d="${reg.path}" fill="#d46219" fill-opacity="${i.roomId===60?'.04':'.13'}" pointer-events="none"/>`;
+  }
+  return h;
+}
+function focusLighting(id){
+  const edges=lightingRelations().filter(e=>e.sw.id===id||e.lightId===id),ids=new Set([id,...edges.flatMap(e=>[e.sw.id,e.lightId])]);
+  const items=S.installations.filter(i=>ids.has(i.id));
+  for(const i of items){S.hidden=S.hidden.filter(n=>n!==i.layer);S.ui.serviceSystems[i.system]=true;}
+  S.ui.controlLinks='selected';
+  const points=items.flatMap(i=>installationPoints(i));if(!points.length)return;
+  const x1=Math.min(...points.map(p=>p.x)),x2=Math.max(...points.map(p=>p.x)),y1=Math.min(...points.map(p=>p.y)),y2=Math.max(...points.map(p=>p.y));
+  const ratio=rect().width/Math.max(1,rect().height),w=Math.max(2600,x2-x1+1600,(y2-y1+1600)*ratio),h=w/ratio;
+  view={x:(x1+x2-w)/2,y:(y1+y2-h)/2,w,h};viewTouched=true;render();renderInstallationPanel();save();
+}
+function lightingPanelMarkup(i){
+  if(!['switch','light'].includes(i.kind))return '';
+  const lights=S.installations.filter(x=>x.kind==='light'),byId=new Map(lights.map(l=>[l.id,l]));
+  const mode=S.ui.controlLinks||'selected';
+  let h=`<h2>Sterowanie oświetleniem</h2><p class="hint">Linie pokazują przypisanie włącznika do lampy, nie trasę przewodów ani schemat zacisków.</p><button id="focusLighting">Pokaż powiązania na rzucie</button><label class="service-filter">Linie <select id="lightingLinksMode">${[['selected','Zaznaczony element'],['all','Wszystkie'],['off','Ukryte']].map(([v,t])=>`<option value="${v}" ${mode===v?'selected':''}>${t}</option>`).join('')}</select></label>`;
+  if(i.kind==='switch')for(const [index,ch] of (i.channels||[]).entries()){
+    h+=`<fieldset class="control-channel"><legend>${String.fromCharCode(65+index)} · ${esc(ch.label)}</legend>`;
+    if(!ch.lightIds?.length)h+='<p class="warn">Brak przypisanych lamp.</p>';
+    for(const id of ch.lightIds||[]){const l=byId.get(id);h+=l?`<button data-light-focus="${id}">${esc(l.tag)} · ${esc(elementId('i'+id))}</button> <span>${esc(l.name)}</span><br>`:`<p class="warn">Brak lampy ${esc(elementId('i'+id))}. <button data-remove-light="${index}:${id}">Usuń powiązanie</button></p>`;}
+    h+=`<details class="light-picker"><summary>Zmień przypisane lampy</summary>${lights.map(l=>`<label class="service-filter"><input type="checkbox" data-control-channel="${index}" data-control-light="${l.id}" ${(ch.lightIds||[]).includes(l.id)?'checked':''}><span>${esc(l.tag)} · ${esc(l.name)}</span></label>`).join('')}</details></fieldset>`;
+  }
+  if(i.kind==='light'){
+    const edges=lightingRelations().filter(e=>e.lightId===i.id);
+    if(!edges.length)h+='<p class="warn">Brak przypisanego włącznika. Wybierz włącznik i dodaj tę lampę do kanału.</p>';
+    for(const e of edges)h+=`<p><button data-light-focus="${e.sw.id}">${esc(e.sw.tag)} · ${esc(elementId('i'+e.sw.id))}</button><br>Kanał ${String.fromCharCode(65+e.index)} — ${esc(e.channel.label)}</p>`;
+  }
+  return h;
+}
+function bindLightingPanel(el,i){
+  on('focusLighting','click',()=>focusLighting(i.id));
+  on('lightingLinksMode','change',e=>{S.ui.controlLinks=e.target.value;render();save();});
+  el.querySelectorAll('[data-light-focus]').forEach(b=>b.onclick=()=>findElement('I'+b.dataset.lightFocus));
+  el.querySelectorAll('[data-control-channel]').forEach(cb=>cb.onchange=()=>{
+    checkpoint();const ch=i.channels[+cb.dataset.controlChannel],id=+cb.dataset.controlLight;
+    ch.lightIds=cb.checked?[...new Set([...ch.lightIds,id])]:ch.lightIds.filter(n=>n!==id);changed();
+  });
+  el.querySelectorAll('[data-remove-light]').forEach(b=>b.onclick=()=>{
+    const [index,id]=b.dataset.removeLight.split(':').map(Number);checkpoint();i.channels[index].lightIds=i.channels[index].lightIds.filter(n=>n!==id);changed();
+  });
+}
+function toggleServiceLayer(layer){
+  const items=(S.installations||[]).filter(i=>i.layer===layer),shown=items.some(installationVisible);
+  checkpoint();S.hidden=shown?[...new Set([...S.hidden,layer])]:S.hidden.filter(n=>n!==layer);
+  if(!shown)for(const i of items)S.ui.serviceSystems[i.system]=true;
+  sel.clear();focusedEquipment=null;changed();
 }
 
 const VARIANTS = {
@@ -2590,7 +2928,7 @@ const VARIANTS = {
   R2: {name:'R2 — wejście blisko środka północy, salon SW', build: variantR2},
   R3: {name:'R3 — wejście przy narożniku NE, salon SE', build: variantR3},
 };
-function freshState(v){ const s = defaults(VARIANTS[v].build()); s.variant = v; if(v==='E2')addE2Installations(s);return s; }
+function freshState(v){ const s = defaults(VARIANTS[v].build()); s.variant = v; if(v==='E2'){addE2Installations(s);upgradeE2Installations(s);}return s; }
 
 function defaults(s){
   s.walls = s.walls || [];
@@ -2608,7 +2946,7 @@ function defaults(s){
     if(f.equipment)f.nextEquipmentId=next;
   });
   s.set = Object.assign({grid:50, pitch:30, overhang:600, rate:'', newT:120, newExt:false, minPass:750}, s.set||{});
-  s.ui = Object.assign({under:true, underOp:0.35, dims:false, rooms:true, roomLabels:true, furniture:true, roof:true, zones:true, pass:true, ids:false}, s.ui||{});
+  s.ui = Object.assign({under:true, underOp:0.35, dims:false, rooms:true, roomLabels:true, furniture:true, controlLinks:'selected', roof:true, zones:true, pass:true, ids:false}, s.ui||{});
   return installationDefaults(s);
 }
 
@@ -2622,7 +2960,7 @@ function loadSavedVariant(v){
     try{const view=JSON.parse(localStorage.getItem(LS+':'+v));if(view){s.ui={...s.ui,...view.ui};s.hidden=view.hidden||s.hidden;}}catch{}
     return s;
   }
-  for(const key of [LS,NICHE_LS,PAX_LS,LAYOUT_LS,UTILITY_LS,CORNER_LS,KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
+  for(const key of [LS,SERVICES_LS,NICHE_LS,PAX_LS,LAYOUT_LS,UTILITY_LS,CORNER_LS,KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS]){
     try{
       const raw=localStorage.getItem(key+':'+v);if(!raw)continue;
       const s=defaults(JSON.parse(raw));s.variant=v;
@@ -2647,11 +2985,11 @@ function loadSavedVariant(v){
       if([ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')enlargeE2Window5(s);
       if([WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')optimizeE2Kitchen(s);
       if([KITCHEN_LS,WINDOW_LS,ISLAND_LS,WALL_LS,RECENT_LS,SOFA_LS,PREVIOUS_LS,LEGACY_LS].includes(key)&&v==='E2')resizeE2Corner(s);
-      if(![LS,NICHE_LS,PAX_LS,LAYOUT_LS,UTILITY_LS].includes(key)&&v==='E2')reviseE2UtilityRooms(s);
-      if(![LS,NICHE_LS,PAX_LS,LAYOUT_LS].includes(key)&&v==='E2')reviseE2KitchenAndDoors(s);
-      if(![LS,NICHE_LS,PAX_LS].includes(key)&&v==='E2')replaceLaundryBillyWithPax(s);
-      if(![LS,NICHE_LS].includes(key)&&v==='E2')fixE2NicheMounting(s);
-      if(v==='E2'){preserveReference(s);addE2Installations(s);}
+      if(![LS,SERVICES_LS,NICHE_LS,PAX_LS,LAYOUT_LS,UTILITY_LS].includes(key)&&v==='E2')reviseE2UtilityRooms(s);
+      if(![LS,SERVICES_LS,NICHE_LS,PAX_LS,LAYOUT_LS].includes(key)&&v==='E2')reviseE2KitchenAndDoors(s);
+      if(![LS,SERVICES_LS,NICHE_LS,PAX_LS].includes(key)&&v==='E2')replaceLaundryBillyWithPax(s);
+      if(![LS,SERVICES_LS,NICHE_LS].includes(key)&&v==='E2')fixE2NicheMounting(s);
+      if(v==='E2'){preserveReference(s);addE2Installations(s);upgradeE2Installations(s);}
       return s;
     }catch(e){}
   }
@@ -2693,8 +3031,11 @@ function setInstallationsVisible(show){
 }
 function syncVisibilityButtons(){
   const hasInstallations=!!S.installations?.length,shown=hasInstallations&&S.installations.some(vis);
-  for(const id of ['bInstallations','bInstallationFilters'])$('#'+id).hidden=!hasInstallations;
+  for(const id of ['bInstallations','bInstallationFilters','bHydraulics','bUnderfloor','bElectrical'])$('#'+id).hidden=!hasInstallations;
   $('#bOnlyInstallations').disabled=!hasInstallations;
+  for(const [id,layer] of [['bHydraulics',SERVICE_LAYERS.hydraulics],['bUnderfloor',SERVICE_LAYERS.underfloor],['bElectrical',SERVICE_LAYERS.electrical]]){
+    const button=$('#'+id),on=(S.installations||[]).some(i=>i.layer===layer&&installationVisible(i));button.classList.toggle('on',on);button.setAttribute('aria-pressed',String(on));
+  }
   for(const [id,on] of [['bFurniture',S.ui.furniture!==false&&S.furn.some(vis)],['bInstallations',shown]]){
     const button=$('#'+id);button.classList.toggle('on',on);button.setAttribute('aria-pressed',String(on));
   }
@@ -3734,7 +4075,15 @@ function switchVariant(v,mode='push'){
 }
 function findElement(query){
   const match=query.trim().match(/^(?:([a-z][a-z0-9]*)-)?([SOMPI])(\d+)(?:-E(\d+))?$/i);
-  if(!match)return 'Nieprawidłowy format ID. Przykład: E2-M75 lub M75.';
+  if(!match){
+    let v=S.variant,tag=query.trim();
+    const prefix=Object.keys(VARIANTS).find(v=>tag.toUpperCase().startsWith(v.toUpperCase()+'-'));
+    if(prefix){v=prefix;tag=tag.slice(prefix.length+1);}
+    const hits=(variantStateFor(v).installations||[]).filter(i=>String(i.tag).toUpperCase()===tag.toUpperCase());
+    if(hits.length===1)return findElement(v+'-I'+hits[0].id);
+    if(hits.length>1)return 'Symbol jest niejednoznaczny. Wybierz element z listy lub użyj pełnego ID.';
+    return 'Nieprawidłowy format ID lub nieznany symbol. Przykład: E2-M75, I151 lub W61.';
+  }
   const [,prefix,kind,number,equipment]=match;
   const v=prefix?Object.keys(VARIANTS).find(v=>v.toLowerCase()===prefix.toLowerCase()):S.variant;
   if(!v)return 'Nieznany wariant w ID.';
@@ -3794,9 +4143,10 @@ function renderPanel(){
   }
   if(items.length===1&&items[0][0]==='i'){
     const i=S.installations.find(i=>i.id===+items[0].slice(1));
-    if(i)h+=`<h2>${esc(i.tag)} · ${esc(INSTALLATION_SYSTEMS[i.system]?.name||i.system)}</h2><div class="row"><span>Nazwa</span><input id="pIName" value="${esc(i.name)}"></div><p><b>Poziom:</b> ${esc(i.level)}</p><p class="hint">Koncepcja do koordynacji — bez doboru wykonawczego.</p><ul>${i.notes.map(n=>'<li>'+esc(n)+'</li>').join('')}</ul><label>Własne uwagi<textarea id="pINotes" rows="4" style="width:100%">${esc(i.userNotes||'')}</textarea></label><div class="row"><span>Przesunięcie X</span><input type="number" id="pIX" value="${i.offsetX||0}" step="50"> mm</div><div class="row"><span>Przesunięcie Y</span><input type="number" id="pIY" value="${i.offsetY||0}" step="50"> mm</div><p class="hint">Przesunięcie dotyczy symbolu/trasy. Nie zmienia położenia urządzeń ani budynku.</p>`;
+    if(i)h+=`<h2>${esc(i.tag)} · ${esc(INSTALLATION_SYSTEMS[i.system]?.name||i.system)}</h2><p class="hint">Warstwa: ${esc(i.layer)}${i.media?' · '+esc(i.media.join(' + ')):''}${i.kind==='socket'?' · propozycja '+(i.socketCount||1)+' gniazd':''}</p>${lightingPanelMarkup(i)}`+`<div class="row"><span>Nazwa</span><input id="pIName" value="${esc(i.name)}"></div><p><b>Poziom:</b> ${esc(i.level)}</p><p class="hint">Koncepcja do koordynacji — bez doboru wykonawczego.</p><ul>${i.notes.map(n=>'<li>'+esc(n)+'</li>').join('')}</ul><label>Własne uwagi<textarea id="pINotes" rows="4" style="width:100%">${esc(i.userNotes||'')}</textarea></label><div class="row"><span>Przesunięcie X</span><input type="number" id="pIX" value="${i.offsetX||0}" step="50"> mm</div><div class="row"><span>Przesunięcie Y</span><input type="number" id="pIY" value="${i.offsetY||0}" step="50"> mm</div><p class="hint">Przesunięcie dotyczy symbolu/trasy. Nie zmienia położenia urządzeń ani budynku.</p>`;
     el.innerHTML=h;
     el.querySelectorAll('[data-copy-id]').forEach(b=>b.onclick=()=>copyElementId(b.dataset.copyId,b));
+    bindLightingPanel(el,i);
     on('pIName','change',e=>{checkpoint();i.name=e.target.value||i.name;changed();});
     on('pINotes','change',e=>{checkpoint();i.userNotes=e.target.value;changed();});
     for(const [id,field] of [['pIX','offsetX'],['pIY','offsetY']])on(id,'change',e=>{const n=+e.target.value;if(Number.isFinite(n)){checkpoint();i[field]=n;changed();}});
@@ -4001,6 +4351,7 @@ function renderLayers(){
   el.querySelectorAll('[data-lv]').forEach(cb => cb.addEventListener('change', () => {
     const n = cb.dataset.lv; checkpoint();
     if(cb.checked&&S.furn.some(f=>f.layer===n))S.ui.furniture=true;
+    if(cb.checked)for(const i of S.installations||[])if(i.layer===n)S.ui.serviceSystems[i.system]=true;
     S.hidden = cb.checked ? S.hidden.filter(x => x !== n) : [...S.hidden, n];
     sel.clear(); changed();
   }));
@@ -4397,6 +4748,9 @@ $('#idForm').onsubmit=e=>{
   e.preventDefault();const error=findElement($('#idQuery').value);$('#idError').textContent=error;
   if(!error)$('#idDialog').close();
 };
+$('#bHydraulics').onclick=()=>toggleServiceLayer(SERVICE_LAYERS.hydraulics);
+$('#bUnderfloor').onclick=()=>toggleServiceLayer(SERVICE_LAYERS.underfloor);
+$('#bElectrical').onclick=()=>toggleServiceLayer(SERVICE_LAYERS.electrical);
 $('#bFurniture').onclick=()=>changeVisibility('furniture');
 $('#bInstallations').onclick=()=>changeVisibility('installations');
 $('#bOnlyInstallations').onclick=()=>changeVisibility('only-installations');
@@ -4441,7 +4795,7 @@ $('#bImp').onclick = () => $('#fImp').click();
 $('#fImp').onchange = e => {
   const f = e.target.files[0]; if (!f) return;
   f.text().then(t => {
-    try { const o = JSON.parse(t); if (!Array.isArray(o.walls)) throw 0; if(isReference()||o.variant===REFERENCE_VARIANT){alert('Kopia referencyjna jest tylko do odczytu. Wczytaj edycje do Projektu Głównego lub innego wariantu.');return;}checkpoint(); o.ui = S.ui; o.variant = VARIANTS[o.variant] ? o.variant : S.variant; S = defaults(o); if(S.variant==='E2')addE2Installations(S);syncVariant(); updateVariantUrl(); focusedEquipment=null; sel.clear(); syncInputs(); changed(); fit(); }
+    try { const o = JSON.parse(t); if (!Array.isArray(o.walls)) throw 0; if(isReference()||o.variant===REFERENCE_VARIANT){alert('Kopia referencyjna jest tylko do odczytu. Wczytaj edycje do Projektu Głównego lub innego wariantu.');return;}checkpoint(); o.ui = S.ui; o.variant = VARIANTS[o.variant] ? o.variant : S.variant; S = defaults(o); if(S.variant==='E2'){addE2Installations(S);upgradeE2Installations(S);}syncVariant(); updateVariantUrl(); focusedEquipment=null; sel.clear(); syncInputs(); changed(); fit(); }
     catch(err) { alert('To nie jest plik rzutu z tego edytora.'); }
   });
   e.target.value = '';
@@ -4452,7 +4806,7 @@ $('#bReset').onclick = () => {
   checkpoint(); const ui = S.ui, set = S.set, v = S.variant; S = freshState(v); S.ui = ui; S.set = set; sel.clear(); changed(); fit();
 };
 $('#bPng').onclick = () => {
-  const keep = {...view}, keepSel = sel; sel = new Set();
+  const keep = {...view}, keepSel = sel;lightingExportFocus=new Set([...sel].filter(k=>k[0]==='i').map(k=>+k.slice(1)));sel = new Set();
   fit();
   const clone = svg.cloneNode(true);
   clone.querySelectorAll('.ui').forEach(n => n.remove());
@@ -4466,7 +4820,7 @@ $('#bPng').onclick = () => {
     c.toBlob(b => download(`rzut-ogrodniki-${S.variant}.png`, b));
   };
   img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(src);
-  view = keep; sel = keepSel; render();
+  view = keep; sel = keepSel;lightingExportFocus=null;render();
 };
 
 new ResizeObserver(() => viewTouched ? render() : fit()).observe($('#stage'));
