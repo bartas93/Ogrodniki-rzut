@@ -12,6 +12,16 @@ Wariant **Projekt główny 2026-11-16** (`E2REF20261116`) jest kopią sprzed dod
 
 ## Obsługa warstwy
 
+Nad rzutem jest stale widoczny pasek **Widok**, również na telefonie:
+
+- **Meble** — pokazuje lub ukrywa meble, ich opisy, ID i strefy. To ustawienie widoku; meble pozostają w kontroli kolizji i dojść.
+- **Instalacje** — włącza lub wyłącza nakładkę, zachowując wybór branż.
+- **Tylko instalacje** — pokazuje wszystkie branże na tle ścian, ukrywa meble, nazwy/kolory pomieszczeń, dach, strefy, podkład i wizualizację przejść.
+- **Pokaż wszystko** — odsłania wszystkie warstwy, meble i branże oraz przywraca nazwy/kolory pomieszczeń, dach, strefy i przejścia.
+- **Branże…** — otwiera panel i przewija do filtrów instalacji.
+
+Wybór widoku zapisuje się osobno dla wariantu i przeżywa odświeżenie. Eksport PNG przedstawia wybrany widok, a JSON nadal zawiera wszystkie elementy. Wyszukanie ID ukrytego mebla ponownie go pokazuje. Kopia referencyjna pozostaje bez nowej warstwy instalacji i bez możliwości edycji geometrii. Zmiana dotyczy ustawień widoku w v36; nie wymaga resetu ani kolejnej migracji projektu.
+
 [Bieżący Projekt Główny](https://bartas93.github.io/Ogrodniki-rzut/) ma warstwę **Instalacje**, przycisk na pasku oraz siedem filtrów branżowych w panelu. Domyślnie widoczna jest wentylacja; przycisk **Wszystkie** pokazuje cały program, a **Tylko wentylacja** przywraca czytelny widok początkowy. Wyłączenie warstwy nie usuwa danych.
 
 Punkt lub trasę można wskazać na rzucie, wybrać z listy branży albo wyszukać po ID, np. `E2-I151`. Panel pokazuje nazwę, poziom prowadzenia, ograniczenia i własne uwagi. Numer jest trwały; zmiana nazwy lub przesunięcia go nie zmienia. Można przesunąć adnotację myszą, klawiaturą lub przez pola X/Y, a na telefonie wybrać ją stuknięciem w trybie Podgląd. Przesunięcie adnotacji nie przesuwa urządzenia.

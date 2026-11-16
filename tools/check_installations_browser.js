@@ -15,6 +15,28 @@ const mobile=process.argv.includes('mobile');
   const find=async id=>{await page.locator('#bFindId').click();await page.locator('#idQuery').fill(id);await page.locator('#idForm button[type=submit]').click();assert.equal(await page.locator('#idDialog').evaluate(d=>d.open),false,id);};
   await page.goto(url+'/');const initial=await state();assert.ok(initial.installations.length>100);
   assert.ok(await page.locator('#gInstallations [data-i]').count());
+  const geometry=s=>JSON.stringify([s.walls,s.rooms,s.furn]),originalGeometry=geometry(initial),originalAudit=await page.locator('#kvPass').innerText();
+  await page.locator('#bFurniture').click();assert.equal(await page.locator('#gFurn [data-f]').count(),0);
+  assert.equal(await page.locator('#bFurniture').getAttribute('aria-pressed'),'false');
+  assert.equal(await page.locator('#kvPass').innerText(),originalAudit,'ukrywanie mebli nie wyłącza ich z kontroli');
+  await page.locator('[data-tool="furn"]').click();
+  await page.locator('#bOnlyInstallations').click();assert.equal(await page.locator('#gFurn').innerHTML(),'');
+  assert.equal(await page.locator('[data-tool="select"]').evaluate(b=>b.classList.contains('on')),true);
+  for(const id of ['gRoof','gLabels','gPass','gRoomFill'])assert.equal(await page.locator('#'+id).innerHTML(),'');
+  assert.ok((await page.locator('#gInstallations [data-i]').count())>100);
+  assert.equal(geometry(await state()),originalGeometry);
+  assert.ok(Object.values((await state()).ui.serviceSystems).every(Boolean));
+  await page.reload();assert.equal(await page.locator('#gFurn').innerHTML(),'');
+  await page.locator('#bInstallations').click();assert.equal(await page.locator('#gInstallations').innerHTML(),'');
+  await page.locator('#bShowAll').click();assert.ok(await page.locator('#gFurn [data-f]').count());
+  assert.ok((await page.locator('#gInstallations [data-i]').count())>100);
+  assert.equal(await page.locator('#bFurniture').getAttribute('aria-pressed'),'true');
+  assert.equal(geometry(await state()),originalGeometry);assert.equal(await page.locator('#kvPass').innerText(),originalAudit);
+  // Wszystkie przyciski są osiągalne na telefonie bez poziomego przewijania paska.
+  for(const id of ['bFurniture','bInstallations','bOnlyInstallations','bShowAll']){
+    const box=await page.locator('#'+id).boundingBox();assert.ok(box.x>=0&&box.x+box.width<=await page.evaluate(()=>innerWidth));
+  }
+  await page.screenshot({path:'/tmp/layer-buttons-'+(mobile?'mobile':'desktop')+'.png'});
   if(mobile)await page.locator('#bPanel').click();
   await page.locator('#servicesAll').click();assert.ok((await page.locator('#gInstallations [data-i]').count())>100);
   await page.locator('#servicesVent').click();await page.locator('[data-system="water"]').check();

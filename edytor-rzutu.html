@@ -11,7 +11,12 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:13px/1.35 "Segoe UI",system-ui,sans-serif}
-#app{display:grid;grid-template-columns:52px 1fr 310px;grid-template-rows:auto 1fr 24px;height:100vh}
+#app{display:grid;grid-template-columns:52px 1fr 310px;grid-template-rows:auto auto minmax(0,1fr) 24px;height:100vh}
+#visibilityBar{grid-column:1/-1;display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:6px 10px;background:var(--panel);border-bottom:1px solid var(--line)}
+#visibilityBar button{min-height:34px}
+#visibilityBar [hidden]{display:none}
+#tools,#stage,#side{grid-row:3}
+#status{grid-row:4}
 #top{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:6px 10px;background:var(--panel);border-bottom:1px solid var(--line)}
 #top h1{font-size:14px;margin:0 8px 0 0;font-weight:600}
 .sep{width:1px;height:20px;background:var(--line);margin:0 4px}
@@ -86,8 +91,11 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 #idError{min-height:1.5em;color:#b91c1c}
 .id-code{font:12px ui-monospace,monospace;max-width:100%;overflow-wrap:anywhere}
 @media (max-width:800px){
-  #app{grid-template-columns:44px 1fr;grid-template-rows:auto 1fr auto 24px;height:100dvh}
-  #side{grid-column:1/-1;max-height:42vh;border-left:0;border-top:1px solid var(--line)}
+  #app{grid-template-columns:44px 1fr;grid-template-rows:auto auto minmax(0,1fr) auto 24px;height:100dvh}
+  #side{grid-column:1/-1;grid-row:4;max-height:42vh;border-left:0;border-top:1px solid var(--line)}
+  #status{grid-row:5}
+  #visibilityBar{gap:5px;padding:5px 8px}
+  #visibilityBar button{min-height:40px;padding:7px 9px}
   body.nopanel #side{display:none}
   #tools button{width:34px;height:34px}
   #top{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:6px 8px;scrollbar-width:none}
@@ -115,7 +123,6 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
     <button id="bThumbs" title="Miniatury wszystkich wariantów naraz">▦ Warianty</button>
     <button id="bPanel" class="mobile-only" title="Pokaż / ukryj panel właściwości">Panel</button>
     <label class="tg"><input type="checkbox" id="tIds" title="Przybliż rzut, aby zobaczyć więcej ID. Pełne ID znajdziesz w panelu zaznaczenia."> ID elementów</label>
-    <button id="bInstallations" hidden title="Warstwa instalacji i filtry branż">Instalacje</button>
     <button id="bFindId">Znajdź ID</button>
     <button id="bView" title="Tryb podglądu (dotyk): przeciągnięcie przesuwa widok, stuknięcie pokazuje szczegóły, dwa palce = zoom">Podgląd</button>
     <span class="sep"></span>
@@ -139,6 +146,14 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
     <input type="file" id="fImp" accept=".json,application/json" hidden>
   </div>
 
+  <div id="visibilityBar" role="group" aria-label="Widoczność warstw">
+    <span>Widok:</span>
+    <button id="bFurniture" aria-pressed="true" title="Pokaż lub ukryj meble i ich strefy">Meble</button>
+    <button id="bInstallations" hidden aria-pressed="true" title="Pokaż lub ukryj instalacje">Instalacje</button>
+    <button id="bOnlyInstallations" title="Ściany i wszystkie branże instalacji, bez mebli i nakładek">Tylko instalacje</button>
+    <button id="bShowAll" title="Pokaż wszystkie warstwy, meble i branże instalacji">Pokaż wszystko</button>
+    <button id="bInstallationFilters" hidden title="Otwórz filtry branż instalacji">Branże…</button>
+  </div>
   <div id="tools">
     <button data-tool="select" title="Zaznacz / przesuń (V)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 3l14 8-6 1.5L10 19z"/></svg><span class="k">V</span></button>
     <button data-tool="wall" title="Ściana (W)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 18V6h6v8h12v4z" fill="currentColor" fill-opacity=".25"/></svg><span class="k">W</span></button>
@@ -2539,8 +2554,7 @@ function drawInstallations(){
 }
 function renderInstallationPanel(){
   const el=$('#installationPanel'),items=S.installations||[];
-  $('#bInstallations').hidden=!items.length;
-  $('#bInstallations').classList.toggle('on',items.length>0&&!S.hidden.includes(INSTALLATION_LAYER));
+  syncVisibilityButtons();
   if(!items.length){el.innerHTML='';return;}
   const selected=items.find(i=>sel.has('i'+i.id));
   let h='<h2>Instalacje — koncepcja</h2><p class="hint">Trasy i punkty do koordynacji. Przerywane linie nie oznaczają gotowych przewodów ani potwierdzonych spadków. Wybierz branżę, potem punkt na rzucie lub na liście.</p>';
@@ -2594,7 +2608,7 @@ function defaults(s){
     if(f.equipment)f.nextEquipmentId=next;
   });
   s.set = Object.assign({grid:50, pitch:30, overhang:600, rate:'', newT:120, newExt:false, minPass:750}, s.set||{});
-  s.ui = Object.assign({under:true, underOp:0.35, dims:false, rooms:true, roof:true, zones:true, pass:true, ids:false}, s.ui||{});
+  s.ui = Object.assign({under:true, underOp:0.35, dims:false, rooms:true, roomLabels:true, furniture:true, roof:true, zones:true, pass:true, ids:false}, s.ui||{});
   return installationDefaults(s);
 }
 
@@ -2671,6 +2685,41 @@ let ptr = null, drawSt = null, curSnap = null, hoverOp = null, numBuf = '', spac
 
 const nid = () => S.nextId++;
 const vis = o => !S.hidden.includes(o.layer||'');
+const furnitureVisible = f => S.ui.furniture!==false&&vis(f);
+function installationLayers(){return new Set((S.installations||[]).map(i=>i.layer||INSTALLATION_LAYER));}
+function setInstallationsVisible(show){
+  const layers=installationLayers();
+  S.hidden=show?S.hidden.filter(n=>!layers.has(n)):[...new Set([...S.hidden,...layers])];
+}
+function syncVisibilityButtons(){
+  const hasInstallations=!!S.installations?.length,shown=hasInstallations&&S.installations.some(vis);
+  for(const id of ['bInstallations','bInstallationFilters'])$('#'+id).hidden=!hasInstallations;
+  $('#bOnlyInstallations').disabled=!hasInstallations;
+  for(const [id,on] of [['bFurniture',S.ui.furniture!==false&&S.furn.some(vis)],['bInstallations',shown]]){
+    const button=$('#'+id);button.classList.toggle('on',on);button.setAttribute('aria-pressed',String(on));
+  }
+}
+function changeVisibility(action){
+  checkpoint();
+  if(action==='furniture'){
+    const show=!(S.ui.furniture!==false&&S.furn.some(vis));S.ui.furniture=show;
+    if(show){const names=new Set(S.furn.map(f=>f.layer||''));S.hidden=S.hidden.filter(n=>!names.has(n));}
+  }else if(action==='installations')setInstallationsVisible(!S.installations.some(vis));
+  else if(action==='only-installations'){
+    S.ui.furniture=false;S.ui.rooms=false;S.ui.roomLabels=false;S.ui.roof=false;
+    S.ui.zones=false;S.ui.pass=false;S.ui.under=false;S.ui.dims=false;
+    setInstallationsVisible(true);
+    // Ściany pozostają punktem odniesienia dla instalacji.
+    const walls=new Set(S.walls.map(w=>w.layer||''));S.hidden=S.hidden.filter(n=>!walls.has(n));
+    for(const key of Object.keys(INSTALLATION_SYSTEMS))S.ui.serviceSystems[key]=true;
+  }else if(action==='all'){
+    S.hidden=[];S.ui.furniture=true;S.ui.rooms=true;S.ui.roomLabels=true;
+    S.ui.roof=true;S.ui.zones=true;S.ui.pass=true;
+    if(S.installations?.length)for(const key of Object.keys(INSTALLATION_SYSTEMS))S.ui.serviceSystems[key]=true;
+  }
+  if(S.ui.furniture===false&&tool==='furn')setTool('select');
+  sel.clear();focusedEquipment=null;syncInputs();changed();
+}
 const wallById = id => S.walls.find(w => w.id === id);
 const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -3161,7 +3210,7 @@ function measureSnap(raw, e){
         pts.push({x:g.a.x+g.d.x*u+g.n.x*v, y:g.a.y+g.d.y*u+g.n.y*v});
     }
     for (const f of S.furn) {
-      if (!vis(f)) continue;
+      if (!furnitureVisible(f)) continue;
       for (const b of furnBodies(f)) {
         const c = [{x:b.x1,y:b.y1}, {x:b.x2,y:b.y1}, {x:b.x2,y:b.y2}, {x:b.x1,y:b.y2}];
         pts.push(...c); segs.push([c[0],c[1]], [c[1],c[2]], [c[2],c[3]], [c[3],c[0]]);
@@ -3336,7 +3385,7 @@ function drawRooms(){
   });
   const fs = px(12);
   for (const r of S.rooms) {
-    if (!vis(r)) continue;
+    if (!vis(r)||S.ui.roomLabels===false) continue;
     const info = A && A.rooms.get(r.id);
     let line2 = '';
     if (info) {
@@ -3442,7 +3491,7 @@ function furnMarkup(f, info, on, isGhost){
 function drawFurn(){
   let z = '', b = '';
   for (const f of S.furn) {
-    if (!vis(f)) continue;
+    if (!furnitureVisible(f)) continue;
     const [a,c] = furnMarkup(f, A && A.fs && A.fs.get(f.id), sel.has('f'+f.id), false);
     z += a; b += c;
   }
@@ -3616,6 +3665,7 @@ function status(){
   $('#sZoom').textContent = `1 px = ${Math.round(px(1))} mm`;
 }
 function render(){
+  syncVisibilityButtons();
   syncAspect();
   svg.setAttribute('viewBox', `${view.x} ${view.y} ${view.w} ${view.h}`);
   drawGrid(); drawUnder(); drawRooms(); drawPass(); drawWalls(); drawOps(); drawFurn(); drawRoof(); drawDims(); drawInstallations(); drawIds(); drawHandles(); drawOver();
@@ -3654,7 +3704,7 @@ function elementRecords(state=S){
 }
 function drawIds(){
   let h='';const occupied=[];
-  const records=elementRecords().filter(it=>vis(it.obj)&&(it.key[0]!=='i'||installationVisible(it.obj)));
+  const records=elementRecords().filter(it=>vis(it.obj)&&(it.key[0]!=='i'||installationVisible(it.obj))&&(it.key[0]!=='f'||S.ui.furniture!==false)&&(it.key[0]!=='r'||S.ui.roomLabels!==false));
   const focused=records.find(it=>it.eq&&equipmentId(it.obj,it.eq)===focusedEquipment&&sel.has(it.key));
   if(focused){const b=focused.b;h+=`<rect x="${b.x1}" y="${b.y1}" width="${b.x2-b.x1}" height="${b.y2-b.y1}" fill="#1f6feb" fill-opacity=".15" stroke="#1f6feb" stroke-width="${px(3)}"/>`;}
   // Przy oddaleniu unikamy nakładania podpisów. Przybliżenie odsłania kolejne ID.
@@ -3701,6 +3751,8 @@ function findElement(query){
   const target=elementRecords().find(it=>it.key===key&&(equipment?it.eq?.id===Number(equipment):!it.eq));
   // Szukanie odkrywa warstwę, aby zaznaczenie było widoczne także po wczytaniu zapisu.
   S.hidden=S.hidden.filter(layer=>layer!==(target.obj.layer||''));
+  if(key[0]==='f')S.ui.furniture=true;
+  if(key[0]==='r')S.ui.roomLabels=true;
   if(key[0]==='i')S.ui.serviceSystems={...S.ui.serviceSystems,[target.obj.system]:true};
   sel=new Set([key]);focusedEquipment=equipment?equipmentId(target.obj,target.eq):null;
   setTool('select');document.body.classList.remove('nopanel');
@@ -3941,12 +3993,14 @@ function renderLayers(){
   let h = '<h2>Warstwy</h2>';
   for (const n of names) {
     const cnt = S.walls.filter(w => w.layer === n).length, cntF = S.furn.filter(f => f.layer === n).length, cntI=(S.installations||[]).filter(i=>i.layer===n).length;
-    h += `<div class="layer"><input type="checkbox" data-lv="${esc(n)}" ${S.hidden.includes(n)?'':'checked'}><span>${n ? esc(n) : 'główna'} <span class="hint">(${cnt} ścian${cntF ? `, ${cntF} mebli` : ''}${cntI ? `, ${cntI} instalacji` : ''})</span></span>${n&&!isReference() ? `<button data-ld="${esc(n)}">Usuń</button>` : ''}</div>`;
+    const furnitureOnly=cntF>0&&!cnt&&!cntI&&!S.rooms.some(r=>r.layer===n);
+    h += `<div class="layer"><input type="checkbox" data-lv="${esc(n)}" ${(S.hidden.includes(n)||(furnitureOnly&&S.ui.furniture===false))?'':'checked'}><span>${n ? esc(n) : 'główna'} <span class="hint">(${cnt} ścian${cntF ? `, ${cntF} mebli` : ''}${cntI ? `, ${cntI} instalacji` : ''})</span></span>${n&&!isReference() ? `<button data-ld="${esc(n)}">Usuń</button>` : ''}</div>`;
   }
   h += '<div class="hint">Instalacje są nakładką i nie zmieniają obrysu ani kontroli przejść. Ukryte ściany pozostałych warstw nie liczą się do bryły i dachu.</div>';
   const el = $('#layers'); el.innerHTML = h;
   el.querySelectorAll('[data-lv]').forEach(cb => cb.addEventListener('change', () => {
     const n = cb.dataset.lv; checkpoint();
+    if(cb.checked&&S.furn.some(f=>f.layer===n))S.ui.furniture=true;
     S.hidden = cb.checked ? S.hidden.filter(x => x !== n) : [...S.hidden, n];
     sel.clear(); changed();
   }));
@@ -3990,6 +4044,7 @@ function dupSel(){
 }
 function setTool(t){
   if(isReference()&&!(['select','measure'].includes(t)))t='select';
+  if(t==='furn')S.ui.furniture=true;
   tool = t; drawSt = null; numBuf = ''; showNum(); hoverOp = null; curSnap = null; mA = null; mHover = null;
   ghost = t === 'furn' && placeKey ? makeFurn(-1, placeKey, lastP.x, lastP.y, placeRot) : null;
   document.querySelectorAll('#tools button').forEach(b => b.classList.toggle('on', b.dataset.tool === t));
@@ -4212,8 +4267,8 @@ svg.addEventListener('pointerup', e => {
     const inside = (x,y) => x >= x1 && x <= x2 && y >= y1 && y <= y2;
     if (x2-x1 > px(3) || y2-y1 > px(3)) {
       for (const w of S.walls) if (vis(w) && inside(w.x1,w.y1) && inside(w.x2,w.y2)) sel.add('w'+w.id);
-      for (const r of S.rooms) if (vis(r) && inside(r.x,r.y)) sel.add('r'+r.id);
-      for (const f of S.furn) if (vis(f) && inside(f.x,f.y)) sel.add('f'+f.id);
+      for (const r of S.rooms) if (vis(r)&&S.ui.roomLabels!==false && inside(r.x,r.y)) sel.add('r'+r.id);
+      for (const f of S.furn) if (furnitureVisible(f) && inside(f.x,f.y)) sel.add('f'+f.id);
     }
     render(); renderPanel(); return;
   }
@@ -4342,7 +4397,11 @@ $('#idForm').onsubmit=e=>{
   e.preventDefault();const error=findElement($('#idQuery').value);$('#idError').textContent=error;
   if(!error)$('#idDialog').close();
 };
-$('#bInstallations').onclick=()=>{checkpoint();S.hidden=S.hidden.includes(INSTALLATION_LAYER)?S.hidden.filter(n=>n!==INSTALLATION_LAYER):[...S.hidden,INSTALLATION_LAYER];document.body.classList.remove('nopanel');changed();};
+$('#bFurniture').onclick=()=>changeVisibility('furniture');
+$('#bInstallations').onclick=()=>changeVisibility('installations');
+$('#bOnlyInstallations').onclick=()=>changeVisibility('only-installations');
+$('#bShowAll').onclick=()=>changeVisibility('all');
+$('#bInstallationFilters').onclick=()=>{document.body.classList.remove('nopanel');render();$('#installationPanel').scrollIntoView({block:'start'});};
 $('#tIds').onchange=e=>{S.ui.ids=e.target.checked;render();save();};
 $('#mCancel').onclick=cancelMeasurePoint;$('#mClear').onclick=clearMeasures;
 $('#bThumbs').onclick = openThumbs; $('#bThumbsClose').onclick = closeThumbs;
