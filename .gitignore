@@ -2,3 +2,5 @@
 ogrodniki_raport_planowanej_budowy_*.md
 # model Revit — może zawierać metadane autora
 *.rvt
+# materiały do sytuowania domu — wyłącznie lokalnie
+dzialka-prywatna/

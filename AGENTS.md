@@ -1,5 +1,7 @@
 # Ogrodniki — instrukcja dla agenta (Codex / Claude)
 
+Aktualizacja17.11: §30 wymagań oraz `planery-2026-11-17.md`. `instalacje-plan.html` (moduły `instalacje-plan.mjs` / `instalacje-obliczenia.mjs`) oraz `dzialka.html` (`dzialka.mjs` / `dzialka-model.mjs`) mają osobne lokalne zapisy v1/schema1, wspólny `planery.css`. Nie zapisują do LSv37 ani snapshotu. Nowe linki widoczne tylko w E2. CWU to jawny przykład obliczeniowy, strumienie wentylacji domyślnie puste; nie dobieraj urządzeń z metrażu. Rekuperator w technicznym, światło lokalnie z rezerwą smart home, cyrkulacja do decyzji. Schemat działki nie ma jeszcze granic/rzędnych/georeferencji. Zachowaj10m odstępu szklarni liczone od elewacji do krawędzi i niezależne checkboxy. Dane działki tylko prywatnie, ignorowany `dzialka-prywatna/`. Instrukcja `dzialka-dane.html`, nie obiecuj działającego importuGPKG/GeoTIFF. Testy `timeout 30s node tools/check_planery.mjs` i `timeout 60s node tools/check_planery_browser.js` oraz osobno `... mobile`.
+
 Repozytorium służy do projektowania koncepcji parterowego domu jednorodzinnego.
 Sercem jest **edytor rzutu w jednym pliku HTML** (`edytor-rzutu.html`): ściany, drzwi, okna, meble ze strefami użytkowymi,
 automatyczna kontrola kolizji i przejść, statystyki bryły i dachu kopertowego, kilka wariantów domu.

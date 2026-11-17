@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {compareWater,pipeVolume,balance} from '../instalacje-obliczenia.mjs';
+import {initialSite,enforceGreenhouse,greenhouseGap,siteWarnings,validateSite,houseSize} from '../dzialka-model.mjs';
+const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-8,`${a} != ${b}`),input={length:10,diameter:12,flow:6,starts:8,delta:30,loopLength:20,loss:5,pump:5,hours:16};
+const water=compareWater(input);close(water.liters,1.1309733552923256);close(water.seconds,11.309733552923256);close(water.waterDay,9.047786842338605);close(water.circulationHeatDay,1.6);close(water.pumpElectricDay,.08);close(water.cooledHeatDay,water.liters*30*4.186/3600*8);
+close(pipeVolume(20,12),2*pipeVolume(10,12));close(pipeVolume(10,24),4*pipeVolume(10,12));
+assert.throws(()=>compareWater({...input,flow:0}));assert.throws(()=>compareWater({...input,hours:25}));assert.throws(()=>compareWater({...input,length:NaN}));assert.throws(()=>compareWater({...input,diameter:-12}));
+assert.deepEqual(balance([{type:'N',value:70},{type:'W',value:''}]),{supply:70,extract:0,missing:1,difference:70});assert.deepEqual(balance([{type:'N',value:75},{type:'W',value:75}]),{supply:75,extract:75,missing:0,difference:0});assert.throws(()=>balance([{type:'N',value:-1}]));
+const s=initialSite();assert.equal(s.elements.length,15);close(greenhouseGap(s.elements),10);assert.equal(siteWarnings(s).filter(x=>x.includes('nachodzi')).length,0);
+s.elements.find(e=>e.id==='house').x+=3;s.elements.find(e=>e.id==='greenhouse').w=7;enforceGreenhouse(s);close(greenhouseGap(s.elements),10);
+s.greenhouseLock=false;s.elements.find(e=>e.id==='greenhouse').x+=1;assert.ok(siteWarnings(s).some(x=>x.includes('różni')));s.elements.find(e=>e.id==='greenhouse').y=100;assert.ok(siteWarnings(s).some(x=>x.includes('poza pasem')));
+assert.deepEqual(validateSite(JSON.parse(JSON.stringify(s))),s);assert.throws(()=>validateSite({schema:2}));assert.throws(()=>validateSite({...s,elements:[{...s.elements[0],w:-1}]}));assert.throws(()=>validateSite({...s,elements:[{...s.elements[0],x:Infinity}]}));
+const altered=initialSite();altered.elements.find(e=>e.id==='house').w=999;assert.equal(validateSite(altered).elements.find(e=>e.id==='house').w,houseSize.w);
+const hidden=initialSite();hidden.elements.forEach(e=>e.visible=false);assert.deepEqual(siteWarnings(hidden),siteWarnings(initialSite()));
+console.log('PLANERY_OK: fizyka CWU, niepełny bilans, walidacja, więz10m i zakres kontroli działki');

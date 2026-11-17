@@ -109,6 +109,7 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
 }
 .service-filter{display:flex;align-items:center;gap:5px;margin:8px 0;font-size:12px;cursor:pointer}
 .service-filter input{min-width:20px;min-height:20px}.service-actions{display:flex;gap:5px;flex-wrap:wrap}
+.planner-link{display:inline-flex;align-items:center;min-height:40px;padding:7px 10px;border:1px solid #9cad9b;border-radius:6px;background:#eef4e9;color:#284b36;text-decoration:none;font-size:12px}.planner-link[hidden]{display:none}
 .service-list{font-size:12px;margin:5px 0 10px}.service-list summary{cursor:pointer;padding:4px}
 .service-list button{display:block;width:100%;text-align:left;font-size:11px;margin:3px 0;white-space:normal}
 .service-selected{border-top:1px solid var(--line);margin-top:12px;font-size:12px}
@@ -170,6 +171,8 @@ ul.msgs{margin:4px 0 0 18px;padding:0;color:#b91c1c;font-size:12px}
     <button id="bOnlyInstallations" title="Ściany i wszystkie branże instalacji, bez mebli i nakładek">Tylko instalacje</button>
     <button id="bShowAll" title="Pokaż wszystkie warstwy, meble i branże instalacji">Pokaż wszystko</button>
     <button id="bInstallationFilters" hidden title="Otwórz filtry branż instalacji">Branże…</button>
+    <a id="installationPlanLink" class="planner-link" href="instalacje-plan.html" hidden>Plan instalacji ↗</a>
+    <a id="sitePlanLink" class="planner-link" href="dzialka.html" hidden>Plan działki ↗</a>
   </div>
   <div id="tools">
     <button data-tool="select" title="Zaznacz / przesuń (V)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 3l14 8-6 1.5L10 19z"/></svg><span class="k">V</span></button>
@@ -4848,7 +4851,7 @@ document.querySelectorAll('#tools button').forEach(b => b.addEventListener('clic
 function syncVariant(){
   for(const id of ['bImp','bReset','bUndo','bRedo','iPass','iPitch','iOver','iRate'])$('#'+id).disabled=isReference();
   for(const b of document.querySelectorAll('#tools button'))b.disabled=isReference()&&!['select','measure'].includes(b.dataset.tool);
-  $('#sVar').value = S.variant; document.title = 'Rzut Ogrodniki — ' + VARIANTS[S.variant].name; $('#kitchen3dLink').hidden = S.variant !== 'E2'; }
+  $('#sVar').value = S.variant; document.title = 'Rzut Ogrodniki — ' + VARIANTS[S.variant].name; $('#kitchen3dLink').hidden = S.variant !== 'E2'; $('#installationPlanLink').hidden = S.variant !== 'E2'; $('#sitePlanLink').hidden = S.variant !== 'E2'; }
 $('#sVar').innerHTML = Object.entries(VARIANTS).map(([k,v]) => `<option value="${k}">${esc(v.name)}</option>`).join('');
 $('#sVar').onchange = e => switchVariant(e.target.value);
 window.addEventListener('popstate',()=>switchVariant(variantFromUrl(),null));

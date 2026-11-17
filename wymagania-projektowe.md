@@ -324,4 +324,12 @@ Zapis **v35** migruje v34 wyłącznie przez `fixE2NicheMounting`, zachowując in
 - **[DECYZJA]** Różne kolory typów włączników, gniazd i innych elementów elektryki oraz widoczna legenda.10 kategorii według liczby sterowanych grup, liczby gniazd i funkcji. Legenda pod rzutem oraz w PNG. [Kolory i obsługa](instalacje-hydraulika-elektryka.md).
 - Zmiana widoku w v37, bez migracji ani zmian elementów, przypisań, geometrii i kopii referencyjnej. Oryginalna nazwa Instalacje pozostaje tylko w danych starszej warstwy, z czytelną nazwą w interfejsie.
 
+## 30. Doprecyzowanie instalacji i schemat działki (17.11.2026)
+
+- **[DECYZJA]** Centrala rekuperacji w pomieszczeniu technicznym. Sterowanie światłem zwykłe lokalne, z przygotowaniem do późniejszego smart home. CyrkulacjaCWU: najpierw porównanie oczekiwania i strat, bez automatycznego wyboru.
+- **[ZAKRES]** Osobny planer trzech branż: program do doboru urządzeń, pusty arkusz bilansu wentylacji, porównanieCWU oraz odczyt przypisań światła z bieżącego lokalnegoE2. Nie zmienia tras/urządzeń na rzucie bez obliczeń i gabarytów.
+- **[PROGRAM DZIAŁKI]** Dom mniej więcej pośrodku; dojazd wzdłuż wschodniej strony, skręt na zachód do wschodniej ściany i parking4–5aut. Gospodarczy z wiatą na wschodzie, magazynki na północ od niego. PV naziemna na północy; ogród i siedzisko ogniskowe na południu. Szklarnia10m od zachodniej elewacji. TarasSW przy wyjściach salonu, zadaszenie części zachodniej. Każdy element można ukryć niezależnie.
+- **[DO UZUPEŁNIENIA]** Granice, rzędne i strona wjazdu. Roboczy schemat w metrach nie potwierdza usytuowania na rzeczywistej działce; pozostałe wymiary obiektów do uzgodnienia. Przygotowana instrukcja pobraniaGPKG/NMT i danych planistycznych; georeferencja i audyt usytuowania po dostarczeniu danych. Prywatnych materiałów działki nie publikować.
+- [Pełny zakres, założenia i ograniczenia](planery-2026-11-17.md). Osobne zapisy planerów, bez migracjiLSv37, zmian geometrii domu i referencji16.11.
+
 [Przygotowania instalacyjne, zależności, źródła i zakres rezerwy LPG](instalacje-przygotowanie.md). To aktualizacja programu i dokumentacji; geometria rzutu oraz zapis v35 bez zmian. Obecny audyt geometryczny nie potwierdza zmieszczenia wszystkich nowych urządzeń i ich obsługi w technicznym.
