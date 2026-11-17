@@ -340,4 +340,10 @@ Zapis **v35** migruje v34 wyłącznie przez `fixE2NicheMounting`, zachowując in
 - **[OGRANICZENIA]** Przypisanie i aktualność MPZP, linie zabudowy, las/strefy ochronne, dopuszczalność osobnej zabudowy i rzędne wykonawcze do potwierdzenia. Zapisane parametry planistyczne mają jawny status założeń, bez automatycznego zatwierdzania PZT i poziomu±0,00. Nie mieszać wysokości nieznanego układu starego profilu z nowym NMT.
 - Zapis planera v1/schema1 zachowany z opcjonalnym `context`; stare pliki i ręczne położenia zachowane. Bez zmian geometrii domu, jego zapisu i referencji. Publiczna instrukcja Geoportalu pozostaje usunięta.
 
+## 32. Dopasowanie orientacji układu do działki
+
+- **[DECYZJA]** Ustawić układ zabudowy zgodnie z obróconymi krawędziami działki. Obrót obejmuje dom i jego otoczenie, zachowuje wymiary, pole i identyfikatory. Odstęp szklarni10m liczyć prostopadle do elewacji w osiach układu, nie jako odcinek w osi wschód–zachód mapy.
+- Granice mapowe i NMT pozostają w swoim układzie. Brama zachowuje położenie na styku z drogą; łącznik prowadzi do obróconego dojazdu. Statystyki wysokości, odległości i kontrola granic uwzględniają obrót obrysów.
+- Strona: kąt ręczny i przycisk Dopasuj do granic działki. Zachować jawny zapis kąta, ręczne położenia i istniejące pliki; stary kontekst bez kąta otrzymuje propozycję kierunku przy wczytaniu. Bez zmiany geometrii domu w głównym edytorze i kopii referencyjnej.
+
 [Przygotowania instalacyjne, zależności, źródła i zakres rezerwy LPG](instalacje-przygotowanie.md). To aktualizacja programu i dokumentacji; geometria rzutu oraz zapis v35 bez zmian. Obecny audyt geometryczny nie potwierdza zmieszczenia wszystkich nowych urządzeń i ich obsługi w technicznym.

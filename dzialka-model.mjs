@@ -1,8 +1,9 @@
 import {validateContext,contextWarnings} from './dzialka-teren.mjs';
+import {suggestLayoutAngle} from './dzialka-obrot.mjs';
 export const SITE_KEY='ogrodniki-dzialka-v1';
 // Lokalny układ metrowy: X na wschód, Y na południe. Brak georeferencji.
 export const houseSize={w:17.824,h:10.624};
-export function initialSite(){return {schema:1,entry:'pending',greenhouseLock:true,notes:'',elements:[
+export function initialSite(){return {schema:1,layoutAngle:0,entry:'pending',greenhouseLock:true,notes:'',elements:[
  {id:'garden',name:'Ogród południowy',x:-17,y:12,w:43,h:24,color:'#d9e9c6'},
  {id:'road',name:'Dojazd od granicy wschodniej',x:28,y:-35,w:4,h:36.8,color:'#d8d9d5'},
  {id:'turn',name:'Skręt do wschodniej elewacji',x:8.912,y:-2.2,w:23.088,h:4,color:'#d8d9d5'},
@@ -26,13 +27,14 @@ export function validateSite(x){
  const s=initialSite();s.entry=['north','south','pending'].includes(x.entry)?x.entry:'pending';s.greenhouseLock=x.greenhouseLock!==false;s.notes=typeof x.notes==='string'?x.notes.slice(0,15000):'';
  for(const e of s.elements){const a=x.elements.find(a=>a.id===e.id);if(!a)continue;for(const k of ['x','y','w','h']){if(typeof a[k]!=='number'||!Number.isFinite(a[k])||Math.abs(a[k])>2000||(['w','h'].includes(k)&&a[k]<.2))throw new Error('Nieprawidłowe wymiary lub położenie.');e[k]=a[k];}e.visible=a.visible!==false;}
  if(x.context)s.context=validateContext(x.context);
+ if(x.layoutAngle!==undefined){if(typeof x.layoutAngle!=='number'||!Number.isFinite(x.layoutAngle)||Math.abs(x.layoutAngle)>180)throw new Error('Nieprawidłowy kąt układu.');s.layoutAngle=x.layoutAngle;}else if(s.context)s.layoutAngle=Number(suggestLayoutAngle(s.context.parcel.polygon).toFixed(4));
  const h=s.elements.find(e=>e.id==='house');h.w=houseSize.w;h.h=houseSize.h;return enforceGreenhouse(s);
 }
 // Rezerwy funkcjonalne mogą się stykać/nakładać: dojazd z parkingiem, zadaszenie z tarasem.
 export function siteWarnings(s){const es=s.elements,h=es.find(e=>e.id==='house'),g=es.find(e=>e.id==='greenhouse'),out=[];
  for(const e of es.filter(e=>!['house','turn','road','garden'].includes(e.id))){const dx=Math.min(h.x+h.w,e.x+e.w)-Math.max(h.x,e.x),dy=Math.min(h.y+h.h,e.y+e.h)-Math.max(h.y,e.y);if(dx>.01&&dy>.01)out.push(`${e.name}: obrys nachodzi na dom.`);}
- if(Math.abs(greenhouseGap(es)-10)>.01)out.push('Szklarnia: odstęp poziomy od zachodniej elewacji różni się od 10 m.');
- if(g.y+g.h<h.y||g.y>h.y+h.h)out.push('Szklarnia jest poza pasem zachodniej elewacji — 10 m to odstęp poziomy, nie najkrótsza odległość narożników.');
+ if(Math.abs(greenhouseGap(es)-10)>.01)out.push('Szklarnia: odstęp prostopadły od zachodniej elewacji projektu różni się od 10 m.');
+ if(g.y+g.h<h.y||g.y>h.y+h.h)out.push('Szklarnia jest poza pasem zachodniej elewacji — 10 m to odsunięcie w osi układu, nie najkrótsza odległość narożników.');
  if(s.entry==='pending')out.push('Strona wjazdu nieustalona: na schemacie dojazd pokazano roboczo od północy.');
  if(s.context)out.push(...contextWarnings(s));else out.push('Brak granic i rzędnych: nie sprawdzono odsunięć od działki, drogi, sąsiadów, zacieniania ani spadków.');
  return out;
