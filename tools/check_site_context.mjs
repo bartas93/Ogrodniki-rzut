@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {contextFixture} from './site_context_fixture.mjs';
+import {validateSite,siteWarnings} from '../dzialka-model.mjs';
+import {validateContext,polygonArea,pointInPolygon,rectangleRelation,terrainAt,terrainStats,gatePoint,accessProfile} from '../dzialka-teren.mjs';
+const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-8,`${a} ≠ ${b}`),s=validateSite(contextFixture()),c=s.context;
+near(polygonArea(c.parcel.polygon),10000);assert.ok(pointInPolygon([0,0],c.parcel.polygon));assert.ok(!pointInPolygon([100,0],c.parcel.polygon));
+const home=s.elements.find(e=>e.id==='house');assert.equal(rectangleRelation(home,c.parcel.polygon).inside,true);home.x=70;assert.ok(siteWarnings(s).some(w=>w.includes('wychodzi poza')));home.x=-8.912;
+assert.equal(rectangleRelation({x:1,y:1,w:8,h:8},[[0,0],[10,0],[10,10],[7,10],[7,3],[3,3],[3,10],[0,10]]).inside,false);
+near(terrainAt(c.terrain,0,0),100);near(terrainAt(c.terrain,10,-10),100.3);assert.equal(terrainAt(c.terrain,-100,0),null);
+const stats=terrainStats(c.terrain,{x:-10,y:-10,w:20,h:20});assert.equal(stats.count,16);near(stats.mean,100);near(stats.corners[0],99.3);assert.equal(stats.complete,true);
+assert.deepEqual(gatePoint(c),[40,50]);const ap=accessProfile(s);assert.ok(ap.length>60);assert.ok(ap.complete);assert.ok(ap.maxGrade>=4.9&&ap.maxGrade<=5.1);
+assert.ok(siteWarnings(s).some(w=>w.includes('jeden budynek')));assert.ok(!siteWarnings(s).some(w=>w.startsWith('Brak granic i rzędnych')));
+assert.deepEqual(validateSite(JSON.parse(JSON.stringify(s))),s);
+for(const bad of [{...c,crs:'EPSG:4326'},{...c,terrain:{...c.terrain,values:[null]}},{...c,access:{...c.access,segment:[[1,1],[1,1]]}},{...c,parcel:{...c.parcel,polygon:[[0,0],[1,0]]}}])assert.throws(()=>validateContext(bad));
+c.access.fraction=0;assert.ok(siteWarnings(s).some(w=>w.includes('Brama nie mieści')));
+console.log('SITE_CONTEXT_OK: metry, granice wklęsłe, pole, interpolacja bez półpikselowego przesunięcia, NMT, profil, brama, walidacja i roundtrip');

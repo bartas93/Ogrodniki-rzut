@@ -1,3 +1,4 @@
+import {validateContext,contextWarnings} from './dzialka-teren.mjs';
 export const SITE_KEY='ogrodniki-dzialka-v1';
 // Lokalny układ metrowy: X na wschód, Y na południe. Brak georeferencji.
 export const houseSize={w:17.824,h:10.624};
@@ -24,6 +25,7 @@ export function validateSite(x){
  if(!x||x.schema!==1||!Array.isArray(x.elements))throw new Error('To nie jest zapis planera działki.');
  const s=initialSite();s.entry=['north','south','pending'].includes(x.entry)?x.entry:'pending';s.greenhouseLock=x.greenhouseLock!==false;s.notes=typeof x.notes==='string'?x.notes.slice(0,15000):'';
  for(const e of s.elements){const a=x.elements.find(a=>a.id===e.id);if(!a)continue;for(const k of ['x','y','w','h']){if(typeof a[k]!=='number'||!Number.isFinite(a[k])||Math.abs(a[k])>2000||(['w','h'].includes(k)&&a[k]<.2))throw new Error('Nieprawidłowe wymiary lub położenie.');e[k]=a[k];}e.visible=a.visible!==false;}
+ if(x.context)s.context=validateContext(x.context);
  const h=s.elements.find(e=>e.id==='house');h.w=houseSize.w;h.h=houseSize.h;return enforceGreenhouse(s);
 }
 // Rezerwy funkcjonalne mogą się stykać/nakładać: dojazd z parkingiem, zadaszenie z tarasem.
@@ -32,6 +34,6 @@ export function siteWarnings(s){const es=s.elements,h=es.find(e=>e.id==='house')
  if(Math.abs(greenhouseGap(es)-10)>.01)out.push('Szklarnia: odstęp poziomy od zachodniej elewacji różni się od 10 m.');
  if(g.y+g.h<h.y||g.y>h.y+h.h)out.push('Szklarnia jest poza pasem zachodniej elewacji — 10 m to odstęp poziomy, nie najkrótsza odległość narożników.');
  if(s.entry==='pending')out.push('Strona wjazdu nieustalona: na schemacie dojazd pokazano roboczo od północy.');
- out.push('Brak granic i rzędnych: nie sprawdzono odsunięć od działki, drogi, sąsiadów, zacieniania ani spadków.');
+ if(s.context)out.push(...contextWarnings(s));else out.push('Brak granic i rzędnych: nie sprawdzono odsunięć od działki, drogi, sąsiadów, zacieniania ani spadków.');
  return out;
 }

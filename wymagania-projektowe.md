@@ -332,4 +332,12 @@ Zapis **v35** migruje v34 wyłącznie przez `fixE2NicheMounting`, zachowując in
 - **[DO UZUPEŁNIENIA]** Granice, rzędne i strona wjazdu. Roboczy schemat w metrach nie potwierdza usytuowania na rzeczywistej działce; pozostałe wymiary obiektów do uzgodnienia. Georeferencja i audyt usytuowania po dostarczeniu danych. Instrukcji pobierania danych z Geoportalu nie publikować na stronie; pomoc w rozmowie. Prywatnych materiałów działki nie publikować.
 - [Pełny zakres, założenia i ograniczenia](planery-2026-11-17.md). Osobne zapisy planerów, bez migracjiLSv37, zmian geometrii domu i referencji16.11.
 
+## 31. Prywatne dane przestrzenne w planerze działki (17.11.2026)
+
+- **[DECYZJA]** Wjazd z południowego wschodu przez styk działki z drogą. Punkt, szerokość i rzędna bramy nadal robocze. Schemat rzeczywistej działki przygotować na przekazanych granicach i NMT, z domem mniej więcej pośrodku i zachowaniem programu §30.
+- **[PRYWATNOŚĆ]** Granice, identyfikatory, współrzędne, NMT i dokumenty inwestora poza publicznym repozytorium. Strona zawiera jedynie obsługę lokalnego pakietu JSON. Import i lokalny zapis obejmują dane przestrzenne; eksport może je zawierać. Dane nie są przesyłane na serwer.
+- **[ZAKRES]** Oddzielna widoczność granicy, otoczenia, kolorów wysokości, warstwic i bramy/łącznika, obok dotychczasowych obiektów. Odczyt NMT pod obrysami, odległości od granicy mapowej i profil terenu wzdłuż roboczej osi dojazdu. Ukrywanie nie wyłącza sprawdzeń.
+- **[OGRANICZENIA]** Przypisanie i aktualność MPZP, linie zabudowy, las/strefy ochronne, dopuszczalność osobnej zabudowy i rzędne wykonawcze do potwierdzenia. Zapisane parametry planistyczne mają jawny status założeń, bez automatycznego zatwierdzania PZT i poziomu±0,00. Nie mieszać wysokości nieznanego układu starego profilu z nowym NMT.
+- Zapis planera v1/schema1 zachowany z opcjonalnym `context`; stare pliki i ręczne położenia zachowane. Bez zmian geometrii domu, jego zapisu i referencji. Publiczna instrukcja Geoportalu pozostaje usunięta.
+
 [Przygotowania instalacyjne, zależności, źródła i zakres rezerwy LPG](instalacje-przygotowanie.md). To aktualizacja programu i dokumentacji; geometria rzutu oraz zapis v35 bez zmian. Obecny audyt geometryczny nie potwierdza zmieszczenia wszystkich nowych urządzeń i ich obsługi w technicznym.
