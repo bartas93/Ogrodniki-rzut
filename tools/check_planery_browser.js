@@ -29,7 +29,8 @@ const mobile=process.argv.includes('mobile'),root=path.join(__dirname,'..');
   await page.locator('#siteEntry').selectOption('north');await page.locator('#siteFile').setInputFiles(sitePath);await page.waitForFunction(()=>document.querySelector('#siteEntry').value==='south');
   await page.locator('[data-visible="fire"]').uncheck();d=page.waitForEvent('download');await page.locator('#siteSvgExport').click();dl=await d;const svgPath='/tmp/dzialka-export-'+(mobile?'mobile':'desktop')+'.svg';await dl.saveAs(svgPath);const exported=fs.readFileSync(svgPath,'utf8');assert.ok(exported.includes('data-site="house"'));assert.ok(!exported.includes('data-site="fire"'));assert.ok(exported.includes('BRAK GRANICY'));
   const final=await page.evaluate(()=>({s:localStorage.getItem('ogrodniki-rzut-v37:E2'),ref:localStorage.getItem('ogrodniki-reference-2026-11-16')}));assert.deepEqual(final,original);
-  await page.goto(base+'/dzialka-dane.html');assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.match(await page.locator('body').innerText(),/nie importuje jeszcze GPKG/);
+  assert.equal(await page.locator('a[href="dzialka-dane.html"]').count(),0);assert.equal((await ctx.request.get(base+'/dzialka-dane.html')).status(),404);
+  await page.goto(base+'/instalacje-plan.html');assert.equal(await page.locator('a[href="dzialka-dane.html"]').count(),0);
   await page.goto(base+'/?variant=R2');assert.equal(await page.locator('#sitePlanLink').isVisible(),false);assert.equal(await page.locator('#installationPlanLink').isVisible(),false);
   assert.deepEqual(errors,[]);console.log('PLANERY_BROWSER_OK '+(mobile?'mobile':'desktop')+': CWU, bilans, lokalne dane, światło,15 obiektów,10m, dotyk, JSON/SVG, niezależność E2 i referencji');
  }finally{if(browser)await browser.close();server.close();}
