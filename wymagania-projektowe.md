@@ -346,4 +346,11 @@ Zapis **v35** migruje v34 wyłącznie przez `fixE2NicheMounting`, zachowując in
 - Granice mapowe i NMT pozostają w swoim układzie. Brama zachowuje położenie na styku z drogą; łącznik prowadzi do obróconego dojazdu. Statystyki wysokości, odległości i kontrola granic uwzględniają obrót obrysów.
 - Strona: kąt ręczny i przycisk Dopasuj do granic działki. Zachować jawny zapis kąta, ręczne położenia i istniejące pliki; stary kontekst bez kąta otrzymuje propozycję kierunku przy wczytaniu. Bez zmiany geometrii domu w głównym edytorze i kopii referencyjnej.
 
+## 33. Zewnętrzny widok domu3D (18.11.2026)
+
+- **[DECYZJA]** Analogiczny do kuchni osobny, interaktywny widok domu od zewnątrz. Wejście z Projektu Głównego i planu działki, obrót/zoom na komputerze i telefonie, widoki elewacji i tarasu, widoczność elementów, parametry i wykończenie oraz eksport.
+- **[ŹRÓDŁO]** Gotowy obrys i istniejące otwory z geometrii E2. Domyślnie dach kopertowy30° z okapem1m. Odczyt bieżącego lokalnego rzutu, z bazą publiczną przy braku zapisu. Identyfikatory zachowane. Lokalne ustawienie działki i tarasy można wykorzystać bez kopiowania georeferencji/NMT.
+- **[PROPOZYCJA]** Ściana do oparcia dachu3,10m, tynk w ciepłej bieli, dach ceglasty i ciemna stolarka. To parametry wizualizacji, nie wybór konstrukcji i materiałów do zamówienia. Wnętrze2,80m ze wcześniejszej koncepcji; docelowy przekrój do opracowania. Zadaszenie tarasu, rolety i rynny uproszczone. Teren i oświetlenie poglądowe.
+- Osobny zapis3D i JSON/PNG, bez nadpisywania E2, działki, kuchni i referencji. [Pełny zakres i ograniczenia](dom3d-opis.md). Nie zmieniono obrysu domu, okien ani drzwi w projekcie2D.
+
 [Przygotowania instalacyjne, zależności, źródła i zakres rezerwy LPG](instalacje-przygotowanie.md). To aktualizacja programu i dokumentacji; geometria rzutu oraz zapis v35 bez zmian. Obecny audyt geometryczny nie potwierdza zmieszczenia wszystkich nowych urządzeń i ich obsługi w technicznym.
