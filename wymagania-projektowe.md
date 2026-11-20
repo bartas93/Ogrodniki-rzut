@@ -354,3 +354,10 @@ Zapis **v35** migruje v34 wyłącznie przez `fixE2NicheMounting`, zachowując in
 - Osobny zapis3D i JSON/PNG, bez nadpisywania E2, działki, kuchni i referencji. [Pełny zakres i ograniczenia](dom3d-opis.md). Nie zmieniono obrysu domu, okien ani drzwi w projekcie2D.
 
 [Przygotowania instalacyjne, zależności, źródła i zakres rezerwy LPG](instalacje-przygotowanie.md). To aktualizacja programu i dokumentacji; geometria rzutu oraz zapis v35 bez zmian. Obecny audyt geometryczny nie potwierdza zmieszczenia wszystkich nowych urządzeń i ich obsługi w technicznym.
+
+## 34. Cały dom od środka 3D i ludzik (20.11.2026)
+
+- **[DECYZJA]** Osobny widok całego wnętrza analogiczny do kuchni, z możliwością ustawienia człowieka w wybranym miejscu. Przycisk **Cały dom 3D** w Projekcie Głównym.
+- Geometria i istniejące identyfikatory E2; odczyt lokalnego zapisu z publiczną bazą przy jego braku. Przekrój ścian, widoczność mebli, wybór pomieszczenia, obrót i zoom na komputerze oraz telefonie. Nie zmieniać układu domu na potrzeby modelu.
+- Ludzik: pozycja kliknięciem/stuknięciem podłogi lub małego planu, współrzędne, wzrost i kierunek, przybliżenie i usunięcie. Własny zapis widoku i eksport JSON/PNG. Ostrzeżenie o kolizji pozycji nie jest potwierdzeniem dojścia.
+- Wysokości i wygląd wyposażenia bez danych producenta poglądowe. Brak przestrzennego projektu instalacji i automatycznej synchronizacji z niezależnym planerem kuchni. Bez zapisu do E2, działki i referencji. [Zakres, źródła i ograniczenia](wnetrze3d-opis.md).
