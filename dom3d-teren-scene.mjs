@@ -1,0 +1,15 @@
+import * as THREE from './vendor/three/three.module.min.js';
+import {terrainAt} from './dzialka-teren.mjs';
+import {terrainReport} from './dom3d-teren.mjs';
+// Wspólna powierzchnia terenu dla wnętrza i bryły. Budynek pozostaje poziomy na Y=0.
+export function attachTerrain(scene,t,settings){
+ if(scene.terrainResources){for(const r of scene.terrainResources)r.dispose?.();const old=new Set(scene.terrainResources);scene.resources=scene.resources.filter(r=>!old.has(r));}scene.terrainRoot?.removeFromParent();scene.terrainRoot=null;scene.terrainResources=[];scene.terrainGeometryRange=null;scene.terrainReport=terrainReport(t,scene.h,settings);if(!t||!scene.terrainReport?.valid){scene.applyVisibility();return;}
+ const start=scene.resources.length,root=new THREE.Group();scene.root.add(root);scene.terrainRoot=root;const g=t.grid,level=scene.terrainReport.floorLevel,pos=[],colors=[],index=[],valid=[];let min=Infinity,max=-Infinity;for(const z of g.values)if(z!==null){min=Math.min(min,z);max=Math.max(max,z);}const low=new THREE.Color('#819c6b'),high=new THREE.Color('#b8aa80');
+ for(let r=0;r<g.rows;r++)for(let c=0;c<g.cols;c++){const i=r*g.cols+c,z=g.values[i];valid.push(z!==null);pos.push(g.x+(c+.5)*g.step,(z??level)-level,g.y+(r+.5)*g.step);const color=low.clone().lerp(high,(z===null?0:(z-min)/(max-min||1)));colors.push(color.r,color.g,color.b);}
+ for(let r=0;r<g.rows-1;r++)for(let c=0;c<g.cols-1;c++){const a=r*g.cols+c,b=a+1,d=a+g.cols,e=d+1;for(const tri of [[a,d,b],[b,d,e]])if(tri.every(i=>valid[i]))index.push(...tri);}
+ const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geo.setIndex(index);geo.computeVertexNormals();const material=scene.material('#ffffff',{vertexColors:true,side:THREE.DoubleSide,roughness:1});scene.mesh(geo,material,root).castShadow=false;geo.computeBoundingBox();scene.terrainGeometryRange={min:geo.boundingBox.min.y,max:geo.boundingBox.max.y};
+ // Przezroczysty pas tylko ilustruje różnicę poziomów; nie jest modelem fundamentu.
+ const W=scene.b.width/2,D=scene.b.depth/2,points=[[-W,-D],[W,-D],[W,D],[-W,D],[-W,-D]],skirt=[],idx=[];for(let k=1;k<points.length;k++){const a=points[k-1],b=points[k],N=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])*2);for(let i=0;i<N;i++){const p=[a[0]+(b[0]-a[0])*i/N,a[1]+(b[1]-a[1])*i/N],q=[a[0]+(b[0]-a[0])*(i+1)/N,a[1]+(b[1]-a[1])*(i+1)/N],pz=terrainAt(g,...p),qz=terrainAt(g,...q);if(pz===null||qz===null||pz-level>=-.12&&qz-level>=-.12)continue;const s=skirt.length/3;skirt.push(p[0],Math.min(-.12,pz-level),p[1],q[0],Math.min(-.12,qz-level),q[1],q[0],-.12,q[1],p[0],-.12,p[1]);idx.push(s,s+1,s+2,s,s+2,s+3);}}
+ if(skirt.length){const base=new THREE.BufferGeometry();base.setAttribute('position',new THREE.Float32BufferAttribute(skirt,3));base.setIndex(idx);base.computeVertexNormals();scene.mesh(base,scene.material('#9d9180',{transparent:true,opacity:.3,depthWrite:false,side:THREE.DoubleSide}),root).castShadow=false;}
+ scene.terrainResources=scene.resources.slice(start);scene.applyVisibility();scene.invalidate();
+}

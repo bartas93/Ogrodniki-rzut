@@ -1,6 +1,6 @@
 # Cały dom — wnętrze 3D
 
-Stan: 20.11.2026. Strona `wnetrze3d.html`, wejście **Cały dom 3D** w Projekcie Głównym oraz linki z widoku zewnętrznego i planera kuchni.
+Aktualizacja: 24.11.2026. Strona `wnetrze3d.html`, wejście **Cały dom 3D** w Projekcie Głównym oraz linki z widoku zewnętrznego i planera kuchni.
 
 Model korzysta z bieżącego lokalnego zapisu E2 (`ogrodniki-rzut-v37:E2`). Przy jego braku lub nieprawidłowych danych pobiera publiczną bazę `wnetrze3d-baza.json`, generowaną z konstruktora przez `timeout 30s node tools/export_wnetrze3d.js`. Publiczna baza zawiera 12 etykiet pomieszczeń i 79 mebli/urządzeń. Obrys domu 17,824 × 10,624 m pozostaje bez zmian. Model nie obejmuje innych wariantów ani instalacji przestrzennych. Zmiana źródła nie nadpisuje lokalnego rzutu.
 
@@ -22,7 +22,7 @@ Wysokości zapisane w danych są odczytywane (np. PAX 2364 mm, moduły kuchni 90
 
 ## Zapis i dane
 
-Własny klucz `ogrodniki-wnetrze3d-v1`, schema1: ustawienia i jeden ludzik. Odczyt geometrii jest niezależny; przycisk „Wczytaj aktualny rzut” odświeża źródło. JSON przenosi zwalidowaną, ograniczoną do geometrii kopię domu i widok; po imporcie ta kopia pozostaje źródłem do ponownego wczytania rzutu. PNG zapisuje bieżący model z ludzikiem i etykietami; przy braku WebGL działa plan 2D, ustawianie postaci, zapis JSON i eksport SVG. Zapisy E2, kuchni, działki i referencji nie są zmieniane. Nazwy są renderowane jako tekst, a w SVG escapowane. Eksport pomija notatki, instalacje, georeferencję, NMT i kontekst działki. Działa lokalny Three.js 0.180.0 / MIT, bez CDN i wysyłania danych.
+Własny klucz `ogrodniki-wnetrze3d-v1`, schema1: ustawienia i jeden ludzik. Odczyt geometrii jest niezależny; przycisk „Wczytaj aktualny rzut” odświeża źródło. JSON przenosi zwalidowaną, ograniczoną do geometrii kopię domu i widok; po imporcie ta kopia pozostaje źródłem do ponownego wczytania rzutu. PNG zapisuje bieżący model z ludzikiem i etykietami; przy braku WebGL działa plan 2D, ustawianie postaci, zapis JSON i eksport SVG. Zapisy E2, kuchni, działki i referencji nie są zmieniane. Nazwy są renderowane jako tekst, a w SVG escapowane. Eksport pomija notatki, instalacje, georeferencję i kontekst działki. Po wczytaniu NMT dodaje jego lokalny fragment i roboczą rzędną posadzki; taki plik pozostaje prywatny. [Panel terenu](teren3d-opis.md) jest wspólny dla wnętrza i bryły. Podłoga pozostaje pozioma na ±0,00; człowiek stoi na podłodze, a teren zmienia wysokość względem niej. Warstwa Teren jest niezależna od mebli. Działa lokalny Three.js 0.180.0 / MIT, bez CDN i wysyłania danych.
 
 ## Weryfikacja
 

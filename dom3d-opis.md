@@ -1,6 +1,6 @@
 # Dom z zewnątrz — widok 3D
 
-18.11.2026. [Otwórz model](https://bartas93.github.io/Ogrodniki-rzut/dom3d.html). Wejście także z Projektu Głównego i planu działki. Interaktywny podgląd bryły i wykończenia, z obsługą telefonu, bez buildu i zewnętrznego CDN. Lokalny Three.js0.180.0, licencjaMIT. Otwieraj przez HTTP(S), np.GitHub Pages; moduły i odczyt bazy wymagają serwera.
+Aktualizacja 24.11.2026. [Otwórz model](https://bartas93.github.io/Ogrodniki-rzut/dom3d.html). Wejście także z Projektu Głównego i planu działki. Interaktywny podgląd bryły i wykończenia, z obsługą telefonu, bez buildu i zewnętrznego CDN. Lokalny Three.js0.180.0, licencjaMIT. Otwieraj przez HTTP(S), np.GitHub Pages; moduły i odczyt bazy wymagają serwera.
 
 ## Źródło i dokładność geometrii
 
@@ -22,13 +22,13 @@ Przy H=3,10m, kącie30° i okapie1m: dolna krawędź dachu2,523m, kalenica6,167m
 
 ## Taras, wygląd i instalacje
 
-Taras zachodni, południowo-zachodni i część zadaszona odpowiadają rezerwom planera działki. Jeżeli dostępny jest zgodny lokalny zapis, można przejąć jego obrót i położenia tarasów. W modelu zachowywane są wyłącznie względne prostokąty tarasów i kąt; dla starszego planu bez kąta oblicza się sam kierunek granicy, bez kopiowania jej do modelu; nie pobiera się georeferencji, identyfikatora, granic aniNMT do modelu/eksportu3D. Bez takiego zapisu stosowane są domyślne rezerwy.
+Taras zachodni, południowo-zachodni i część zadaszona odpowiadają rezerwom planera działki. Jeżeli dostępny jest zgodny lokalny zapis, można przejąć jego obrót i położenia tarasów. W modelu zachowywane są wyłącznie względne prostokąty tarasów i kąt; dla starszego planu bez kąta oblicza się sam kierunek granicy, bez kopiowania jej do modelu; nie pobiera się georeferencji, identyfikatora ani granic. Od 24.11 opcjonalny lokalny fragment NMT jest używany przez [panel terenu](teren3d-opis.md) i dołączany do prywatnego eksportu 3D. Bez takiego zapisu stosowane są domyślne rezerwy.
 
 Zadaszenie zachodnie ma poglądową wolnostojącą konstrukcję. Jej wysokości, przekroje, połączenie z okapem, szczelność i obciążenia nie są zatwierdzone. Przy skrajnych parametrach dachu możliwe są konflikty wymagające zmiany zadaszenia; model nie zastępuje sprawdzenia konstrukcyjnego. RezerwyPAX i pozostałe umeblowanie nie są przebudowywane.
 
 Tynk w ciepłej bieli, ceglasty dach, ciemna stolarka i drewniany taras są propozycją wykończenia. Barwy można zmieniać. Podziały szyb, profile, okucia i elementy blacharskie są uproszczone. Rynny i skrzynki rolet to propozycje rozmieszczenia, nie dokumentacja montażu. Rolety są domyślnie wyłączone; można je pokazać i opuścić. Przejścia wentylacji/spalin przez dach pozostają do projektu; model ich nie zatwierdza.
 
-Pokazany teren jest płaski i poglądowy. Światło i cienie służą czytelności bryły, nie analizie nasłonecznienia, zacienieniaPV i wpływu sąsiadów. Model nie potwierdzaMPZP, usytuowania i powierzchni biologicznie czynnej. Dokładne materiały działki nadal pozostają poza repozytorium.
+Bez lokalnego NMT teren jest płaski i poglądowy. Po wczytaniu wysokości oba widoki 3D pokazują naturalny teren w skali 1:1; rzędna poziomej posadzki jest regulowana i jawnie robocza. Nie zaprojektowano niwelacji, fundamentów, schodów ani murów oporowych. Światło i cienie służą czytelności bryły, nie analizie nasłonecznienia, zacienieniaPV i wpływu sąsiadów. Model nie potwierdzaMPZP, usytuowania i powierzchni biologicznie czynnej. Dokładne materiały działki nadal pozostają poza repozytorium.
 
 ## Obsługa i zapis
 
@@ -36,6 +36,6 @@ Pokazany teren jest płaski i poglądowy. Światło i cienie służą czytelnoś
 - Widoki: perspektywa, tarasSW, wejścieE, południe, zachód, północ i z góry. Kierunki odnoszą się do projektu; przy włączonym lokalnym planie działki kamera uwzględnia jego obrót.
 - 10 niezależnych ustawień widoczności, wybór i kopiowanie pełnegoID otworu,3 kolory, parametry wysokości/dachu/okapu oraz rolety. Wymiary iID domyślnie ukryte dla czytelności.
 - PNG obejmuje bieżący kadr, włączone etykiety i oznaczenie koncepcji. BezWebGL2 dostępny jest widok elewacji2D z eksportemSVG i wyborem otworów.
-- Własny zapis `ogrodniki-dom3d-v1`, schema1. Zawiera ustawienia wyglądu i ewentualną zaimportowaną kopię geometrii. JSON do przenoszenia zawiera geometrię domu, wygląd i względne tarasy/obrót, bez geodezyjnego kontekstu. Import jest walidowany przed podmianą modelu. RzutE2, planer kuchni, działka i snapshot16.11 nie są nadpisywane.
+- Własny zapis `ogrodniki-dom3d-v1`, schema1. Zawiera ustawienia wyglądu i ewentualną zaimportowaną kopię geometrii. JSON do przenoszenia zawiera geometrię domu, wygląd, względne tarasy/obrót oraz opcjonalny lokalny fragment NMT i roboczą rzędną posadzki, bez georeferencji, granic i identyfikatora działki. Plik z NMT jest prywatny. Import jest walidowany przed podmianą modelu. RzutE2, planer kuchni, działka i snapshot16.11 nie są nadpisywane.
 
 Testy: `timeout 30s node tools/check_dom3d.mjs`, `timeout 60s node tools/check_dom3d_browser.js` i osobno `... mobile`. Sprawdzają zgodność bazy zE2, wycięcia iID, powierzchnię oraz wysokości połaci, odczyt lokalnego rzutu, kamerę i gesty, warstwy/parametry, PNG/JSON, fallbackSVG i niezależność zapisów. Rzeczywistego urządzenia mobilnego nie testowano — sprawdzono mobilny Chromium z dotykiem.

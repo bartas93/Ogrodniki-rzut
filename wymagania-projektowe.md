@@ -361,3 +361,9 @@ Zapis **v35** migruje v34 wyłącznie przez `fixE2NicheMounting`, zachowując in
 - Geometria i istniejące identyfikatory E2; odczyt lokalnego zapisu z publiczną bazą przy jego braku. Przekrój ścian, widoczność mebli, wybór pomieszczenia, obrót i zoom na komputerze oraz telefonie. Nie zmieniać układu domu na potrzeby modelu.
 - Ludzik: pozycja kliknięciem/stuknięciem podłogi lub małego planu, współrzędne, wzrost i kierunek, przybliżenie i usunięcie. Własny zapis widoku i eksport JSON/PNG. Ostrzeżenie o kolizji pozycji nie jest potwierdzeniem dojścia.
 - Wysokości i wygląd wyposażenia bez danych producenta poglądowe. Brak przestrzennego projektu instalacji i automatycznej synchronizacji z niezależnym planerem kuchni. Bez zapisu do E2, działki i referencji. [Zakres, źródła i ograniczenia](wnetrze3d-opis.md).
+
+## 35. Uwzględnienie pochylenia terenu (24.11.2026)
+
+- **[DECYZJA]** Oba widoki domu 3D mają uwzględniać rzeczywiste pochylenie NMT z lokalnego planu działki, z obrotem i położeniem domu. Podłoga i wyposażenie pozostają poziome; nie zmieniać geometrii rzutu dla uzyskania efektu nachylenia.
+- Regulowana robocza rzędna posadzki, odczyty przy narożnikach i otworach zewnętrznych, zależność tarasów od naturalnego gruntu, przekroje i osobna widoczność terenu. Bez wybranej rzędnej propozycja widoku: najwyższa próbkowana wysokość pod obrysem +0,30 m. To nie ustalony poziom ±0,00 ani projekt posadowienia/niwelacji, schodów i odwodnienia.
+- Lokalny import/odczyt NMT; w publicznej bazie nie ma rzeczywistych danych inwestora. JSON 3D z NMT jest prywatny, bez georeferencji i identyfikatorów działki. Dotychczasowe zapisy E2, działki, kuchni, referencji i geometria bez zmian. [Zakres i ograniczenia](teren3d-opis.md). Aktualizuje wcześniejsze opisy wyłącznie płaskiego terenu i pomijania NMT w prywatnym eksporcie 3D.
